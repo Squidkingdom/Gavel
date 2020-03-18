@@ -7,6 +7,5 @@ public class Round {
     int affSpeaks = 0;
     int negSpeaks = 0;
     Judge judge = new Judge();
-    Room room = new Room();
 
 }
