@@ -3,7 +3,6 @@ package com.squidkingdom.Gavel;
 import java.util.Scanner;
 
 public class Main {
-	private static final String FILE_NAME = "C:\\Users\\Brady\\eclipse-workspace2\\Gavel\\tmp\\MyFirstExcel.xlsx";
 	public static TeamManager manager = new TeamManager();
 	public static Scanner in = new Scanner(System.in);
 	public static final int roomNum = 10;
