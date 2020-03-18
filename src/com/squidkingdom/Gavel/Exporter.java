@@ -19,5 +19,13 @@ public class Exporter {
         csvWriter.append(",");
         csvWriter.append("Judge");
         csvWriter.append("\n");
+
+        String winner = round.affWon ? "Aff" : "Neg";
+
+        csvWriter.append(String.join(",", winner, round.affTeam.person1 + " + " +  round.affTeam.person2, Integer.toString(round.affSpeaks), round.negTeam.person1 + " + " +  round.negTeam.person2, Integer.toString(round.negSpeaks), round.judge.name));
+        csvWriter.append("\n");
+
+        csvWriter.flush();
+        csvWriter.close();
     }
 }
