@@ -2,6 +2,7 @@ package com.squidkingdom.Gavel;
 
 import java.util.Scanner;
 
+@SuppressWarnings("ALL")
 public class Main {
 	public static TeamManager manager = new TeamManager();
 	public static Scanner in = new Scanner(System.in);
