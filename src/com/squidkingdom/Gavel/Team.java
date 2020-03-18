@@ -6,11 +6,8 @@ public class Team {
 	Judge judges[]= new Judge[5];
 	Round rounds[]= new Round[5];
 	Team opp[] = new Team[5];
-	Boolean round1Complete = false;
-	Boolean round2Complete = false;
-	Boolean round3Complete = false;
-	Boolean round4Complete = false;
-	Boolean round5Complete = false;
+	boolean[] roundComplete = new boolean[]{false, false, false, false, false};
+
 	String code = "";
 	String person1 = "";
 	String person2 = "";
