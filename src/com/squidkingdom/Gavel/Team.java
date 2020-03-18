@@ -4,7 +4,7 @@ public class Team {
 	int totalWins = 0;
 	int totalSpeaks = 0;
 	Judge judges[]= new Judge[5];
-	Room rooms[]= new Room[5];
+	Room room[]= new Room[5];
 	Team opp[] = new Team[5];
 	String code = "";
 	String person1 = "";
