@@ -22,7 +22,8 @@ public class Exporter {
 
         String winner = round.didWin ? "Aff" : "Neg";
 
-        csvWriter.append(String.join(",", winner, round.affTeam.person1 + " + " +  round.affTeam.person2, Integer.toString(round.affSpeaks), round.negTeam.person1 + " + " +  round.negTeam.person2, Integer.toString(round.negSpeaks), round.judge.name));
+        // Need both teams in order to export this data
+        csvWriter.append(String.join(",", winner, round.oppTeam.person1 + " + " +  round.affTeam.person2, Integer.toString(round.affSpeaks), round.negTeam.person1 + " + " +  round.negTeam.person2, Integer.toString(round.negSpeaks), round.judge.name));
         csvWriter.append("\n");
 
         csvWriter.flush();
