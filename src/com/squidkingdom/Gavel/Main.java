@@ -81,9 +81,6 @@ public class Main {
 		negTeam.roundComplete[round] = true;
 		negTeam.totalWins += !affWon ?  1 : 0;
 
-
-
-
 	}
 
 
