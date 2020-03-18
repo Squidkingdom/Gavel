@@ -6,6 +6,7 @@ public class Main {
 	public static TeamManager manager = new TeamManager();
 	public static Scanner in = new Scanner(System.in);
 	public static final int roomNum = 10;
+
 	public static void main(String[] args) {
 
 		String arg1 = args[0].substring(1);

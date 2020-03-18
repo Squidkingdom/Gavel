@@ -4,8 +4,13 @@ public class Team {
 	int totalWins = 0;
 	int totalSpeaks = 0;
 	Judge judges[]= new Judge[5];
-	Room rooms[]= new Room[5];
+	Round rounds[]= new Round[5];
 	Team opp[] = new Team[5];
+	Boolean round1Complete = false;
+	Boolean round2Complete = false;
+	Boolean round3Complete = false;
+	Boolean round4Complete = false;
+	Boolean round5Complete = false;
 	String code = "";
 	String person1 = "";
 	String person2 = "";
