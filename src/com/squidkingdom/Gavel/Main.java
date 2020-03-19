@@ -60,7 +60,7 @@ public class Main {
 
 		}
 	}
-
+// addresult 10 true 1 a 1 3 2 4
 	public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s){
 		Team affTeam = manager.getTeamByCode(acode);
 		Team negTeam = manager.getTeamByCode(ncode);

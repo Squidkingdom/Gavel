@@ -6,6 +6,7 @@ public class RoomManager {
     public RoomManager(){}
     public static Room dummy;
 
+
     public static void newRoom() {
         roomArray[JIDArrayLength] = new Room(JIDArrayLength + 1);
         JIDArrayLength++;

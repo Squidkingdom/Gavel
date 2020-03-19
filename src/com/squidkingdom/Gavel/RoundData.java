@@ -3,11 +3,11 @@ package com.squidkingdom.Gavel;
 public class RoundData {
     boolean isFinished = false;
     boolean affWon;
-    Team affTeam = new Team();
-    Team negTeam = new Team();
+    Team affTeam;
+    Team negTeam;
     int affSpeaks = 0;
     int negSpeaks = 0;
-    Judge judge = new Judge();
+    Judge judge;
 
     public RoundData(Team affTeam, Team negTeam, Judge judge) {
         this.affTeam = affTeam;
@@ -15,5 +15,8 @@ public class RoundData {
         this.affSpeaks = affSpeaks;
         this.negSpeaks = negSpeaks;
         this.judge = judge;
+    }
+    public RoundData(){
+
     }
 }
