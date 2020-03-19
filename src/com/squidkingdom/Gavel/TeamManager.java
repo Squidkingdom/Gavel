@@ -1,40 +1,41 @@
 package com.squidkingdom.Gavel;
-
+import java.util.ArrayList;
 public class TeamManager {
     public static final Team dummy = new Team("DUMMY");
-    public static Team[] teamArray = new Team[30];
+    public static ArrayList<Room> roomArray = new ArrayList<Room>(1);
+    public static ArrayList<Team> teamArray = new ArrayList<Team>(1);
 
     public static int JIDArrayLength = 0;
     public TeamManager(){
-        teamArray[0] = dummy;
+        teamArray.set(0, dummy);
     }
 
 
     public static void newTeam(String code) {
         Team team = new Team(code);
-            teamArray[JIDArrayLength + 1] = team;
+            teamArray.set(JIDArrayLength + 1, team);
             JIDArrayLength++;
 
     }
     public void newTeam(String code, String person1) {
         Team team = new Team(code, person1);
 
-            teamArray[JIDArrayLength + 1] = team;
+            teamArray.set(JIDArrayLength + 1, team);
              JIDArrayLength++;
 
     }
     public void newTeam(String code, String person1, String person2) {
         Team team = new Team(code, person1, person2);
 
-            teamArray[JIDArrayLength + 1] = team;
+            teamArray.set(JIDArrayLength + 1, team);
             JIDArrayLength++;
     }
 
 
     public static Team getTeamByCode(String code){
         for (int i = 0; i < JIDArrayLength + 1; i++) {
-                if (teamArray[i].code.equalsIgnoreCase(code)) {
-                    return teamArray[i];
+                if (teamArray.get(i).code.equalsIgnoreCase(code)) {
+                    return teamArray.get(i);
                 }
 
             }
@@ -42,7 +43,7 @@ public class TeamManager {
     }
     public static boolean checkcode(String code){
         for (int i = 0; i < JIDArrayLength + 1; i++) {
-            if (teamArray[i].code.toLowerCase() == code.toLowerCase()) {
+            if (teamArray.get(i).code.toLowerCase() == code.toLowerCase()) {
                 return true;
             }
 

@@ -7,6 +7,7 @@ public class Team {
 	Judge judges[]= new Judge[5];
 	Round rounds[]= new Round[]{tr,tr,tr,tr,tr};
 	Team opp[] = new Team[5];
+	boolean hasHadBye = false;
 	boolean[] roundComplete = new boolean[]{false, false, false, false, false};
 	boolean[] inProgress = new boolean[]{false, false, false, false, false};
 
