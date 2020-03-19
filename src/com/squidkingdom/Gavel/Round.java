@@ -8,11 +8,9 @@ public class Round {
     int negSpeaks = 0;
     Judge judge = new Judge();
 
-    Round(boolean side, Team oppTeam, int affSpeaks, int negSpeaks, Judge judge) {
+    Round(boolean side, Team oppTeam, Judge judge) {
         this.side = side;
         this.oppTeam = oppTeam;
-        this.affSpeaks = affSpeaks;
-        this.negSpeaks = negSpeaks;
         this.judge = judge;
     }
 }
