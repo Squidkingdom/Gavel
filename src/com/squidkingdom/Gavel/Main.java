@@ -108,6 +108,7 @@ public class Main {
 		negTeam.roundComplete[round] = true;
 		negTeam.totalWins += !affWon ?  1 : 0;
 		//Set Room Data
+		RoomManager.getRoomById(id).data[round].isFinished = true;
 		RoomManager.getRoomById(id).data[round].affSpeaks = (a1s + a2s);
 		RoomManager.getRoomById(id).data[round].negSpeaks = (n1s + n2s);
 		RoomManager.getRoomById(id).data[round].negTeam = negTeam;
