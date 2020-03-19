@@ -1,5 +1,7 @@
 package com.squidkingdom.Gavel;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.Scanner;
 
 @SuppressWarnings("ALL")
@@ -9,9 +11,11 @@ public class Main {
 	public static final int roomNum = 10;
 
 	public static void main(String[] args) {
-
 		boolean running = true;
-		// '-n' will be new team
+
+		for (int i = 0; i < roomNum; i++) {
+			RoomManager.newRoom();
+		}
 		while(running) {
 			print("Available options are: New | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
 			String anwser = in.nextLine();
@@ -22,8 +26,12 @@ public class Main {
 
 				printInfo(code2);
 			} else if (anwser.toLowerCase().startsWith("addresult")) {
-				//TODO fix this
-				//selectedResult();
+				String arg[] = anwser.split(" ");
+				if(arg.length != 9){
+					print("You did not provide the correct amount of arguments.");
+					return;
+				}
+				selectedResult(Integer.parseInt(arg[1]), Boolean.valueOf(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]),Integer.parseInt(arg[7]),Integer.parseInt(arg[8]));
 			} else if (anwser.toLowerCase().startsWith("export")) {
 
 			} else if (anwser.toLowerCase().startsWith("start")) {
@@ -53,7 +61,7 @@ public class Main {
 		}
 	}
 
-	public static void selectedResult( boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s){
+	public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s){
 		Team affTeam = manager.getTeamByCode(acode);
 		Team negTeam = manager.getTeamByCode(ncode);
 		int round = 1;
@@ -91,7 +99,20 @@ public class Main {
 		negTeam.totalSpeaks += (n1s + n2s);
 		negTeam.roundComplete[round] = true;
 		negTeam.totalWins += !affWon ?  1 : 0;
+		//Set Room Data
+		RoomManager.getRoomById(id).data[round].affSpeaks = (a1s + a2s);
+		RoomManager.getRoomById(id).data[round].negSpeaks = (n1s + n2s);
+		RoomManager.getRoomById(id).data[round].negTeam = negTeam;
+		RoomManager.getRoomById(id).data[round].affTeam = affTeam;
+		RoomManager.getRoomById(id).data[round].affWon = affWon;
+		RoomManager.getRoomById(id).data[round].judge = affTeam.rounds[round].judge;
 
+
+
+		//Testing
+		String bool = " ";
+		bool.valueOf(bool);
+		print("Spot Check: "+affRound.negSpeaks + " " + negRound.affSpeaks + "" + bool.valueOf(bool));
 	}
 
 
