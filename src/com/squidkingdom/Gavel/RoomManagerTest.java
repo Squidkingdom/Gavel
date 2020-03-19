@@ -23,6 +23,9 @@ class RoomManagerTest {
         RoomManager.newRoom();
         RoomManager.newRoom();
         RoomManager.newRoom();
+        RoomManager.newRoom();
+        RoomManager.newRoom();
+        RoomManager.newRoom();
 
         RoomManager.roomArray.get(3).data[2].affSpeaks = 4;
         assertEquals(4, RoomManager.getRoomById(4).data[2].affSpeaks);

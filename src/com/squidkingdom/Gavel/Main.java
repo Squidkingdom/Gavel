@@ -149,7 +149,7 @@ public class Main {
 				String didWin = round.didWin ? "Won on a " : "Lost on a ";
 				String side = round.side ?  "Aff" : "Neg";
 				int speaks = round.side ? round.affSpeaks : round.negSpeaks;
-				print("Round "+(i + 1)+": Side: \"" + side + "\" Outcome: \"" + didWin + speaks + "\" Opp Code: \"" + round.oppTeam.code + "\" Judge: \"" + round.judge.name + "\" Room: \'" + round.roomnum +"\'");
+				print("Round "+(i + 1)+": Side: \"" + side + "\" Outcome: \"" + didWin + speaks + "\" Opp Code: \"" + round.oppTeam.code + "\" Judge: \"" + round.judge.name + "\" Room: \"" + round.roomnum +"\"");
 			}
 		}
 
@@ -166,8 +166,8 @@ public class Main {
 		team1.opp[event - 1] = team2;
 		team1.judges[event - 1] = judge;
 
-		team2.rounds[event - 1] = new Round(true, team1, judge);
-		team2.opp[event - 1] = team2;
+		team2.rounds[event - 1] = new Round(false, team1, judge);
+		team2.opp[event - 1] = team1;
 		team2.judges[event - 1] = judge;
 	}
 
