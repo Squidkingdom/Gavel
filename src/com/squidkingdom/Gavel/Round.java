@@ -10,13 +10,14 @@ public class Round {
     int negSpeaks = 0;
     Judge judge = new Judge();
 
-    Round(boolean side, int affS, boolean won, int roomid, int negSpeaks, Team oppTeam) {
+    Round(boolean side, int affS, boolean won, int roomid, int negSpeaks, Team oppTeam, Judge judge) {
         this.affSpeaks = affS;
         this.didWin = won;
         this.roomnum = roomid;
         this.negSpeaks = negSpeaks;
         this.side = side;
         this.oppTeam = oppTeam;
+        this.judge = judge;
     }
     Round(boolean side, Team oppTeam, Judge judge){
         this.side = side;

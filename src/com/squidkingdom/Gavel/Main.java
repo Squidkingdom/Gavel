@@ -17,54 +17,57 @@ public class Main {
 			RoomManager.newRoom();
 		}
 		while(running) {
-			print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
-			String anwser = in.nextLine();
-			if (anwser.toLowerCase().startsWith("new")) {
-				selectedNew();
-			} else if (anwser.toLowerCase().startsWith("print")) {
-				String code2 = anwser.split(" ", 5)[1];
+			try {
+				print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
+				String anwser = in.nextLine();
+				if (anwser.toLowerCase().startsWith("new")) {
+					selectedNew();
+				} else if (anwser.toLowerCase().startsWith("print")) {
+					String code2 = anwser.split(" ", 5)[1];
 
-				printInfo(code2);
-			} else if (anwser.toLowerCase().startsWith("addresult")) {
-				String arg[] = anwser.split(" ");
-				if(arg.length != 9){
-					print("You did not provide the correct amount of arguments.");
-					return;
+					printInfo(code2);
+				} else if (anwser.toLowerCase().startsWith("addresult")) {
+					String arg[] = anwser.split(" ");
+					if (arg.length != 9) {
+						print("You did not provide the correct amount of arguments.");
+						return;
+					}
+					selectedResult(Integer.parseInt(arg[1]), Boolean.valueOf(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
+				} else if (anwser.toLowerCase().startsWith("export")) {
+
+				} else if (anwser.toLowerCase().startsWith("start")) {
+					print("You chose tab.");
+				} else if (anwser.toLowerCase().startsWith("snr")) {
+					print("You chose tab.");
+				} else if (anwser.toLowerCase().startsWith("exit")) {
+					print("Goodbye...");
+					running = false;
+				} else if (anwser.toLowerCase().startsWith("pairmanual")) {
+					String team1Code = anwser.split(" ", 6)[1];
+					String team2Code = anwser.split(" ", 6)[2];
+					String judgeCode = anwser.split(" ", 6)[3];
+					int roomId = Integer.parseInt(anwser.split(" ", 6)[4]);
+					int roundNumber = Integer.parseInt(anwser.split(" ", 6)[5]);
+
+					Team team1 = manager.getTeamByCode(team1Code);
+					Team team2 = manager.getTeamByCode(team2Code);
+					Judge judge = JudgeManager.getJudgeByCode(judgeCode);
+					Room room = RoomManager.getRoomById(roomId);
+
+					pair(team1, team2, judge, room, roundNumber);
+					print("Team " + team1Code + " was paired with Team " + team2Code + " with the judge " + judgeCode + " in room " + roomId);
+				} else if (anwser.toLowerCase().startsWith("judgenew")) {
+					String judgeName = anwser.split(" ", 5)[1];
+					String judgeCode = anwser.split(" ", 5)[2];
+
+					JudgeManager.newJudge(judgeName, judgeCode);
+					Judge judge = JudgeManager.getJudgeByCode(judgeCode);
+
+					print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
 				}
-				selectedResult(Integer.parseInt(arg[1]), Boolean.valueOf(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]),Integer.parseInt(arg[7]),Integer.parseInt(arg[8]));
-			} else if (anwser.toLowerCase().startsWith("export")) {
-
-			} else if (anwser.toLowerCase().startsWith("start")) {
-				print("You chose tab.");
-			} else if (anwser.toLowerCase().startsWith("snr")) {
-				print("You chose tab.");
+			} catch (Exception exception) {
+				print("There was an error. Please retry");
 			}
-			else if (anwser.toLowerCase().startsWith("exit")) {
-				print("Goodbye...");
-				running = false;
-			} else if (anwser.toLowerCase().startsWith("pairmanual")) {
-				String team1Code = anwser.split(" ", 6)[1];
-				String team2Code = anwser.split(" ", 6)[2];
-				String judgeCode = anwser.split(" ", 6)[3];
-				int roomId = Integer.parseInt(anwser.split(" ", 6)[4]);
-				int roundNumber = Integer.parseInt(anwser.split(" ", 6)[5]);
-
-				Team team1 = TeamManager.getTeamByCode(team1Code);
-				Team team2 = TeamManager.getTeamByCode(team2Code);
-				Judge judge = JudgeManager.getJudgeByCode(judgeCode);
-				Room room = RoomManager.getRoomById(roomId);
-
-				pair(team1, team2, judge, room, roundNumber);
-				print("Team " + team1Code + " was paired with Team " + team2Code + " with the judge " + judgeCode + " in room " + roomId);
-			} else if (anwser.toLowerCase().startsWith("judgenew")) {
-				String judgeName = anwser.split(" ", 5)[1];
-				String judgeCode = anwser.split(" ", 5)[2];
-
-				JudgeManager.newJudge(judgeName, judgeCode);
-
-				print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
-			}
-
 
 		}
 	}
@@ -72,6 +75,7 @@ public class Main {
 	public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s){
 		Team affTeam = manager.getTeamByCode(acode);
 		Team negTeam = manager.getTeamByCode(ncode);
+
 		int round = 1;
 		for (int i = 0; i <= 5; i++) {
 			if (!affTeam.roundComplete[i]) {
@@ -79,6 +83,14 @@ public class Main {
 				break;
 			}
 		}
+
+		if (!affTeam.inProgress[round]) {
+			print("This round is not in progress, you cannot give results for it");
+			return;
+		}
+		affTeam.inProgress[round] = false;
+		negTeam.inProgress[round] = false;
+
 		//Validate Data
 		if(!(a1s + a2s + n1s + n2s == 10)){
 			print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name );
@@ -91,14 +103,14 @@ public class Main {
 
 
 		//Set Aff Data
-		Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam);
+		Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam, affTeam.judges[round]);
 		affTeam.rounds[round] = roundAffObj;
 		affTeam.totalSpeaks += (a1s + a2s);
 		affTeam.roundComplete[round] = true;
 		affTeam.totalWins += affWon ?  1 : 0;
 
 		//Set Neg Data
-		Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam);
+		Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam, affTeam.judges[round]);
 		negTeam.rounds[round] = roundNegObj;
 		negTeam.totalSpeaks += (n1s + n2s);
 		negTeam.roundComplete[round] = true;
@@ -108,15 +120,11 @@ public class Main {
 		RoundData roundRmObj = new RoundData(affTeam, negTeam,   affTeam.rounds[round].judge,  (a1s + a2s),  (n1s + n2s),  affWon, true);
 		RoomManager.getRoomById(id).data[round] = roundRmObj;
 
-
-
-
 		//Testing
 		String bool = " ";
 		bool.valueOf(bool);
 		print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + bool.valueOf(bool));
 	}
-
 
 	public static void selectedNew(){
 		print("Enter the code for this new team");
@@ -165,10 +173,12 @@ public class Main {
 		team1.rounds[event - 1] = new Round(true, team2, judge);
 		team1.opp[event - 1] = team2;
 		team1.judges[event - 1] = judge;
+		team1.inProgress[event - 1] = true;
 
 		team2.rounds[event - 1] = new Round(false, team1, judge);
 		team2.opp[event - 1] = team1;
 		team2.judges[event - 1] = judge;
+		team2.inProgress[event - 1] = true;
 	}
 
 	public static void print(String print){

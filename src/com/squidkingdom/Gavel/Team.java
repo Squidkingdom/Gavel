@@ -8,6 +8,7 @@ public class Team {
 	Round rounds[]= new Round[]{tr,tr,tr,tr,tr};
 	Team opp[] = new Team[5];
 	boolean[] roundComplete = new boolean[]{false, false, false, false, false};
+	boolean[] inProgress = new boolean[]{false, false, false, false, false};
 
 	String code = "";
 	String person1 = "";
