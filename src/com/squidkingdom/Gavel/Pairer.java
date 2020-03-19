@@ -1,6 +1,7 @@
 package com.squidkingdom.Gavel;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
 public class Pairer {
@@ -10,26 +11,26 @@ public class Pairer {
     public static ArrayList<Team> teamArray = TeamManager.teamArray;
 
 
-    public static void pairRound1() throws GavelExeception {
-        Team currentBye;
+    public static ArrayList<String> pairRound1() throws GavelExeception {
+        Optional<Team> currentBye = Optional.empty();
         int rNum = roomArray.size();
-        Room[] localRA = (Room[]) roomArray.toArray().clone();
+        ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
         int tNum = teamArray.size();
-        Team[] localTA = (Team[]) teamArray.toArray().clone();
+        ArrayList<Team> localTA = (ArrayList<Team>) teamArray.clone();
         int jNum = judgeArray.size();
-        Judge[] localJA = (Judge[]) judgeArray.toArray().clone();
+        ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
 
         if ((tNum % 2) > 0) {
             boolean succeeded = false;
             while (!succeeded) {
-                int r = (rand.nextInt() % tNum);
-                if (!localTA[r].hasHadBye) {
-                    localTA[r].hasHadBye = true;
-                    currentBye = localTA[r];
-                    r = rand.nextInt();
+                int r = (rand.nextInt(tNum));
+                if (!localTA.get(r).hasHadBye) {
+                    localTA.get(r).hasHadBye = true;
+                    currentBye = Optional.of(localTA.get(r));
+                    localTA.remove(r);
+                    r = rand.nextInt(tNum);
+                    succeeded = true;
                 }
-                for ()
-
             }
         }
 
@@ -41,9 +42,23 @@ public class Pairer {
             throw new GavelExeception("Error: Not enough judges");
         }
 
-        for (int i = 0; i < (tNum / 2); i++) {
+        ArrayList<String> pairings = new ArrayList<String>(15);
 
+        while (localTA.size() > 1) {
+            Team team1 = localTA.get(0);
+            Team team2 = localTA.get(1);
+            Judge judge = localJA.get(0);
+            Room room = localRA.get(0);
+            Main.pair(team1, team2, judge, room, 1);
+            pairings.add(team1.code + " + " + team2.code + " (" + judge.code + ") in room " + room.id);
+            localTA.remove(0);
+            localTA.remove(0);
+            localJA.remove(0);
+            localRA.remove(0);
         }
+
+        pairings.add(currentBye.orElse(new Team("No one")).code + " has a bye");
+        return pairings;
     }
 
     public static void pairRound2() throws GavelExeception {

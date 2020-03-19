@@ -7,27 +7,27 @@ public class TeamManager {
 
     public static int JIDArrayLength = 0;
     public TeamManager(){
-        teamArray.set(0, dummy);
+        teamArray.add(dummy);
     }
 
 
     public static void newTeam(String code) {
         Team team = new Team(code);
-            teamArray.set(JIDArrayLength + 1, team);
+            teamArray.add(team);
             JIDArrayLength++;
 
     }
     public void newTeam(String code, String person1) {
         Team team = new Team(code, person1);
 
-            teamArray.set(JIDArrayLength + 1, team);
+            teamArray.add(team);
              JIDArrayLength++;
 
     }
     public void newTeam(String code, String person1, String person2) {
         Team team = new Team(code, person1, person2);
 
-            teamArray.set(JIDArrayLength + 1, team);
+            teamArray.add(team);
             JIDArrayLength++;
     }
 
