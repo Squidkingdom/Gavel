@@ -17,7 +17,7 @@ public class Main {
 			RoomManager.newRoom();
 		}
 		while(running) {
-			print("Available options are: New | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
+			print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
 			String anwser = in.nextLine();
 			if (anwser.toLowerCase().startsWith("new")) {
 				selectedNew();
@@ -43,11 +43,11 @@ public class Main {
 				print("Goodbye...");
 				running = false;
 			} else if (anwser.toLowerCase().startsWith("pairmanual")) {
-				String team1Code = anwser.split(" ", 5)[1];
-				String team2Code = anwser.split(" ", 5)[2];
-				String judgeCode = anwser.split(" ", 5)[3];
-				int roomId = Integer.parseInt(anwser.split(" ", 5)[4]);
-				int roundNumber = Integer.parseInt(anwser.split(" ", 5)[5]);
+				String team1Code = anwser.split(" ", 6)[1];
+				String team2Code = anwser.split(" ", 6)[2];
+				String judgeCode = anwser.split(" ", 6)[3];
+				int roomId = Integer.parseInt(anwser.split(" ", 6)[4]);
+				int roundNumber = Integer.parseInt(anwser.split(" ", 6)[5]);
 
 				Team team1 = TeamManager.getTeamByCode(team1Code);
 				Team team2 = TeamManager.getTeamByCode(team2Code);
@@ -55,6 +55,14 @@ public class Main {
 				Room room = RoomManager.getRoomById(roomId);
 
 				pair(team1, team2, judge, room, roundNumber);
+				print("Team " + team1Code + " was paired with Team " + team2Code + " with the judge " + judgeCode + " in room " + roomId);
+			} else if (anwser.toLowerCase().startsWith("judgenew")) {
+				String judgeName = anwser.split(" ", 5)[1];
+				String judgeCode = anwser.split(" ", 5)[2];
+
+				JudgeManager.newJudge(judgeName, judgeCode);
+
+				print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
 			}
 
 

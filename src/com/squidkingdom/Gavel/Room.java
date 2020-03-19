@@ -5,7 +5,7 @@ public class Room {
 
     RoundData tr = new RoundData();
 
-    RoundData[] data = new RoundData[]{tr,tr,tr,tr,tr};;
+    RoundData[] data = new RoundData[]{tr,tr,tr,tr,tr};
 
     public Room(int id) {
         this.id = id;
