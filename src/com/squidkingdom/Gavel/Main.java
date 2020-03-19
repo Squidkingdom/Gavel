@@ -10,12 +10,10 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String arg1 = args[0].substring(1);
-		String arg2 = args[1].substring(1);
 		boolean running = true;
 		// '-n' will be new team
 		while(running) {
-			print("Available options are: New | Print [Code] | Result | Export | Tab | SNR | Exit");
+			print("Available options are: New | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
 			String anwser = in.nextLine();
 			if (anwser.toLowerCase().startsWith("new")) {
 				selectedNew();
@@ -23,12 +21,12 @@ public class Main {
 				String code2 = anwser.split(" ", 5)[1];
 
 				printInfo(code2);
-			} else if (anwser.toLowerCase().startsWith("result")) {
+			} else if (anwser.toLowerCase().startsWith("addresult")) {
 				//TODO fix this
 				//selectedResult();
 			} else if (anwser.toLowerCase().startsWith("export")) {
 
-			} else if (anwser.toLowerCase().startsWith("tab")) {
+			} else if (anwser.toLowerCase().startsWith("start")) {
 				print("You chose tab.");
 			} else if (anwser.toLowerCase().startsWith("snr")) {
 				print("You chose tab.");
@@ -36,6 +34,19 @@ public class Main {
 			else if (anwser.toLowerCase().startsWith("exit")) {
 				print("Goodbye...");
 				running = false;
+			} else if (anwser.toLowerCase().startsWith("pairmanual")) {
+				String team1Code = anwser.split(" ", 5)[1];
+				String team2Code = anwser.split(" ", 5)[2];
+				String judgeCode = anwser.split(" ", 5)[3];
+				int roomId = Integer.parseInt(anwser.split(" ", 5)[4]);
+				int roundNumber = Integer.parseInt(anwser.split(" ", 5)[5]);
+
+				Team team1 = TeamManager.getTeamByCode(team1Code);
+				Team team2 = TeamManager.getTeamByCode(team2Code);
+				Judge judge = JudgeManager.getJudgeByCode(judgeCode);
+				Room room = RoomManager.getRoomById(roomId);
+
+				pair(team1, team2, judge, room, roundNumber);
 			}
 
 
@@ -120,6 +131,19 @@ public class Main {
 
 
 	}
+
+	public static void pair(Team team1, Team team2, Judge judge, Room room, int event) {
+		room.data[event - 1] = new RoundData(team1, team2, judge);
+
+		team1.rounds[event - 1] = new Round(true, team2, judge);
+		team1.opp[event - 1] = team2;
+		team1.judges[event - 1] = judge;
+
+		team2.rounds[event - 1] = new Round(true, team1, judge);
+		team2.opp[event - 1] = team2;
+		team2.judges[event - 1] = judge;
+	}
+
 	public static void print(String print){
 		System.out.println(print);
 	}
