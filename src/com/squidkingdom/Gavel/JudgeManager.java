@@ -13,7 +13,7 @@ public class JudgeManager {
     }
 
     public static Judge getJudgeByCode(String code) {
-        Optional<Judge> optionalJudge = judgeArray.stream().filter(Objects::nonNull).filter(e -> e.code == code).findAny();
+        Optional<Judge> optionalJudge = judgeArray.stream().filter(Objects::nonNull).filter(e -> e.code.equalsIgnoreCase(code)).findAny();
         return optionalJudge.orElse(DUMMY);
     }
 }
