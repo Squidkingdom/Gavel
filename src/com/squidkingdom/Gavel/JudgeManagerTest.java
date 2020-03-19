@@ -2,6 +2,8 @@ package com.squidkingdom.Gavel;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class JudgeManagerTest {
@@ -18,11 +20,12 @@ class JudgeManagerTest {
 
     @Test
     void getJudgeByCode() {
-        Judge[] judgeArray = JudgeManager.judgeArray;
+        ArrayList<Judge> judgeArray = JudgeManager.judgeArray;
         JudgeManager.newJudge("John doe", "TEST3");
         JudgeManager.newJudge("Jane doe", "TEST4");
 
         assertEquals("John doe", JudgeManager.getJudgeByCode("TEST3").name);
         assertEquals("TEST4", JudgeManager.getJudgeByCode("TEST4").code);
+        assertEquals(JudgeManager.DUMMY, JudgeManager.getJudgeByCode("ldkasjdl"));
     }
 }

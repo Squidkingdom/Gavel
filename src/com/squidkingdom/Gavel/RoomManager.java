@@ -1,26 +1,22 @@
 package com.squidkingdom.Gavel;
 
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
+
 public class RoomManager {
-    public static Room[] roomArray = new Room[11];
-    public static int JIDArrayLength = 0;
+    public static final Room DUMMY = new Room();
+    public static ArrayList<Room> roomArray = new ArrayList<Room>(11);
     public RoomManager(){}
-    public static Room dummy;
 
 
     public static void newRoom() {
-        roomArray[JIDArrayLength] = new Room(JIDArrayLength + 1);
-        JIDArrayLength++;
+        roomArray.add(new Room(roomArray.size() + 1));
     }
 
     public static Room getRoomById(int id){
-
-        for (int i = 0; i < JIDArrayLength + 1; i++) {
-            if (roomArray[i].id == id) {
-                return roomArray[i];
-            }
-
-        }
-        return dummy;
+        Optional<Room> optionalRoom = roomArray.stream().filter(Objects::nonNull).filter(e -> e.id == id).findAny();
+        return optionalRoom.orElse(DUMMY);
     }
 
 }

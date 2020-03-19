@@ -1,23 +1,19 @@
 package com.squidkingdom.Gavel;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
 
 public class JudgeManager {
-    public static Judge dummy = new Judge("Dummy", "DUMMY");
-    public static Judge[] judgeArray = new Judge[]{dummy, dummy, dummy, dummy, dummy, dummy, dummy, dummy, dummy};
-    public static int JIDArrayLength = 0;
+    public static final Judge DUMMY = new Judge("Dummy", "DUMMY");
+    public static ArrayList<Judge> judgeArray = new ArrayList<Judge>(9);
 
     public static void newJudge(String name, String code) {
-        judgeArray[JIDArrayLength] = new Judge(name, code);
-        JIDArrayLength++;
+        judgeArray.add(new Judge(name, code));
     }
 
     public static Judge getJudgeByCode(String code) {
-        for (Judge judge : judgeArray) {
-            if (judge.code == code) {
-                return judge;
-            }
-        }
-        return dummy;
+        Optional<Judge> optionalJudge = judgeArray.stream().filter(Objects::nonNull).filter(e -> e.code == code).findAny();
+        return optionalJudge.orElse(DUMMY);
     }
 }
