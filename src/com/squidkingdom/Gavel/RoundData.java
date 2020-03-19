@@ -3,6 +3,7 @@ package com.squidkingdom.Gavel;
 public class RoundData {
     boolean isFinished = false;
     boolean affWon;
+    int room;
     Team affTeam;
     Team negTeam;
     int affSpeaks = 0;
@@ -15,6 +16,14 @@ public class RoundData {
         this.affSpeaks = affSpeaks;
         this.negSpeaks = negSpeaks;
         this.judge = judge;
+    }
+    public RoundData(Team affTeam, Team negTeam, Judge judge, int affSpeaks, int negSpeaks, boolean affWon){
+        this.affTeam = affTeam;
+        this.negTeam = negTeam;
+        this.affSpeaks = affSpeaks;
+        this.negSpeaks = negSpeaks;
+        this.judge = judge;
+        this.affWon = affWon;
     }
     public RoundData(){
 

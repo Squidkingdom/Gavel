@@ -1,7 +1,7 @@
 package com.squidkingdom.Gavel;
 
 public class Judge {
-    String name = "";
+    String name = "Judge";
     String code = "";
     public Judge(){
     }

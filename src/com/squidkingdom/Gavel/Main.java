@@ -73,9 +73,10 @@ public class Main {
 		Team affTeam = manager.getTeamByCode(acode);
 		Team negTeam = manager.getTeamByCode(ncode);
 		int round = 1;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i <= 5; i++) {
 			if (!affTeam.roundComplete[i]) {
 				round = i;
+				break;
 			}
 		}
 		//Validate Data
@@ -83,44 +84,36 @@ public class Main {
 			print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name );
 			return;
 		}
-		else if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)){
+		if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)){
 			print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name );
 			return;
 		}
 
 
 		//Set Aff Data
-		Round affRound = affTeam.rounds[round];
-		affRound.affSpeaks = (a1s + a2s);
-		affRound.didWin = affWon;
-		affRound.negSpeaks = (n2s + n1s);
-		affRound.oppTeam = negTeam;
+		Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam);
+		affTeam.rounds[round] = roundAffObj;
 		affTeam.totalSpeaks += (a1s + a2s);
 		affTeam.roundComplete[round] = true;
 		affTeam.totalWins += affWon ?  1 : 0;
+
 		//Set Neg Data
-		Round negRound = negTeam.rounds[round];
-		negRound.affSpeaks = (a1s + a2s);
-		negRound.didWin = !affWon;
-		negRound.negSpeaks = (n2s + n1s);
-		negRound.oppTeam = affTeam;
+		Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam);
+		negTeam.rounds[round] = roundNegObj;
 		negTeam.totalSpeaks += (n1s + n2s);
 		negTeam.roundComplete[round] = true;
 		negTeam.totalWins += !affWon ?  1 : 0;
+
 		//Set Room Data
-		RoomManager.getRoomById(id).data[round].affSpeaks = (a1s + a2s);
-		RoomManager.getRoomById(id).data[round].negSpeaks = (n1s + n2s);
-		RoomManager.getRoomById(id).data[round].negTeam = negTeam;
-		RoomManager.getRoomById(id).data[round].affTeam = affTeam;
-		RoomManager.getRoomById(id).data[round].affWon = affWon;
-		RoomManager.getRoomById(id).data[round].judge = affTeam.rounds[round].judge;
+		RoundData roundRmObj = new RoundData(affTeam, negTeam,   affTeam.rounds[round].judge,  (a1s + a2s),  (n1s + n2s),  affWon);
+		RoomManager.getRoomById(id).data[round] = roundRmObj;
 
 
 
 		//Testing
 		String bool = " ";
 		bool.valueOf(bool);
-		print("Spot Check: "+affRound.negSpeaks + " " + negRound.affSpeaks + "" + bool.valueOf(bool));
+		print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + bool.valueOf(bool));
 	}
 
 
@@ -150,8 +143,12 @@ public class Main {
 		print("Code: \"" + team.code + "\" and Speakers: " + team.person1 +", " + team.person2 + "\n");
 
 		for (int i = 0; i < 5; i++) {
-			if (!team.roundComplete[i]) {
-				lastRound = i;
+			if (team.roundComplete[i]) {
+				Round round = team.rounds[i];
+				String didWin = round.didWin ? "Won on a " : "Lost on a ";
+				String side = round.side ?  "Aff" : "Neg";
+				int speaks = round.side ? round.affSpeaks : round.negSpeaks;
+				print("Round "+(i + 1)+": Side: \"" + side + "\" Outcome: \"" + didWin + speaks + "\" Opp Code: \"" + round.oppTeam.code + "\" Judge: \"" + round.judge.name + "\" Room: \'" + round.roomnum +"\'");
 			}
 		}
 
