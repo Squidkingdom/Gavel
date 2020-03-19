@@ -17,13 +17,14 @@ public class RoundData {
         this.negSpeaks = negSpeaks;
         this.judge = judge;
     }
-    public RoundData(Team affTeam, Team negTeam, Judge judge, int affSpeaks, int negSpeaks, boolean affWon){
+    public RoundData(Team affTeam, Team negTeam, Judge judge, int affSpeaks, int negSpeaks, boolean affWon, boolean isFinished){
         this.affTeam = affTeam;
         this.negTeam = negTeam;
         this.affSpeaks = affSpeaks;
         this.negSpeaks = negSpeaks;
         this.judge = judge;
         this.affWon = affWon;
+        this.isFinished = isFinished;
     }
     public RoundData(){
 

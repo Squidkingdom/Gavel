@@ -105,8 +105,9 @@ public class Main {
 		negTeam.totalWins += !affWon ?  1 : 0;
 
 		//Set Room Data
-		RoundData roundRmObj = new RoundData(affTeam, negTeam,   affTeam.rounds[round].judge,  (a1s + a2s),  (n1s + n2s),  affWon);
+		RoundData roundRmObj = new RoundData(affTeam, negTeam,   affTeam.rounds[round].judge,  (a1s + a2s),  (n1s + n2s),  affWon, true);
 		RoomManager.getRoomById(id).data[round] = roundRmObj;
+
 
 
 
