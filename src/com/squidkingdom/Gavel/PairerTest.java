@@ -63,13 +63,13 @@ class PairerTest {
         JudgeManager.newJudge("James Doe", "j3");
 
 
-        assertFalse(TeamManager.getTeamByCode("t1").inProgress[0]);
-        assertFalse(TeamManager.getTeamByCode("t2").inProgress[0]);
-        assertFalse(TeamManager.getTeamByCode("t3").inProgress[0]);
-        assertFalse(TeamManager.getTeamByCode("t4").inProgress[0]);
-        assertFalse(TeamManager.getTeamByCode("t5").inProgress[0]);
-        assertFalse(TeamManager.getTeamByCode("t6").inProgress[0]);
-        assertFalse(TeamManager.getTeamByCode("t7").inProgress[0]);
+        assertFalse(TeamManager.getTeamByCode("t1").inProgress[1]);
+        assertFalse(TeamManager.getTeamByCode("t2").inProgress[1]);
+        assertFalse(TeamManager.getTeamByCode("t3").inProgress[1]);
+        assertFalse(TeamManager.getTeamByCode("t4").inProgress[1]);
+        assertFalse(TeamManager.getTeamByCode("t5").inProgress[1]);
+        assertFalse(TeamManager.getTeamByCode("t6").inProgress[1]);
+        assertFalse(TeamManager.getTeamByCode("t7").inProgress[1]);
 
         try {
             System.out.println(Pairer.pairRound3());
