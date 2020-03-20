@@ -19,12 +19,14 @@ public class Round {
         this.oppTeam = oppTeam;
         this.judge = judge;
     }
-    Round(boolean side, Team oppTeam, Judge judge){
+
+    Round(boolean side, Team oppTeam, Judge judge) {
         this.side = side;
         this.oppTeam = oppTeam;
         this.judge = judge;
     }
-    Round(){
+
+    Round() {
 
     }
 }

@@ -63,7 +63,88 @@ public class Pairer {
     }
 
     public static void pairRound2() throws GavelExeception {
+        Team byeCastle;
+        int rNum = roomArray.size();
+        ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
+        int tNum = teamArray.size();
+        ArrayList<Team> localTA = (ArrayList<Team>) teamArray.clone();
+        int jNum = judgeArray.size();
+        ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
 
+        //Handle Possible bye
+        if ((tNum % 2) > 0) {
+            boolean succeeded = false;
+            while (!succeeded) {
+                int r = (rand.nextInt(tNum));
+                if (!localTA.get(r).hasHadBye) {
+                    localTA.get(r).hasHadBye = true;
+                    byeCastle = localTA.get(r);
+                    r = rand.nextInt(tNum);
+                    localTA.remove(r);
+                    succeeded = true;
+                }
+
+            }
+        }
+
+
+        //Make sure everything is good in da hood
+        if ((tNum / 2) > rNum) {
+            throw new GavelExeception("Error: Not enough rooms");
+        }
+
+        if ((tNum / 2) >= jNum) {
+            throw new GavelExeception("Error: Not enough judges");
+        }
+
+
+        //Pair Teams
+        while (localTA.size() >= 2) {
+            Team team1 = localTA.get(0);
+            Team team2 = localTA.get(1);
+            boolean hasShuffledT2 = false;
+            int team2Offset = 0;
+
+
+            do {
+                if (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code)) {
+                    if (localTA.size() == 2) {
+                        throw new GavelExeception("FUUUUUCCCKKK");
+                    } else {
+                        team2 = localTA.get(2);
+
+                    }
+                }
+            } while (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code));
+            //Break if they have met each other before
+            //TODO what if its an impossible situation IE, no more pairings possible.
+
+
+
+
+            //Judges
+            Judge judge = localJA.get(team2Offset);
+            int judgeOffset = 0;
+            do {
+                if (team1.judges[0].code.equalsIgnoreCase(judge.code) || team2.judges[0].code.equalsIgnoreCase(judge.code)) {
+                    if (localJA.size() == 2) {
+                        throw new GavelExeception("FUUUUUCCCKKK");
+                    } else {
+                        judge = localJA.get(0+judgeOffset);
+                        judgeOffset++;
+                    }
+                }
+            }while (team1.judges[0].code.equalsIgnoreCase(judge.code) || team2.judges[0].code.equalsIgnoreCase(judge.code));
+
+
+            //Pair the room and clean arrays
+            Room room = localRA.get(0);
+            Main.pair(team1, team2, judge, room, 1);
+            localTA.remove(0);
+            localTA.remove(hasShuffledT2 ? 0 : 1);
+            localJA.remove(0);
+            localRA.remove(0);
+        }
     }
 
     public static ArrayList<String> pairRound3() throws GavelExeception {

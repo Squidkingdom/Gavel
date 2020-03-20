@@ -13,32 +13,32 @@ public class TeamManager {
 
     public static void newTeam(String code) {
         Team team = new Team(code);
-            teamArray.add(team);
-            JIDArrayLength++;
+        teamArray.add(team);
+        JIDArrayLength++;
 
     }
     public void newTeam(String code, String person1) {
         Team team = new Team(code, person1);
 
-            teamArray.add(team);
-             JIDArrayLength++;
+        teamArray.add(team);
+        JIDArrayLength++;
 
     }
     public void newTeam(String code, String person1, String person2) {
         Team team = new Team(code, person1, person2);
 
-            teamArray.add(team);
-            JIDArrayLength++;
+        teamArray.add(team);
+        JIDArrayLength++;
     }
 
 
     public static Team getTeamByCode(String code){
         for (int i = 0; i < JIDArrayLength + 1; i++) {
-                if (teamArray.get(i).code.equalsIgnoreCase(code)) {
-                    return teamArray.get(i);
-                }
-
+            if (teamArray.get(i).code.equalsIgnoreCase(code)) {
+                return teamArray.get(i);
             }
+
+        }
         return dummy;
     }
     public static boolean checkcode(String code){
