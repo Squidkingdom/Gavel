@@ -160,10 +160,10 @@ class PairerTest {
         assertFalse(TeamManager.getTeamByCode("t6").inProgress[2]);
         assertFalse(TeamManager.getTeamByCode("t7").inProgress[2]);
 
-        try {
-            System.out.println(Pairer.pairRound3());
-        } catch (GavelExeception exception) {
-            System.out.println(exception);
-        }
+//        try {
+////            System.out.println(Pairer.pairRound3());
+////        } catch (GavelExeception exception) {
+////            System.out.println(exception);
+////        }
     }
 }

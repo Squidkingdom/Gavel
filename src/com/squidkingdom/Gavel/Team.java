@@ -4,7 +4,7 @@ package com.squidkingdom.Gavel;
 public class Team implements Comparable<Team>
 {
     int totalWins = 0;
-    int totalSpeaks = 0;
+    float totalSpeaks = 0;
     Round tr = new Round();
     Judge judges[] = new Judge[5];
     Round rounds[] = new Round[]{tr, tr, tr, tr, tr};

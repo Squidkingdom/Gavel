@@ -5,10 +5,13 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.Scanner;
 
 @SuppressWarnings("ALL")
+
+//TODO? Comment system?
 public class Main {
     public static TeamManager manager = new TeamManager();
     public static Scanner in = new Scanner(System.in);
     public static final int roomNum = 10;
+    public static boolean speaksOrRanks = true;  //This is speaks
 
     public static void main(String[] args) {
         boolean running = true;
@@ -18,6 +21,9 @@ public class Main {
         }
         while (running) {
             try {
+                /*
+                JudgeNew
+                 */
                 print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
                 String anwser = in.nextLine();
                 if (anwser.toLowerCase().startsWith("new")) {
@@ -57,6 +63,7 @@ public class Main {
 
                     pair(team1, team2, judge, room, roundNumber);
                     print("Team " + team1Code + " was paired with Team " + team2Code + " with the judge " + judgeCode + " in room " + roomId);
+
                 } else if (anwser.toLowerCase().startsWith("judgenew")) {
                     String judgeName = anwser.split(" ", 5)[1];
                     String judgeCode = anwser.split(" ", 5)[2];
@@ -93,15 +100,15 @@ public class Main {
         affTeam.inProgress[round] = false;
         negTeam.inProgress[round] = false;
 
-        //Validate Data
-        if (!(a1s + a2s + n1s + n2s == 10)) {
-            print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-            return;
-        }
-        if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)) {
-            print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-            return;
-        }
+        //TODO make speaks double, add check between 25-30
+      //  if (!(a1s + a2s + n1s + n2s == 10)) {
+         //   print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+        //    return;
+      // }
+      //  if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)) {
+       //     print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+       //     return;
+      //  }
 
 
         //Set Aff Data
