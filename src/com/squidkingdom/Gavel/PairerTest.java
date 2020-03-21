@@ -60,6 +60,8 @@ class PairerTest {
         JudgeManager.newJudge("John Doe", "j1");
         JudgeManager.newJudge("Jane Doe", "j2");
         JudgeManager.newJudge("Jane Doe", "j3");
+        JudgeManager.newJudge("John Doe", "j4");
+
 
 
         Judge judge1 = JudgeManager.getJudgeByCode("j1");
@@ -112,9 +114,6 @@ class PairerTest {
         assertFalse(TeamManager.getTeamByCode("t2").inProgress[1]);
         assertFalse(TeamManager.getTeamByCode("t3").inProgress[1]);
         assertFalse(TeamManager.getTeamByCode("t4").inProgress[1]);
-        assertFalse(TeamManager.getTeamByCode("t5").inProgress[1]);
-        assertFalse(TeamManager.getTeamByCode("t6").inProgress[1]);
-        assertFalse(TeamManager.getTeamByCode("t7").inProgress[1]);
 
         try {
             ArrayList<RoundData> pairings = Pairer.pairRound2();

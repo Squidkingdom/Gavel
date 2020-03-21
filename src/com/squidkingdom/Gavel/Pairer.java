@@ -9,8 +9,6 @@ package com.squidkingdom.Gavel;
     FIXME:
         idk what your doing with the returns and pairings, seems half baked, ignoring for now.
  */
-
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -138,25 +136,17 @@ public class Pairer {
         while (localRA.size() != 0) {
             int team2Offset = 1;
             Team team1 = localTA.get(0);
-            Team team2 = localTA.get(team2Offset);
-            //Pair Teams
-            do {
-                if (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code)) {
-                    if (localTA.size() == 2) {
-                        throw new GavelExeception("FUUUUUCCCKKK");
-                    } else {
-                        team2Offset++;
-                        team2 = localTA.get(team2Offset);
-                    }
-                }
-            } while (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code));
 
+            //Pair Teams
+            Optional<Team> optionalTeam2 = localTA.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findAny();
+            if (!optionalTeam2.isPresent())
+                throw new GavelExeception("TEAMS FUUUUUCCCKKK");
+            Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Team finalTeam2 = team2;
-            Optional<Judge> roundJudge = localJA.stream().filter(e -> team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> finalTeam2.judges[0].code.equalsIgnoreCase(e.code)).findAny();
+            Optional<Judge> roundJudge = localJA.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).findAny();
             if (!roundJudge.isPresent())
-                throw new GavelExeception("FUUUUUCCCKKK");
+                throw new GavelExeception("JUDGES FUUUUUCCCKKK");
 
 
 
@@ -164,10 +154,10 @@ public class Pairer {
             {
                 Room room = localRA.get(0);
                 pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
-                localTA.remove(0);
-                localTA.remove(team2Offset - 1);
-                localJA.remove(0);
-                localRA.remove(0);
+                localTA.remove(team1);
+                localTA.remove(team2);
+                localJA.remove(roundJudge.get());
+                localRA.remove(room);
             }
         }
 
