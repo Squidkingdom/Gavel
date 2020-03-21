@@ -1,20 +1,31 @@
 package com.squidkingdom.Gavel;
+import java.io.*;
+import java.util.*;
 
-public class Team {
+// A class 'Team' that implements Comparable
+class Team implements Comparable<Team>
+{
     int totalWins = 0;
     int totalSpeaks = 0;
     Round tr = new Round();
     Judge judges[] = new Judge[5];
     Round rounds[] = new Round[]{tr, tr, tr, tr, tr};
-    Team opp[] = new Team[5];
     boolean hasHadBye = false;
     boolean[] roundComplete = new boolean[]{false, false, false, false, false};
     boolean[] inProgress = new boolean[]{false, false, false, false, false};
-
     String code = "";
     String person1 = "";
     String person2 = "";
 
+    // Used to sort Teams by year
+    public int compareTo(Team o) {
+        if (this.totalWins < o.totalWins) return -1;
+        if (this.totalWins > o.totalWins) return 1;
+        else return 0;
+    }
+
+
+    // Constructor
     public Team() {
 
     }
@@ -35,4 +46,11 @@ public class Team {
     }
 
 
+    // Getter methods for accessing private data
+    public double getSpeaks() { return totalSpeaks; }
+    public int getTotalWins()  {  return totalWins; }
 }
+
+// Class to compare Teams by ratings
+
+
