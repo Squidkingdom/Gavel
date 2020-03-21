@@ -14,6 +14,10 @@ public class RoomManager {
         roomArray.add(new Room(roomArray.size() + 1));
     }
 
+    public static void newByeRoom() {
+        roomArray.add(new Room(0));
+    }
+
     public static Room getRoomById(int id){
         Optional<Room> optionalRoom = roomArray.stream().filter(Objects::nonNull).filter(e -> e.id == id).findAny();
         return optionalRoom.orElse(DUMMY);

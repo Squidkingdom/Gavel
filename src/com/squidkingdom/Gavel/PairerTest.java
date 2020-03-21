@@ -3,6 +3,7 @@ package com.squidkingdom.Gavel;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +36,8 @@ class PairerTest {
         assertFalse(TeamManager.getTeamByCode("t7").inProgress[0]);
 
         try {
-            Pairer.pairRound1();
+            ArrayList<RoundData> pairings = Pairer.pairRound1();
+            int a = 1;
         } catch (GavelExeception exception) {
             System.out.println(exception);
         }
@@ -134,14 +136,49 @@ class PairerTest {
     }
 
     @Test
+    void betterRoundTwoPairingWorksTest() throws GavelExeception {
+        Main.manager.newTeam("t1", "s1", "s2");
+        Main.manager.newTeam("t2", "s1", "s2");
+        Main.manager.newTeam("t3", "s1", "s2");
+        Main.manager.newTeam("t4", "s1", "s2");
+        Main.manager.newTeam("t5", "s1", "s2");
+        Main.manager.newTeam("t6", "s1", "s2");
+        Main.manager.newTeam("t7", "s1", "s2");
+        JudgeManager.newJudge("John Doe", "j1");
+        JudgeManager.newJudge("Jane Doe", "j2");
+        JudgeManager.newJudge("James Doe", "j3");
+        JudgeManager.newJudge("John Doe", "j4");
+        JudgeManager.newJudge("Jane Doe", "j5");
+        JudgeManager.newJudge("James Doe", "j6");
+        RoomManager.newRoom();
+        RoomManager.newRoom();
+        RoomManager.newRoom();
+
+        ArrayList<RoundData> pairings = Pairer.pairRound1();
+        pairings.stream().filter(roundData -> roundData.judge != JudgeManager.DUMMY).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
+
+        ArrayList<RoundData> pairings2 = Pairer.pairRound2();
+        int a = 1;
+
+    }
+
+    ArrayList<RoundData> safePairing2() {
+        try {
+            return Pairer.pairRound2();
+        } catch (GavelExeception exception) {
+            return safePairing2();
+        }
+    }
+
+    @Test
     void roundThreePairingWorks() {
-        TeamManager.newTeam("t1");
-        TeamManager.newTeam("t2");
-        TeamManager.newTeam("t3");
-        TeamManager.newTeam("t4");
-        TeamManager.newTeam("t5");
-        TeamManager.newTeam("t6");
-        TeamManager.newTeam("t7");
+        Main.manager.newTeam("t1", "s1", "s2");
+        Main.manager.newTeam("t2", "s1", "s2");
+        Main.manager.newTeam("t3", "s1", "s2");
+        Main.manager.newTeam("t4", "s1", "s2");
+        Main.manager.newTeam("t5", "s1", "s2");
+        Main.manager.newTeam("t6", "s1", "s2");
+        Main.manager.newTeam("t7", "s1", "s2");
 
         RoomManager.newRoom();
         RoomManager.newRoom();

@@ -7,7 +7,6 @@ public class TeamManager {
 
     public static int JIDArrayLength = 0;
     public TeamManager(){
-        teamArray.add(dummy);
     }
 
 
@@ -25,7 +24,7 @@ public class TeamManager {
 //        JIDArrayLength++;
 //
 //    }
-    public void newTeam(String code, String person1, String person2) {
+    public static void newTeam(String code, String person1, String person2) {
         Team team = new Team(code, person1, person2);
 
         teamArray.add(team);

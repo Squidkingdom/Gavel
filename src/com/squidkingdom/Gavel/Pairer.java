@@ -33,7 +33,7 @@ public class Pairer {
         ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
     //Handle Bye
-        if ((localAff.size() % 2) > 0) {
+        if (((localAff.size() + localNeg.size()) % 2) > 0) {
             boolean run = true;
             int lastTeam = localAff.size();
             //TODO That just sounds like a for loop with extra steps
@@ -73,7 +73,7 @@ public class Pairer {
 
         ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
 
-        while (localTA.size() > 1) {
+        while (localAff.size() > 1) {
             Team team1 = localAff.get(0);
             Team team2 = localNeg.get(0);
             Judge judge = localJA.get(0);
@@ -105,26 +105,24 @@ public class Pairer {
         ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
         int tNum = teamArray.size();
         ArrayList<Team> localTA = (ArrayList<Team>) teamArray.clone();
-        localTA.remove(0);
-        tNum--;
         int jNum = judgeArray.size();
          ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
         ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> localNeg = localTA.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         int judgeOffset = 0;
         Judge judge = localJA.get(judgeOffset);
         boolean hasShuffledT2 = false;
 
         //Handle Possible bye
-        if ((localTA.size() % 2) > 0) {
+        if (((localAff.size() + localNeg.size()) % 2) > 0) {
             boolean succeeded = false;
             int lastTeam = localAff.size();
             while (!succeeded) {
-                if (!localAff.get(lastTeam).hasHadBye) {
-                    localAff.get(lastTeam).hasHadBye = true;
-                    byeCastle = Optional.of(localAff.get(lastTeam));
-                    localAff.remove(lastTeam);
-                    localTA.remove(lastTeam);
+                if (!localAff.get(lastTeam - 1).hasHadBye) {
+                    localAff.get(lastTeam - 1).hasHadBye = true;
+                    byeCastle = Optional.of(localAff.get(lastTeam - 1));
+                    localAff.remove(lastTeam - 1);
+                    localTA.remove(lastTeam - 1);
                     succeeded = true;
                     byeCastle.get().opp[0] = TeamManager.dummy;
                     byeCastle.get().rounds[0] = new Round(true, TeamManager.dummy, JudgeManager.DUMMY);
@@ -166,6 +164,7 @@ public class Pairer {
 
             //Pair Teams
             Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findAny();
+
             if (!optionalTeam2.isPresent())
                 throw new GavelExeception("TEAMS FUUUUUCCCKKK");
             Team team2 = optionalTeam2.get();

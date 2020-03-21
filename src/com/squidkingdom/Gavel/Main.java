@@ -19,6 +19,7 @@ public class Main {
         for (int i = 0; i < roomNum; i++) {
             RoomManager.newRoom();
         }
+        RoomManager.newByeRoom();
         while (running) {
             try {
                 /*
@@ -181,11 +182,13 @@ public class Main {
         team1.opp[event - 1] = team2;
         team1.judges[event - 1] = judge;
         team1.inProgress[event - 1] = true;
+        team1.isAffLead = !team1.isAffLead;
 
         team2.rounds[event - 1] = new Round(false, team1, judge);
         team2.opp[event - 1] = team1;
         team2.judges[event - 1] = judge;
         team2.inProgress[event - 1] = true;
+        team2.isAffLead = !team2.isAffLead;
 
         return roundData;
     }
