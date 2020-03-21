@@ -13,7 +13,7 @@ public class Pairer {
     public static ArrayList<Team> teamArray = TeamManager.teamArray;
 
 
-    public static ArrayList<String> pairRound1() throws GavelExeception {
+    public static ArrayList<RoundData> pairRound1() throws GavelExeception {
         Optional<Team> currentBye = Optional.empty();
         int rNum = roomArray.size();
         ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
@@ -52,27 +52,27 @@ public class Pairer {
             throw new GavelExeception("Error: Not enough judges");
         }
 
-        ArrayList<String> pairings = new ArrayList<String>(1);
+        ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
 
         while (localTA.size() > 1) {
             Team team1 = localTA.get(0);
             Team team2 = localTA.get(1);
             Judge judge = localJA.get(0);
             Room room = localRA.get(0);
-            Main.pair(team1, team2, judge, room, 1);
-            pairings.add(team1.code + " + " + team2.code + " (" + judge.code + ") in room " + room.id);
+            pairings.add(Main.pair(team1, team2, judge, room, 1));
             localTA.remove(0);
             localTA.remove(0);
             localJA.remove(0);
             localRA.remove(0);
         }
 
-        pairings.add(currentBye.orElse(new Team("No one")).code + " has a bye");
+        if (currentBye.isPresent())
+            pairings.add(new RoundData(currentBye.get(), TeamManager.dummy, JudgeManager.DUMMY));
         return pairings;
     }
 
     //Round 2
-    public static ArrayList<String> pairRound2() throws GavelExeception {
+    public static ArrayList<RoundData> pairRound2() throws GavelExeception {
         Optional<Team> byeCastle = Optional.empty();
         int rNum = roomArray.size();
         ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
@@ -123,7 +123,7 @@ public class Pairer {
         Make sure that the next judge in the array has not seen either team before
          */
 
-        ArrayList<String> pairings = new ArrayList<String>(1);
+        ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
 
         while (localRA.size() != 0) {
             int team2Offset = 1;
@@ -167,8 +167,7 @@ public class Pairer {
             //Pair the room and clean arrays
             {
                 Room room = localRA.get(0);
-                Main.pair(team1, team2, roundJudge.get(), room, 1);
-                pairings.add(team1.code + " + " + team2.code + " (" + judge.code + ") in room " + room.id);
+                pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
                 localTA.remove(0);
                 localTA.remove(team2Offset - 1);
                 localJA.remove(0);
@@ -176,7 +175,8 @@ public class Pairer {
             }
         }
 
-        pairings.add(byeCastle.orElse(new Team("No one")).code + " has a bye");
+        if (byeCastle.isPresent())
+            pairings.add(new RoundData(byeCastle.get(), TeamManager.dummy, JudgeManager.DUMMY));
         return pairings;
     }
 

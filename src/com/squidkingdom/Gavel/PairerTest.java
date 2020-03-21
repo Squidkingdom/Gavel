@@ -2,6 +2,8 @@ package com.squidkingdom.Gavel;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PairerTest {
@@ -33,7 +35,7 @@ class PairerTest {
         assertFalse(TeamManager.getTeamByCode("t7").inProgress[0]);
 
         try {
-            System.out.println(Pairer.pairRound1());
+            Pairer.pairRound1();
         } catch (GavelExeception exception) {
             System.out.println(exception);
         }
@@ -115,7 +117,8 @@ class PairerTest {
         assertFalse(TeamManager.getTeamByCode("t7").inProgress[1]);
 
         try {
-            System.out.println(Pairer.pairRound2());
+            ArrayList<RoundData> pairings = Pairer.pairRound2();
+            int a = 1;
         } catch (GavelExeception exception) {
             System.out.println(exception);
         }

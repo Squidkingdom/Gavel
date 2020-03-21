@@ -166,8 +166,9 @@ public class Main {
 
     }
 
-    public static void pair(Team team1, Team team2, Judge judge, Room room, int event) {
-        room.data[event - 1] = new RoundData(team1, team2, judge);
+    public static RoundData pair(Team team1, Team team2, Judge judge, Room room, int event) {
+        RoundData roundData = new RoundData(team1, team2, judge);
+        room.data[event - 1] = roundData;
 
         team1.rounds[event - 1] = new Round(true, team2, judge);
         team1.opp[event - 1] = team2;
@@ -178,6 +179,8 @@ public class Main {
         team2.opp[event - 1] = team1;
         team2.judges[event - 1] = judge;
         team2.inProgress[event - 1] = true;
+
+        return roundData;
     }
 
     public static void print(String print) {
