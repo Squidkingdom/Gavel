@@ -17,13 +17,14 @@ public class TeamManager {
         JIDArrayLength++;
 
     }
-    public void newTeam(String code, String person1) {
-        Team team = new Team(code, person1);
-
-        teamArray.add(team);
-        JIDArrayLength++;
-
-    }
+    //TODO un comment this for LD
+//    public void newTeam(String code, String person1) {
+//        Team team = new Team(code, person1);
+//
+//        teamArray.add(team);
+//        JIDArrayLength++;
+//
+//    }
     public void newTeam(String code, String person1, String person2) {
         Team team = new Team(code, person1, person2);
 

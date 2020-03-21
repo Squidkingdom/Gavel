@@ -1,8 +1,12 @@
 package com.squidkingdom.Gavel;
 
+import org.jetbrains.annotations.NotNull;
+
 // A class 'Team' that implements Comparable
 public class Team implements Comparable<Team>
 {
+    static boolean affNegFlip = true;
+    boolean isAffLead;
     int totalWins = 0;
     float totalSpeaks = 0;
     Round tr = new Round();
@@ -25,23 +29,29 @@ public class Team implements Comparable<Team>
 
 
     // Constructor
+    @Deprecated
     public Team() {
 
     }
-
+    @Deprecated
     public Team(String code) {
         this.code = code;
-    }
 
-    public Team(String code, String person1) {
-        this.code = code;
-        this.person1 = person1;
     }
+//TODO uncomment this for LD
+//    public Team(String code, String person1) {
+//        this.code = code;
+//        this.person1 = person1;
+//        this.isAffLead = affNegFlip;
+//        affNegFlip = !affNegFlip;
+//    }
 
     public Team(String code, String person1, String person2) {
         this.code = code;
         this.person1 = person1;
         this.person2 = person2;
+        this.isAffLead = affNegFlip;
+        affNegFlip = !affNegFlip;
     }
 
 

@@ -1,19 +1,19 @@
 package com.squidkingdom.Gavel;
 /*TODO:
-    ADD CANT BE AFF/NEG 4 TIMES IN A ROW
-        This could be done by creating an affLeading field in TEAM class and filter into to ArrayList<Team> before .sort()ing and then instead of localTA(0) and localTA(1) make it localAFF(0) localNeg(0), needs to handle drops, and changes in bye status, TBD.
-    MAKE TEAMS[] BE FIELD OF JUDGES INSTEAD OF JUDGES[] IN TEAMS
+    Remove TNUM and derrivitave, remove need for localTa after filter.
+     MAKE TEAMS[] BE FIELD OF JUDGES INSTEAD OF JUDGES[] IN TEAMS
         *(THIS ALLOWS HOT SWAPPING OF JUDGES)
 
 
     FIXME:
         idk what your doing with the returns and pairings, seems half baked, ignoring for now.
  */
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-
+@SuppressWarnings({"unchecked", "UnusedReturnValue"})
 public class Pairer {
     static Random rand = new Random();
     public static ArrayList<Room> roomArray = RoomManager.roomArray;
@@ -22,35 +22,41 @@ public class Pairer {
 
     //Round 3
     public static ArrayList<RoundData> pairRound1() throws GavelExeception {
-        Optional<Team> currentBye = Optional.empty();
+        Optional<Team> byeCastle = Optional.empty();
         int rNum = roomArray.size();
         ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
         int tNum = teamArray.size();
         ArrayList<Team> localTA = (ArrayList<Team>) teamArray.clone();
         int jNum = judgeArray.size();
         ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
+        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
-        if ((tNum % 2) > 0) {
-            boolean succeeded = false;
-            while (!succeeded) {
-                int r = (rand.nextInt(tNum));
-                if (!localTA.get(r).hasHadBye) {
-                    localTA.get(r).hasHadBye = true;
-                    currentBye = Optional.of(localTA.get(r));
-                    localTA.remove(r);
-                    r = rand.nextInt(tNum);
-
-                    currentBye.get().opp[0] = TeamManager.dummy;
-                    currentBye.get().rounds[0] = new Round(true, TeamManager.dummy, JudgeManager.DUMMY);
-                    currentBye.get().totalWins++;
-                    currentBye.get().totalSpeaks = currentBye.get().totalSpeaks + 3;
-                    currentBye.get().judges[0] = JudgeManager.DUMMY;
-                    currentBye.get().roundComplete[0] = true;
-
-                    succeeded = true;
+    //Handle Bye
+        if ((localAff.size() % 2) > 0) {
+            boolean run = true;
+            int lastTeam = localAff.size();
+            //TODO That just sounds like a for loop with extra steps
+            while (run) {
+                if (!localAff.get(lastTeam).hasHadBye) {
+                    localAff.get(lastTeam).hasHadBye = true;
+                    byeCastle = Optional.of(localAff.get(lastTeam));
+                    localAff.remove(lastTeam);
+                    localTA.remove(lastTeam);
+                    run = false;
+                    byeCastle.get().opp[0] = TeamManager.dummy;
+                    byeCastle.get().rounds[0] = new Round(true, TeamManager.dummy, JudgeManager.DUMMY);
+                    byeCastle.get().totalWins++;
+                    byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
+                    byeCastle.get().judges[0] = JudgeManager.DUMMY;
+                    byeCastle.get().roundComplete[0] = true;
+                } else {
+                    lastTeam--;
                 }
             }
         }
+
+        
 
         if ((tNum / 2) > rNum) {
             throw new GavelExeception("Error: Not enough rooms");
@@ -59,25 +65,38 @@ public class Pairer {
         if ((tNum / 2) > jNum) {
             throw new GavelExeception("Error: Not enough judges");
         }
+        
+        if ((localAff.size() % 2) > 0 || (localNeg.size() % 2) > 0){
+
+            throw new GavelExeception("Fuck, bye is not handled ");
+        }
 
         ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
 
         while (localTA.size() > 1) {
-            Team team1 = localTA.get(0);
-            Team team2 = localTA.get(1);
+            Team team1 = localAff.get(0);
+            Team team2 = localNeg.get(0);
             Judge judge = localJA.get(0);
             Room room = localRA.get(0);
             pairings.add(Main.pair(team1, team2, judge, room, 1));
-            localTA.remove(0);
-            localTA.remove(0);
+            localTA.remove(team1);
+            localTA.remove(team2);
+            localAff.remove(team1);
+            localNeg.remove(team2);
             localJA.remove(0);
             localRA.remove(0);
         }
 
-        if (currentBye.isPresent())
-            pairings.add(new RoundData(currentBye.get(), TeamManager.dummy, JudgeManager.DUMMY));
+        if (byeCastle.isPresent())
+            pairings.add(new RoundData(byeCastle.get(), TeamManager.dummy, JudgeManager.DUMMY));
+        
         return pairings;
     }
+
+
+
+
+
 
     //Round 2
     public static ArrayList<RoundData> pairRound2() throws GavelExeception {
@@ -89,25 +108,33 @@ public class Pairer {
         localTA.remove(0);
         tNum--;
         int jNum = judgeArray.size();
-        ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
+         ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
+        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         int judgeOffset = 0;
         Judge judge = localJA.get(judgeOffset);
         boolean hasShuffledT2 = false;
 
         //Handle Possible bye
-        if ((tNum % 2) > 0) {
+        if ((localTA.size() % 2) > 0) {
             boolean succeeded = false;
+            int lastTeam = localAff.size();
             while (!succeeded) {
-                int r = (rand.nextInt(tNum));
-                if (!localTA.get(r).hasHadBye) {
-                    localTA.get(r).hasHadBye = true;
-                    byeCastle = Optional.of(localTA.get(r));
-                    tNum--;
-                    r = rand.nextInt(tNum);
-                    localTA.remove(r);
+                if (!localAff.get(lastTeam).hasHadBye) {
+                    localAff.get(lastTeam).hasHadBye = true;
+                    byeCastle = Optional.of(localAff.get(lastTeam));
+                    localAff.remove(lastTeam);
+                    localTA.remove(lastTeam);
                     succeeded = true;
+                    byeCastle.get().opp[0] = TeamManager.dummy;
+                    byeCastle.get().rounds[0] = new Round(true, TeamManager.dummy, JudgeManager.DUMMY);
+                    byeCastle.get().totalWins++;
+                    byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
+                    byeCastle.get().judges[0] = JudgeManager.DUMMY;
+                    byeCastle.get().roundComplete[0] = true;
+                } else {
+                    lastTeam--;
                 }
-
             }
         }
 
@@ -135,10 +162,10 @@ public class Pairer {
 
         while (localRA.size() != 0) {
             int team2Offset = 1;
-            Team team1 = localTA.get(0);
+            Team team1 = localAff.get(0);
 
             //Pair Teams
-            Optional<Team> optionalTeam2 = localTA.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findAny();
+            Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findAny();
             if (!optionalTeam2.isPresent())
                 throw new GavelExeception("TEAMS FUUUUUCCCKKK");
             Team team2 = optionalTeam2.get();
@@ -156,6 +183,8 @@ public class Pairer {
                 pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
                 localTA.remove(team1);
                 localTA.remove(team2);
+                localAff.remove(team1);
+                localNeg.remove(team2);
                 localJA.remove(roundJudge.get());
                 localRA.remove(room);
             }
@@ -166,9 +195,14 @@ public class Pairer {
         return pairings;
     }
 
+
+
+
+
+
     //Round 3
     public static ArrayList<String> pairRound3() throws GavelExeception {
-        Optional<Team> currentBye = Optional.empty();
+        Optional<Team> byeCastle = Optional.empty();
         int rNum = roomArray.size();
         int jNum = judgeArray.size();
         int tNum = teamArray.size();
@@ -194,21 +228,25 @@ public class Pairer {
         WinCompare winCompare = new WinCompare();
         Collections.sort(localTA, winCompare);
 
+        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+
 
 
 
         //Handle Possible Bye
-        if ((localTA.size() % 2) > 0) {
+        if ((localAff.size() % 2) > 0) {
             boolean succeeded = false;
-            int r = 0;
+            int lastTeam = localAff.size();
             while (!succeeded) {
-                if (!localTA.get(r).hasHadBye) {
-                    localTA.get(r).hasHadBye = true;
-                    currentBye = Optional.of(localTA.get(r));
-                    localTA.remove(r);
+                if (!localAff.get(lastTeam).hasHadBye) {
+                    localAff.get(lastTeam).hasHadBye = true;
+                    byeCastle = Optional.of(localAff.get(lastTeam));
+                    localTA.remove(lastTeam);
+                    localAff.remove(lastTeam);
                     succeeded = true;
                 } else {
-                    r++;
+                    lastTeam--;
                 }
             }
         }
@@ -232,41 +270,31 @@ public class Pairer {
         // DO THE THING (Pair Teams)
         while (localRA.size() != 0) {
             int team2Offset = 1;
-            Team team1 = localTA.get(0);
-            Team team2 = localTA.get(team2Offset);
+            Team team1 = localAff.get(0);
+
             //Pair Teams
-            do {
-                if (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code) || team1.opp[1].code.equalsIgnoreCase(team2.opp[1].code)) {
-                    //TODO this will throw NullPointerExeception
-
-                    if (localTA.size() == 2) {
-                        throw new GavelExeception("FUUUUUCCCKKK");
-                    } else {
-
-                        team2Offset++;
-                        team2 = localTA.get(team2Offset);
-                    }
-                }
-            } while (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code) || team1.opp[1].code.equalsIgnoreCase(team2.opp[1].code));
-
-
+            Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
+            if (!optionalTeam2.isPresent())
+                throw new GavelExeception("TEAMS FUUUUUCCCKKK");
+            Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Team finalTeam2 = team2;
-            Optional<Judge> roundJudge = localJA.stream().filter(e -> team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> finalTeam2.judges[0].code.equalsIgnoreCase(e.code)).findAny();
+            Optional<Judge> roundJudge = localJA.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
             if (!roundJudge.isPresent())
-                throw new GavelExeception("FUUUUUCCCKKK");
+                throw new GavelExeception("JUDGES FUUUUUCCCKKK");
 
 
 
             /*Pair the room and clean array*/
             {
                 Room room = localRA.get(0);
-                //  pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
-                localTA.remove(0);
-                localTA.remove(team2Offset - 1);
-                localJA.remove(0);
-                localRA.remove(0);
+               // pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
+                localTA.remove(team1);
+                localAff.remove(team1);
+                localTA.remove(team2);
+                localNeg.remove(team2);
+                localJA.remove(roundJudge.get());
+                localRA.remove(room);
             }
         }
 
@@ -275,13 +303,18 @@ public class Pairer {
 
         //TODO Does this need to be in round 2 or 1?
 
-        pairings.add(currentBye.orElse(new Team("No one")).code + " has a bye");
+        pairings.add(byeCastle.orElse(new Team("No one")).code + " has a bye");
         return pairings;
     }
+
+
+
+
+
 
     //Round 4
     public static ArrayList<String> pairRound4() throws GavelExeception {
-        Optional<Team> currentBye = Optional.empty();
+        Optional<Team> byeCastle = Optional.empty();
         int rNum = roomArray.size();
         int jNum = judgeArray.size();
         int tNum = teamArray.size();
@@ -289,6 +322,7 @@ public class Pairer {
         ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
         ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
         ArrayList<String> pairings = new ArrayList<String>(1);
+
         //  ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
 
 
@@ -307,21 +341,26 @@ public class Pairer {
         WinCompare winCompare = new WinCompare();
         Collections.sort(localTA, winCompare);
 
+        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+
 
 
 
         //Handle Possible Bye
-        if ((localTA.size() % 2) > 0) {
+        if ((localAff.size() % 2) > 0) {
             boolean succeeded = false;
-            int r = 0;
+            int lastTeam = localAff.size();
             while (!succeeded) {
-                if (!localTA.get(r).hasHadBye) {
-                    localTA.get(r).hasHadBye = true;
-                    currentBye = Optional.of(localTA.get(r));
-                    localTA.remove(r);
+                if (!localAff.get(lastTeam).hasHadBye) {
+                    localAff.get(lastTeam).hasHadBye = true;
+                    byeCastle = Optional.of(localAff.get(lastTeam));
+                    localAff.remove(lastTeam);
+                    localTA.remove(lastTeam);
+
                     succeeded = true;
                 } else {
-                    r++;
+                    lastTeam--;
                 }
             }
         }
@@ -341,63 +380,57 @@ public class Pairer {
 
 
 
-
-        // DO THE THING (Pair Teams)
         while (localRA.size() != 0) {
             int team2Offset = 1;
-            Team team1 = localTA.get(0);
-            Team team2 = localTA.get(team2Offset);
+            Team team1 = localAff.get(0);
+
             //Pair Teams
-            do {
-                if (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code) || team1.opp[1].code.equalsIgnoreCase(team2.opp[1].code)) {
-                    //TODO this will throw NullPointerExeception
-
-                    if (localTA.size() == 2) {
-                        throw new GavelExeception("FUUUUUCCCKKK");
-                    } else {
-
-                        team2Offset++;
-                        team2 = localTA.get(team2Offset);
-                    }
-                }
-            } while (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code) || team1.opp[1].code.equalsIgnoreCase(team2.opp[1].code));
-
-
+            Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
+            if (!optionalTeam2.isPresent())
+                throw new GavelExeception("TEAMS FUUUUUCCCKKK");
+            Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Team finalTeam2 = team2;
-            Optional<Judge> roundJudge = localJA.stream().filter(e -> team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> finalTeam2.judges[0].code.equalsIgnoreCase(e.code)).findAny();
+            Optional<Judge> roundJudge = localJA.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
             if (!roundJudge.isPresent())
-                throw new GavelExeception("FUUUUUCCCKKK");
+                throw new GavelExeception("JUDGES FUUUUUCCCKKK");
 
 
 
             /*Pair the room and clean array*/
             {
                 Room room = localRA.get(0);
-                //  pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
-                localTA.remove(0);
-                localTA.remove(team2Offset - 1);
-                localJA.remove(0);
-                localRA.remove(0);
+                // pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
+                localTA.remove(team1);
+                localAff.remove(team1);
+                localNeg.remove(team2);
+                localTA.remove(team2);
+                localJA.remove(roundJudge.get());
+                localRA.remove(room);
             }
         }
 
 
 
 
+
         //TODO Does this need to be in round 2 or 1?
 
-        pairings.add(currentBye.orElse(new Team("No one")).code + " has a bye");
+        pairings.add(byeCastle.orElse(new Team("No one")).code + " has a bye");
         return pairings;
 
 
     }
+
+
+
+
+
 
 
     //Round 5
     public static ArrayList<String> pairRound5() throws GavelExeception {
-        Optional<Team> currentBye = Optional.empty();
+        Optional<Team> byeCastle = Optional.empty();
         int rNum = roomArray.size();
         int jNum = judgeArray.size();
         int tNum = teamArray.size();
@@ -423,21 +456,25 @@ public class Pairer {
         WinCompare winCompare = new WinCompare();
         Collections.sort(localTA, winCompare);
 
+        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+
 
 
 
         //Handle Possible Bye
-        if ((localTA.size() % 2) > 0) {
+        if ((localAff.size() % 2) > 0) {
             boolean succeeded = false;
-            int r = 0;
+            int lastTeam = localAff.size();
             while (!succeeded) {
-                if (!localTA.get(r).hasHadBye) {
-                    localTA.get(r).hasHadBye = true;
-                    currentBye = Optional.of(localTA.get(r));
-                    localTA.remove(r);
+                if (!localAff.get(lastTeam).hasHadBye) {
+                    localAff.get(lastTeam).hasHadBye = true;
+                    byeCastle = Optional.of(localAff.get(lastTeam));
+                    localTA.remove(lastTeam);
+                    localAff.remove(lastTeam);
                     succeeded = true;
                 } else {
-                    r++;
+                    lastTeam--;
                 }
             }
         }
@@ -461,50 +498,41 @@ public class Pairer {
         // DO THE THING (Pair Teams)
         while (localRA.size() != 0) {
             int team2Offset = 1;
-            Team team1 = localTA.get(0);
-            Team team2 = localTA.get(team2Offset);
+            Team team1 = localAff.get(0);
+
             //Pair Teams
-            do {
-                if (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code) || team1.opp[1].code.equalsIgnoreCase(team2.opp[1].code)) {
-                    //TODO this will throw NullPointerExeception
-
-                    if (localTA.size() == 2) {
-                        throw new GavelExeception("FUUUUUCCCKKK");
-                    } else {
-
-                        team2Offset++;
-                        team2 = localTA.get(team2Offset);
-                    }
-                }
-            } while (team1.opp[0].code.equalsIgnoreCase(team2.opp[0].code) || team1.opp[1].code.equalsIgnoreCase(team2.opp[1].code));
-
-
+            Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
+            if (!optionalTeam2.isPresent())
+                throw new GavelExeception("TEAMS FUUUUUCCCKKK");
+            Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Team finalTeam2 = team2;
-            Optional<Judge> roundJudge = localJA.stream().filter(e -> team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> finalTeam2.judges[0].code.equalsIgnoreCase(e.code)).findAny();
+            Optional<Judge> roundJudge = localJA.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
             if (!roundJudge.isPresent())
-                throw new GavelExeception("FUUUUUCCCKKK");
+                throw new GavelExeception("JUDGES FUUUUUCCCKKK");
 
 
 
             /*Pair the room and clean array*/
             {
                 Room room = localRA.get(0);
-                //  pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
-                localTA.remove(0);
-                localTA.remove(team2Offset - 1);
-                localJA.remove(0);
-                localRA.remove(0);
+                // pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
+                localTA.remove(team1);
+                localAff.remove(team1);
+                localTA.remove(team2);
+                localNeg.remove(team2);
+                localJA.remove(roundJudge.get());
+                localRA.remove(room);
             }
         }
 
 
 
 
+
         //TODO Does this need to be in round 2 or 1?
 
-        pairings.add(currentBye.orElse(new Team("No one")).code + " has a bye");
+        pairings.add(byeCastle.orElse(new Team("No one")).code + " has a bye");
         return pairings;
 
 
