@@ -33,17 +33,17 @@ public class TeamManager {
 
 
     public static Team getTeamByCode(String code){
-        for (int i = 0; i < JIDArrayLength + 1; i++) {
-            if (teamArray.get(i).code.equalsIgnoreCase(code)) {
-                return teamArray.get(i);
+        for (Team team : teamArray) {
+            if (team.code.equalsIgnoreCase(code)) {
+                return team;
             }
 
         }
         return dummy;
     }
     public static boolean checkcode(String code){
-        for (int i = 0; i < JIDArrayLength + 1; i++) {
-            if (teamArray.get(i).code.toLowerCase() == code.toLowerCase()) {
+        for (Team team : teamArray) {
+            if (team.code.equalsIgnoreCase(code)) {
                 return true;
             }
 

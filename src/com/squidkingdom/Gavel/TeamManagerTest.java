@@ -15,9 +15,9 @@ class TeamManagerTest {
         // TODO: TeamManager.newTeam should throw an exception or something, you should not be able to make teams with duplicated codes.
         manager.newTeam("t1", "s1", "s2");
 
-        assertEquals("t1", manager.teamArray.get(1).code);
-        assertEquals("t2", manager.teamArray.get(2).code);
-        assertEquals("t1", manager.teamArray.get(3).code);
+        assertEquals("t1", manager.teamArray.get(0).code);
+        assertEquals("t2", manager.teamArray.get(1).code);
+        assertEquals("t1", manager.teamArray.get(2).code);
     }
 
     @Test

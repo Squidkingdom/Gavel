@@ -20,21 +20,32 @@ public class Pairer {
     public static ArrayList<Judge> judgeArray = JudgeManager.judgeArray;
     public static ArrayList<Team> teamArray = TeamManager.teamArray;
 
-    //Round 3
-    public static ArrayList<RoundData> pairRound1() throws GavelExeception {
-
+    //Round 1
+    public static void pairRound1() throws GavelExeception {
+        return;
     }
-
-
-
-
-
 
     //Round 2
-    public static ArrayList<RoundData> pairRound2() throws GavelExeception {
+    public static void pairRound2() throws GavelExeception {
+        ArrayList<Team> localTeamsArray = (ArrayList<Team>) teamArray.clone();
+        ArrayList<Team> localJudgeArray = (ArrayList<Team>) teamArray.clone();
+        ArrayList<Team> localRoomArray = (ArrayList<Team>) teamArray.clone();
+
+        if ((localTeamsArray.size() / 2) > localJudgeArray.size())
+            throw new GavelExeception("Error: Not enough Judges");
+
+        if ((localTeamsArray.size() / 2) > localRoomArray.size())
+            throw new GavelExeception("Error: Not enough rooms");
+
+        ArrayList<Team> localAff = localTeamsArray.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> localNeg = localTeamsArray.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+
+        if ((localAff.size() % 2) > 0) {
+
+        }
+
 
     }
-
 
 
 
