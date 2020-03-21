@@ -8,6 +8,10 @@ class WinCompare implements Comparator<Team>
     {
         if (m1.getTotalWins() < m2.getTotalWins()) return -1;
         if (m1.getTotalWins() > m2.getTotalWins()) return 1;
-        else return 0;
+        else{
+            if (m1.getSpeaks() < m2.getSpeaks()) return -1;
+            if (m1.getSpeaks() > m2.getSpeaks()) return 1;
+            else return 0;
+        }
     }
 }

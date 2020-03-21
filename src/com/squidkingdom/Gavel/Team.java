@@ -1,15 +1,14 @@
 package com.squidkingdom.Gavel;
-import java.io.*;
-import java.util.*;
 
 // A class 'Team' that implements Comparable
-class Team implements Comparable<Team>
+public class Team implements Comparable<Team>
 {
     int totalWins = 0;
     int totalSpeaks = 0;
     Round tr = new Round();
     Judge judges[] = new Judge[5];
     Round rounds[] = new Round[]{tr, tr, tr, tr, tr};
+    Team opp[] = new Team[5];
     boolean hasHadBye = false;
     boolean[] roundComplete = new boolean[]{false, false, false, false, false};
     boolean[] inProgress = new boolean[]{false, false, false, false, false};

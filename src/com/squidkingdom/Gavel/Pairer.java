@@ -111,11 +111,6 @@ public class Pairer {
 
 
         Make sure that the next judge in the array has not seen either team before
-
-
-
-
-
          */
         while (localRA.size() != 0) {
 
@@ -140,7 +135,7 @@ public class Pairer {
 
             //Pair Judges
             do {
-                if (judgeOffset > localJA.size()){
+                if (judgeOffset > localJA.size()) {
                     throw new GavelExeception("This wouldve been an OOB execpetion, that being said \"FUCK\"");
                 }
                 if (team1.judges[0].code.equalsIgnoreCase(judge.code) || team2.judges[0].code.equalsIgnoreCase(judge.code)) {
@@ -192,8 +187,7 @@ public class Pairer {
         ArrayList<Team> wonOne = localTA.stream().filter(e -> e.totalWins == 1).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Team> wonNone = localTA.stream().filter(e -> e.totalWins == 0).collect(Collectors.toCollection(ArrayList::new));
         WinCompare winCompare = new WinCompare();
-        SpeakCompare speakCompare = new SpeakCompare()
-        Collections.sor;
+        Collections.sort(localTA, winCompare);
 
         //Handle Possible Bye
         if ((wonNone.size() % 2) > 0) {
@@ -211,8 +205,8 @@ public class Pairer {
         }
 
 
-        if((wonTwo.size() % 2) == 1){
-            
+        if ((wonTwo.size() % 2) == 1) {
+
         }
 
 
@@ -221,7 +215,6 @@ public class Pairer {
         while (wonTwo.size() > 1) {
             Team team1 = wonTwo.get(0);
             Team team2 = wonTwo.get(0);
-
 
 
             Judge judge = localJA.get(0);
@@ -273,6 +266,7 @@ public class Pairer {
 
 
     }
+}
 
 
 
