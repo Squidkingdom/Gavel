@@ -37,6 +37,16 @@ public class Pairer {
                 byeCastle = Optional.of(affPool.get(lt));
                 teamPool.remove(byeCastle.get());
                 affPool.remove(byeCastle.get());
+
+                Team ByeTeam = new Team("BYE", "bye", "bye");
+                Judge ByeJudge = new Judge("bye", "BYE");
+                byeCastle.get().opp[0] = ByeTeam;
+                byeCastle.get().rounds[0] = new Round(true, ByeTeam, ByeJudge);
+                byeCastle.get().totalWins++;
+                byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
+                byeCastle.get().judges[0] = ByeJudge;
+                byeCastle.get().roundComplete[0] = true;
+
                 break;
             }
         }
