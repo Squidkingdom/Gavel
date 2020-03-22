@@ -97,8 +97,8 @@ public class Pairer {
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
-        ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> affPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
 
         //Handle Bye
@@ -230,8 +230,8 @@ public class Pairer {
         Optional<Team> byeCastle;
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
-        ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> affPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
         WinCompare winCompare = new WinCompare();
         teamPool.sort(winCompare);
