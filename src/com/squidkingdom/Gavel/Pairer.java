@@ -32,31 +32,34 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-
-                    //TODO set bye data from previous commit
-                    affPool.get(lt).hasHadBye = true;
-                    byeCastle = Optional.of(affPool.get(lt));
-                    teamPool.remove(byeCastle.get());
-                    affPool.remove(byeCastle.get());
-                    break;
-
-                Team ByeTeam = new Team("BYE", "bye", "bye");
-                Judge ByeJudge = new Judge("bye", "BYE");
-                byeCastle.get().opp[0] = ByeTeam;
-                byeCastle.get().rounds[0] = new Round(true, ByeTeam, ByeJudge);
-                byeCastle.get().totalWins++;
-                byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
-                byeCastle.get().judges[0] = ByeJudge;
-                byeCastle.get().roundComplete[0] = true;
-
+                affPool.get(lt).hasHadBye = true;
+                byeCastle = Optional.of(affPool.get(lt));
                 break;
             }
         }
-        if ((affPool.size()) > roomPool.size()) {
+
+        int byeOffset = byeCastle.isPresent() ? 1 : 0;
+
+        if (affPool.size() - byeOffset > roomPool.size() ) {
             throw new GavelExeception("Error: Not enough rooms");
         }
-        if ((affPool.size()) > judgePool.size()) {
+        if (affPool.size() - byeOffset > judgePool.size() ) {
             throw new GavelExeception("Error: Not enough judges");
+        }
+
+        // Update bye data
+        if (byeCastle.isPresent()) {
+            teamPool.remove(byeCastle.get());
+            affPool.remove(byeCastle.get());
+
+            Team ByeTeam = new Team("BYE", "bye", "bye");
+            Judge ByeJudge = new Judge("bye", "BYE");
+            byeCastle.get().opp[0] = ByeTeam;
+            byeCastle.get().rounds[0] = new Round(true, ByeTeam, ByeJudge);
+            byeCastle.get().totalWins++;
+            byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
+            byeCastle.get().judges[0] = ByeJudge;
+            byeCastle.get().roundComplete[0] = true;
         }
 
 
