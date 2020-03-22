@@ -1,91 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0e1dbcaa-9cb4-487f-a142-aef9251ab71f" name="Default Changelist" comment="">
-<<<<<<< Updated upstream
-      <change afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Exporter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="2e511e07-636b-4a53-8f63-0068375fee37" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Round.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Round.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Pairer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Pairer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/TeamManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/TeamManager.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-=======
-      <change afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Room.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/RoomManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Brady.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Brady.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/squidkingdom/Gavel/Main.java" afterDir="false" />
-    </list>
->>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CodeInsightWorkspaceSettings">
-    <option name="optimizeImportsOnTheFly" value="true" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Settings">
-<<<<<<< Updated upstream
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
-    </option>
-=======
->>>>>>> Stashed changes
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="ProjectId" id="1ZDmoipPlka3642QVzxpxALXlhr" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="Downloaded.Files.Path.Enabled" value="true" />
-    <property name="Repository.Attach.Annotations" value="false" />
-    <property name="Repository.Attach.JavaDocs" value="false" />
-    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="findjar.last.used.dir" value="$PROJECT_DIR$/POI" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/POI" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.squidkingdom.Gavel.Main" />
       <module name="Gavel" />
-      <option name="PROGRAM_PARAMETERS" value="-f -h" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.squidkingdom.Gavel.*" />
@@ -107,151 +46,54 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0e1dbcaa-9cb4-487f-a142-aef9251ab71f" name="Default Changelist" comment="" />
-      <created>1584382216247</created>
+      <changelist id="2e511e07-636b-4a53-8f63-0068375fee37" name="Default Changelist" comment="" />
+      <created>1584904714017</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1584382216247</updated>
-      <workItem from="1584555396689" duration="2663000" />
+      <updated>1584904714017</updated>
     </task>
     <servers />
   </component>
-<<<<<<< Updated upstream
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="WindowStateProjectService">
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" />
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state x="1085" y="416" key="#com.intellij.ide.util.MemberChooser" />
-    <state x="1085" y="416" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state x="754" y="502" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" />
-    <state x="754" y="502" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state x="1060" y="441" key="FileChooserDialogImpl" />
-    <state x="1060" y="441" key="FileChooserDialogImpl/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.0.bottom" />
-    <state width="2517" height="492" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="401" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.0.center" />
-    <state width="2517" height="492" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="401" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.0.left" />
-    <state width="2517" height="492" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="401" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.0.right" />
-    <state width="2517" height="492" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="401" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.1.bottom" />
-    <state width="2517" height="492" key="GridCell.Tab.1.bottom/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.1.center" />
-    <state width="2517" height="492" key="GridCell.Tab.1.center/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.1.left" />
-    <state width="2517" height="492" key="GridCell.Tab.1.left/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state width="2517" height="492" key="GridCell.Tab.1.right" />
-    <state width="2517" height="492" key="GridCell.Tab.1.right/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" />
-    <state x="783" y="345" key="SettingsEditor" />
-    <state x="783" y="345" key="SettingsEditor/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state x="988" y="527" key="com.intellij.ide.util.TipDialog" />
-    <state x="988" y="527" key="com.intellij.ide.util.TipDialog/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state x="1007" y="664" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" />
-    <state x="1007" y="664" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-    <state x="936" y="330" key="run.anything.popup" />
-    <state x="936" y="330" key="run.anything.popup/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" />
-=======
-  <component name="VcsManagerConfiguration">
-    <ignored-roots>
-      <path value="$PROJECT_DIR$/Gavel" />
-    </ignored-roots>
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1584907469361">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/-1920.216.1920.1080@0.0.2560.1400" timestamp="1584907469361" />
+    <state x="934" y="294" key="CommitChangelistDialog2" timestamp="1584907432898">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="934" y="294" key="CommitChangelistDialog2/0.0.2560.1400/-1920.216.1920.1080@0.0.2560.1400" timestamp="1584907432898" />
+    <state width="2517" height="401" key="GridCell.Tab.0.bottom" timestamp="1584915228170">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="401" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.216.1920.1080@0.0.2560.1400" timestamp="1584915228170" />
+    <state width="2517" height="401" key="GridCell.Tab.0.center" timestamp="1584915228169">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="401" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.216.1920.1080@0.0.2560.1400" timestamp="1584915228169" />
+    <state width="2517" height="401" key="GridCell.Tab.0.left" timestamp="1584915228169">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="401" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.216.1920.1080@0.0.2560.1400" timestamp="1584915228169" />
+    <state width="2517" height="401" key="GridCell.Tab.0.right" timestamp="1584915228169">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="401" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.216.1920.1080@0.0.2560.1400" timestamp="1584915228169" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584392267728">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584392267728" />
-    <state x="1085" y="416" key="#com.intellij.ide.util.MemberChooser" timestamp="1584383231322">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1085" y="416" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584383231322" />
-    <state x="754" y="502" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1584382420887">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="754" y="502" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584382420887" />
-    <state x="1060" y="441" key="FileChooserDialogImpl" timestamp="1584391003348">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1060" y="441" key="FileChooserDialogImpl/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584391003348" />
-    <state width="2517" height="492" key="GridCell.Tab.0.bottom" timestamp="1584502275566">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275566" />
-    <state width="2517" height="401" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584394658481" />
-    <state width="2517" height="492" key="GridCell.Tab.0.center" timestamp="1584502275565">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275565" />
-    <state width="2517" height="401" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584394658481" />
-    <state width="2517" height="492" key="GridCell.Tab.0.left" timestamp="1584502275565">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275565" />
-    <state width="2517" height="401" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584394658481" />
-    <state width="2517" height="492" key="GridCell.Tab.0.right" timestamp="1584502275565">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275565" />
-    <state width="2517" height="401" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584394658481" />
-    <state width="2517" height="492" key="GridCell.Tab.1.bottom" timestamp="1584502275566">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.1.bottom/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275566" />
-    <state width="2517" height="492" key="GridCell.Tab.1.center" timestamp="1584502275566">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.1.center/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275566" />
-    <state width="2517" height="492" key="GridCell.Tab.1.left" timestamp="1584502275566">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.1.left/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275566" />
-    <state width="2517" height="492" key="GridCell.Tab.1.right" timestamp="1584502275566">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state width="2517" height="492" key="GridCell.Tab.1.right/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584502275566" />
-    <state x="783" y="345" key="SettingsEditor" timestamp="1584554604700">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="783" y="345" key="SettingsEditor/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584554604700" />
-    <state x="783" y="345" key="SettingsEditor/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584391082796" />
-    <state x="988" y="527" key="com.intellij.ide.util.TipDialog" timestamp="1584382230786">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="988" y="527" key="com.intellij.ide.util.TipDialog/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584382230786" />
-    <state x="1007" y="664" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1584391047056">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="1007" y="664" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584391047056" />
-    <state x="92" y="92" width="2376" height="1216" key="dock-window-1" timestamp="1584507539184">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="92" y="92" width="2376" height="1216" key="dock-window-1/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584507539184" />
-    <state x="405" y="69" width="2376" height="1216" key="dock-window-2" timestamp="1584507056210">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="405" y="69" width="2376" height="1216" key="dock-window-2/0.0.2560.1400/-1920.7.1920.1080@0.0.2560.1400" timestamp="1584507056209" />
-    <state x="936" y="330" key="run.anything.popup" timestamp="1584390636618">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="936" y="330" key="run.anything.popup/0.0.2560.1400/-1920.94.1920.1080@0.0.2560.1400" timestamp="1584390636618" />
->>>>>>> Stashed changes
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/squidkingdom/Gavel/Pairer.java</url>
+          <line>161</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/squidkingdom/Gavel/Pairer.java</url>
+          <line>95</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

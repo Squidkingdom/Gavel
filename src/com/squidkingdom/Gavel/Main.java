@@ -1,6 +1,7 @@
 package com.squidkingdom.Gavel;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import javafx.util.Pair;
 
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ public class Main {
     public static TeamManager manager = new TeamManager();
     public static Scanner in = new Scanner(System.in);
     public static final int roomNum = 10;
+    public static int lastRoundStarted = 0;
     public static boolean speaksOrRanks = true;  //This is speaks
 
     public static void main(String[] args) {
@@ -21,11 +23,8 @@ public class Main {
         }
         RoomManager.newByeRoom();
         while (running) {
-            try {
-                /*
-                JudgeNew
-                 */
-                print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
+            try {                                                                                                                 //Might be redundants if time.
+                print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
                 String anwser = in.nextLine();
                 if (anwser.toLowerCase().startsWith("new")) {
                     selectedNew();
@@ -37,16 +36,50 @@ public class Main {
                     String arg[] = anwser.split(" ");
                     if (arg.length != 9) {
                         print("You did not provide the correct amount of arguments.");
-                        return;
+                    } else {
+                        selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
                     }
-                    selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
                 } else if (anwser.toLowerCase().startsWith("export")) {
 
 
                 } else if (anwser.toLowerCase().startsWith("start")) {
-                    print("You chose tab.");
+
+
                 } else if (anwser.toLowerCase().startsWith("snr")) {
-                    print("You chose tab.");
+                    switch (lastRoundStarted) {
+                        case 0://Round 1&2
+                            Pairer.pairRound1();
+                            print("Got here");
+                            Pairer.pairRound2();
+                            lastRoundStarted++;
+                            lastRoundStarted++;
+                            break;
+                        case 2://Round 3
+                            if (TeamManager.teamsFinished(3)){
+                                Pairer.pairRound5();
+                                lastRoundStarted++;
+                            }else{
+                                break;
+                            }
+                        case 3://Round 4
+                            if (TeamManager.teamsFinished(4)){
+                                Pairer.pairRound5();
+                                lastRoundStarted++;
+                            }else{
+
+                            }
+                        case 4://Round 5
+                            if (TeamManager.teamsFinished(5)){
+                                Pairer.pairRound5();
+                                lastRoundStarted++;
+                            }else{
+
+                            }
+
+
+
+                    }
+
                 } else if (anwser.toLowerCase().startsWith("exit")) {
                     print("Goodbye...");
                     running = false;
@@ -75,7 +108,7 @@ public class Main {
                     print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
                 }
             } catch (Exception exception) {
-                print("There was an error. Please retry");
+                print("There was an error. Please retry" + exception);
             }
 
         }
@@ -102,14 +135,14 @@ public class Main {
         negTeam.inProgress[round] = false;
 
         //TODO make speaks double, add check between 25-30
-      //  if (!(a1s + a2s + n1s + n2s == 10)) {
-         //   print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+        //  if (!(a1s + a2s + n1s + n2s == 10)) {
+        //   print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
         //    return;
-      // }
-      //  if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)) {
-       //     print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-       //     return;
-      //  }
+        // }
+        //  if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)) {
+        //     print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+        //     return;
+        //  }
 
 
         //Set Aff Data
@@ -151,13 +184,14 @@ public class Main {
     }
 
     public static void printInfo(String code) {
-        Team team = TeamManager.getTeamByCode(code);
+
         int lastRound = 0;
         //Make Sure code is valid
-        if (TeamManager.checkcode(code)) {
+        if (!TeamManager.checkcode(code)) {
             print("This code is invalid");
             return;
         }
+        Team team = TeamManager.getTeamByCode(code);
         print("Code: \"" + team.code + "\" and Speakers: " + team.person1 + ", " + team.person2 + "\n");
 
         for (int i = 0; i < 5; i++) {
