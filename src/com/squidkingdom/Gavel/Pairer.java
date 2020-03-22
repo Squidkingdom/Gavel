@@ -98,13 +98,13 @@ public class Pairer {
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
         ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
 
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                if(!affPool.get(lt).hasHadBye) {
+                if (!affPool.get(lt).hasHadBye) {
                     //TODO set bye data from previous commit
                     affPool.get(lt).hasHadBye = true;
                     byeCastle = Optional.of(affPool.get(lt));
@@ -123,13 +123,21 @@ public class Pairer {
 
 
         Team team1 = affPool.get(0);
-        Optional<Team> optionalTeam2 = negPool.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
+        Optional<Team> optionalTeam2 = negPool.stream()
+                .filter(e -> !e.code.equalsIgnoreCase(team1.code))
+                .filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code))
+                .findFirst();
         if (!optionalTeam2.isPresent())
             throw new GavelExeception("Fuck, No more teams left.");
         Team team2 = optionalTeam2.get();
 
         //Pair Judges
-        Optional<Judge> roundJudge = judgePool.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
+        Optional<Judge> roundJudge = judgePool.stream()
+                .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
+                .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
 
@@ -154,7 +162,7 @@ public class Pairer {
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
         WinCompare winCompare = new WinCompare();
         teamPool.sort(winCompare);
@@ -163,7 +171,7 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                if(!affPool.get(lt).hasHadBye) {
+                if (!affPool.get(lt).hasHadBye) {
                     //TODO set bye data from previous commit
                     affPool.get(lt).hasHadBye = true;
                     byeCastle = Optional.of(affPool.get(lt));
@@ -182,13 +190,22 @@ public class Pairer {
 
 
         Team team1 = affPool.get(0);
-        Optional<Team> optionalTeam2 = negPool.stream().filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[1].code)).findFirst();
+        Optional<Team> optionalTeam2 = negPool.stream()
+                .filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code))
+                .filter(e -> !e.code.equalsIgnoreCase(team1.opp[1].code))
+                .findFirst();
+
         if (!optionalTeam2.isPresent())
             throw new GavelExeception("Fuck, No more teams left.");
         Team team2 = optionalTeam2.get();
 
         //Pair Judges
-        Optional<Judge> roundJudge = judgePool.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
+        Optional<Judge> roundJudge = judgePool.stream()
+                .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
+                .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
 
@@ -207,7 +224,6 @@ public class Pairer {
     }
 
 
-
     //Round 4
     public static void pairRound4() throws GavelExeception {
 
@@ -215,7 +231,7 @@ public class Pairer {
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
         WinCompare winCompare = new WinCompare();
         teamPool.sort(winCompare);
@@ -224,7 +240,7 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                if(!affPool.get(lt).hasHadBye) {
+                if (!affPool.get(lt).hasHadBye) {
                     //TODO set bye data from previous commit
                     affPool.get(lt).hasHadBye = true;
                     byeCastle = Optional.of(affPool.get(lt));
@@ -243,13 +259,27 @@ public class Pairer {
 
 
         Team team1 = affPool.get(0);
-        Optional<Team> optionalTeam2 = negPool.stream().filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[1].code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[2].code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[3].code)).findFirst();
+        Optional<Team> optionalTeam2 = negPool.stream()
+                .filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code))
+                .filter(e -> !e.code.equalsIgnoreCase(team1.opp[1].code))
+                .filter(e -> !e.code.equalsIgnoreCase(team1.opp[2].code))
+                .filter(e -> !e.code.equalsIgnoreCase(team1.opp[3].code))
+                .findFirst();
         if (!optionalTeam2.isPresent())
             throw new GavelExeception("Fuck, No more teams left.");
         Team team2 = optionalTeam2.get();
 
         //Pair Judges
-        Optional<Judge> roundJudge = judgePool.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team1.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team1.judges[2].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[2].code.equalsIgnoreCase(e.code)).filter(e -> !team1.judges[3].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[3].code.equalsIgnoreCase(e.code)).findAny();
+        Optional<Judge> roundJudge = judgePool.stream()
+                .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team1.judges[1].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team1.judges[2].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[2].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team1.judges[3].code.equalsIgnoreCase(e.code))
+                .filter(e -> !team2.judges[3].code.equalsIgnoreCase(e.code))
+                .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
 
@@ -274,7 +304,7 @@ public class Pairer {
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
         WinCompare winCompare = new WinCompare();
         teamPool.sort(winCompare);
@@ -283,7 +313,7 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                if(!affPool.get(lt).hasHadBye) {
+                if (!affPool.get(lt).hasHadBye) {
                     //TODO set bye data from previous commit
                     affPool.get(lt).hasHadBye = true;
                     byeCastle = Optional.of(affPool.get(lt));
@@ -324,7 +354,8 @@ public class Pairer {
                 .filter(e -> !team1.judges[3].code.equalsIgnoreCase(e.code))
                 .filter(e -> !team2.judges[3].code.equalsIgnoreCase(e.code))
                 .filter(e -> !team1.judges[4].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[4].code.equalsIgnoreCase(e.code)).findAny();
+                .filter(e -> !team2.judges[4].code.equalsIgnoreCase(e.code))
+                .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
 
