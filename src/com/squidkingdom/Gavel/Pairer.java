@@ -3,11 +3,14 @@ package com.squidkingdom.Gavel;
     Remove TNUM and derrivitave, remove need for localTa after filter.
      MAKE TEAMS[] BE FIELD OF JUDGES INSTEAD OF JUDGES[] IN TEAMS
         *(THIS ALLOWS HOT SWAPPING OF JUDGES)
-
+    More rooms than teams available
+    handle no bye combos
 
     FIXME:
         idk what your doing with the returns and pairings, seems half baked, ignoring for now.
  */
+
+import javax.swing.text.html.Option;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collector;
@@ -20,372 +23,148 @@ public class Pairer {
     public static ArrayList<Judge> judgeArray = JudgeManager.judgeArray;
     public static ArrayList<Team> teamArray = TeamManager.teamArray;
 
-    //Round 1
+    //Round 3
     public static void pairRound1() throws GavelExeception {
-        return;
+        Optional<Team> byeCastle = Optional.empty();
+        ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
+        ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
+        ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
+        ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+
+
+        //Handle Bye
+        if (((affPool.size() + negPool.size()) % 2) > 0) {
+            for (int lt = (affPool.size() - 1); lt > 0; lt--) {
+                //TODO set bye data from previous commit
+                affPool.get(lt).hasHadBye = true;
+                byeCastle = Optional.of(affPool.get(lt));
+                teamPool.remove(byeCastle);
+                affPool.remove(byeCastle);
+
+            }
+        }
+        if ((affPool.size()) > roomPool.size()) {
+            throw new GavelExeception("Error: Not enough rooms");
+        }
+        if ((affPool.size()) > roomPool.size()) {
+            throw new GavelExeception("Error: Not enough judges");
+        }
+
+
+        Team team1 =  affPool.get(0);
+        Team team2 = negPool.get(0);
+        Judge roundJudge = judgePool.get(0);
+
+
+        while (roomPool.size() != 0) {
+
+            {
+                Room room = roomPool.get(0);
+                teamPool.remove(team1);
+                affPool.remove(team1);
+                teamPool.remove(team2);
+                negPool.remove(team2);
+                judgePool.remove(roundJudge);
+                roomPool.remove(room);
+            }
+        }
+
+
     }
+
+
+
 
     //Round 2
     public static void pairRound2() throws GavelExeception {
-        ArrayList<Team> localTeamsArray = (ArrayList<Team>) teamArray.clone();
-        ArrayList<Team> localJudgeArray = (ArrayList<Team>) teamArray.clone();
-        ArrayList<Team> localRoomArray = (ArrayList<Team>) teamArray.clone();
 
-        if ((localTeamsArray.size() / 2) > localJudgeArray.size())
-            throw new GavelExeception("Error: Not enough Judges");
+        Optional<Team> byeCastle = Optional.empty();
+        ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
+        ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
+        ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
+        ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
-        if ((localTeamsArray.size() / 2) > localRoomArray.size())
+
+        //Handle Bye
+        if (((affPool.size() + negPool.size()) % 2) > 0) {
+            for (int lt = (affPool.size() - 1); lt > 0; lt--) {
+                //TODO set bye data from previous commit
+                affPool.get(lt).hasHadBye = true;
+                byeCastle = Optional.of(affPool.get(lt));
+                teamPool.remove(byeCastle);
+                affPool.remove(byeCastle);
+
+            }
+        }
+        if ((affPool.size()) > roomPool.size()) {
             throw new GavelExeception("Error: Not enough rooms");
+        }
+        if ((affPool.size()) > roomPool.size()) {
+            throw new GavelExeception("Error: Not enough judges");
+        }
 
-        ArrayList<Team> localAff = localTeamsArray.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> localNeg = localTeamsArray.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
-        if ((localAff.size() % 2) > 0) {
+        Team team1 =  affPool.get(0);
+        Optional<Team> optionalTeam2 = negPool.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
+        if (!optionalTeam2.isPresent())
+            throw new GavelExeception("Fuck, No more teams left.");
+        Team team2 = optionalTeam2.get();
 
+        //Pair Judges
+        Optional<Judge> roundJudge = judgePool.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
+        if (!roundJudge.isPresent())
+            throw new GavelExeception("Fuck, No more Judges left.");
+
+        while (roomPool.size() != 0) {
+
+            {
+                Room room = roomPool.get(0);
+                teamPool.remove(team1);
+                affPool.remove(team1);
+                teamPool.remove(team2);
+                negPool.remove(team2);
+                judgePool.remove(roundJudge.get());
+                roomPool.remove(room);
+            }
         }
 
 
     }
-
-
-
-
+    }
 
     //Round 3
-    public static ArrayList<String> pairRound3() throws GavelExeception {
-        Optional<Team> byeCastle = Optional.empty();
-        int rNum = roomArray.size();
-        int jNum = judgeArray.size();
-        int tNum = teamArray.size();
-        ArrayList<Team> localTA = (ArrayList<Team>) teamArray.clone();
-        ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
-        ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
-        ArrayList<String> pairings = new ArrayList<String>(1);
-        //  ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
-
-
-        //Make sure everything is good in da hood
-        {
-            if ((tNum / 2) > rNum) {
-                throw new GavelExeception("Error: Not enough rooms");
-            }
-            if ((tNum / 2) > jNum) {
-                throw new GavelExeception("Error: Not enough judges");
-            }
-        }
-
-
-        //Filter into record
-        WinCompare winCompare = new WinCompare();
-        Collections.sort(localTA, winCompare);
-
-        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-
-
-
-
-        //Handle Possible Bye
-        if ((localAff.size() % 2) > 0) {
-            boolean succeeded = false;
-            int lastTeam = localAff.size();
-            while (!succeeded) {
-                if (!localAff.get(lastTeam).hasHadBye) {
-                    localAff.get(lastTeam).hasHadBye = true;
-                    byeCastle = Optional.of(localAff.get(lastTeam));
-                    localTA.remove(lastTeam);
-                    localAff.remove(lastTeam);
-                    succeeded = true;
-                } else {
-                    lastTeam--;
-                }
-            }
-        }
-
-
-
-        //Make sure everything is good in da hood
-        {
-            if ((tNum / 2) > rNum) {
-                throw new GavelExeception("Error: Not enough rooms");
-            }
-            if (((tNum / 2) + 1) > jNum) {
-                throw new GavelExeception("Error: Not enough judges");
-            }
-
-        }
-
-
-
-
-        // DO THE THING (Pair Teams)
-        while (localRA.size() != 0) {
-            int team2Offset = 1;
-            Team team1 = localAff.get(0);
-
-            //Pair Teams
-            Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
-            if (!optionalTeam2.isPresent())
-                throw new GavelExeception("TEAMS FUUUUUCCCKKK");
-            Team team2 = optionalTeam2.get();
-
-            //Pair Judges
-            Optional<Judge> roundJudge = localJA.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
-            if (!roundJudge.isPresent())
-                throw new GavelExeception("JUDGES FUUUUUCCCKKK");
-
-
-
-            /*Pair the room and clean array*/
-            {
-                Room room = localRA.get(0);
-               // pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
-                localTA.remove(team1);
-                localAff.remove(team1);
-                localTA.remove(team2);
-                localNeg.remove(team2);
-                localJA.remove(roundJudge.get());
-                localRA.remove(room);
-            }
-        }
-
-
-
-
-        //TODO Does this need to be in round 2 or 1?
-
-        pairings.add(byeCastle.orElse(new Team("No one")).code + " has a bye");
-        return pairings;
+    public static void pairRound3() throws GavelExeception {
     }
-
-
-
-
 
 
     //Round 4
-    public static ArrayList<String> pairRound4() throws GavelExeception {
-        Optional<Team> byeCastle = Optional.empty();
-        int rNum = roomArray.size();
-        int jNum = judgeArray.size();
-        int tNum = teamArray.size();
-        ArrayList<Team> localTA = (ArrayList<Team>) teamArray.clone();
-        ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
-        ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
-        ArrayList<String> pairings = new ArrayList<String>(1);
-
-        //  ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
-
-
-        //Make sure everything is good in da hood
-        {
-            if ((tNum / 2) > rNum) {
-                throw new GavelExeception("Error: Not enough rooms");
-            }
-            if ((tNum / 2) > jNum) {
-                throw new GavelExeception("Error: Not enough judges");
-            }
-        }
-
-
-        //Filter into record
-        WinCompare winCompare = new WinCompare();
-        Collections.sort(localTA, winCompare);
-
-        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-
-
-
-
-        //Handle Possible Bye
-        if ((localAff.size() % 2) > 0) {
-            boolean succeeded = false;
-            int lastTeam = localAff.size();
-            while (!succeeded) {
-                if (!localAff.get(lastTeam).hasHadBye) {
-                    localAff.get(lastTeam).hasHadBye = true;
-                    byeCastle = Optional.of(localAff.get(lastTeam));
-                    localAff.remove(lastTeam);
-                    localTA.remove(lastTeam);
-
-                    succeeded = true;
-                } else {
-                    lastTeam--;
-                }
-            }
-        }
-
-
-
-        //Make sure everything is good in da hood
-        {
-            if ((tNum / 2) > rNum) {
-                throw new GavelExeception("Error: Not enough rooms");
-            }
-            if (((tNum / 2) + 1) > jNum) {
-                throw new GavelExeception("Error: Not enough judges");
-            }
-
-        }
-
-
-
-        while (localRA.size() != 0) {
-            int team2Offset = 1;
-            Team team1 = localAff.get(0);
-
-            //Pair Teams
-            Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
-            if (!optionalTeam2.isPresent())
-                throw new GavelExeception("TEAMS FUUUUUCCCKKK");
-            Team team2 = optionalTeam2.get();
-
-            //Pair Judges
-            Optional<Judge> roundJudge = localJA.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
-            if (!roundJudge.isPresent())
-                throw new GavelExeception("JUDGES FUUUUUCCCKKK");
-
-
-
-            /*Pair the room and clean array*/
-            {
-                Room room = localRA.get(0);
-                // pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
-                localTA.remove(team1);
-                localAff.remove(team1);
-                localNeg.remove(team2);
-                localTA.remove(team2);
-                localJA.remove(roundJudge.get());
-                localRA.remove(room);
-            }
-        }
-
-
-
-
-
-        //TODO Does this need to be in round 2 or 1?
-
-        pairings.add(byeCastle.orElse(new Team("No one")).code + " has a bye");
-        return pairings;
-
-
+    public static void pairRound4() throws GavelExeception {
     }
-
-
-
-
-
-
 
     //Round 5
-    public static ArrayList<String> pairRound5() throws GavelExeception {
-        Optional<Team> byeCastle = Optional.empty();
-        int rNum = roomArray.size();
-        int jNum = judgeArray.size();
-        int tNum = teamArray.size();
-        ArrayList<Team> localTA = (ArrayList<Team>) teamArray.clone();
-        ArrayList<Room> localRA = (ArrayList<Room>) roomArray.clone();
-        ArrayList<Judge> localJA = (ArrayList<Judge>) judgeArray.clone();
-        ArrayList<String> pairings = new ArrayList<String>(1);
-        //  ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
-
-
-        //Make sure everything is good in da hood
-        {
-            if ((tNum / 2) > rNum) {
-                throw new GavelExeception("Error: Not enough rooms");
-            }
-            if ((tNum / 2) > jNum) {
-                throw new GavelExeception("Error: Not enough judges");
-            }
-        }
-
-
-        //Filter into record
-        WinCompare winCompare = new WinCompare();
-        Collections.sort(localTA, winCompare);
-
-        ArrayList<Team> localAff = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> localNeg = localTA.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+    public static void pairRound5() throws GavelExeception {
+    }
 
 
 
 
-        //Handle Possible Bye
-        if ((localAff.size() % 2) > 0) {
-            boolean succeeded = false;
-            int lastTeam = localAff.size();
-            while (!succeeded) {
-                if (!localAff.get(lastTeam).hasHadBye) {
-                    localAff.get(lastTeam).hasHadBye = true;
-                    byeCastle = Optional.of(localAff.get(lastTeam));
-                    localTA.remove(lastTeam);
-                    localAff.remove(lastTeam);
-                    succeeded = true;
-                } else {
-                    lastTeam--;
-                }
-            }
-        }
 
-
-
-        //Make sure everything is good in da hood
-        {
-            if ((tNum / 2) > rNum) {
-                throw new GavelExeception("Error: Not enough rooms");
-            }
-            if (((tNum / 2) + 1) > jNum) {
-                throw new GavelExeception("Error: Not enough judges");
-            }
-
-        }
-
-
-
-
-        // DO THE THING (Pair Teams)
-        while (localRA.size() != 0) {
-            int team2Offset = 1;
-            Team team1 = localAff.get(0);
+}  /*
 
             //Pair Teams
-            Optional<Team> optionalTeam2 = localNeg.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
+            Optional<Team> optionalTeam2 = negPool.stream().filter(e -> !e.code.equalsIgnoreCase(team1.code)).filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code)).findFirst();
             if (!optionalTeam2.isPresent())
-                throw new GavelExeception("TEAMS FUUUUUCCCKKK");
+                throw new GavelExeception("Fuck, No more teams left.");
             Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Optional<Judge> roundJudge = localJA.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
+            Optional<Judge> roundJudge = judgePool.stream().filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code)).findAny();
             if (!roundJudge.isPresent())
-                throw new GavelExeception("JUDGES FUUUUUCCCKKK");
+                throw new GavelExeception("Fuck, No more Judges left.");
 
+             WinCompare winCompare = new WinCompare();
+                  Collections.sort(localTA, winCompare);
 
-
-            /*Pair the room and clean array*/
-            {
-                Room room = localRA.get(0);
-                // pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 2));
-                localTA.remove(team1);
-                localAff.remove(team1);
-                localTA.remove(team2);
-                localNeg.remove(team2);
-                localJA.remove(roundJudge.get());
-                localRA.remove(room);
-            }
-        }
-
-
-
-
-
-        //TODO Does this need to be in round 2 or 1?
-
-        pairings.add(byeCastle.orElse(new Team("No one")).code + " has a bye");
-        return pairings;
-
-
-    }
-}
+     */
