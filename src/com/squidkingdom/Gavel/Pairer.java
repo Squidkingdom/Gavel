@@ -32,11 +32,13 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                //TODO set bye data from previous commit
-                affPool.get(lt).hasHadBye = true;
-                byeCastle = Optional.of(affPool.get(lt));
-                teamPool.remove(byeCastle.get());
-                affPool.remove(byeCastle.get());
+
+                    //TODO set bye data from previous commit
+                    affPool.get(lt).hasHadBye = true;
+                    byeCastle = Optional.of(affPool.get(lt));
+                    teamPool.remove(byeCastle.get());
+                    affPool.remove(byeCastle.get());
+                    break;
 
             }
         }
@@ -83,11 +85,14 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                //TODO set bye data from previous commit
-                affPool.get(lt).hasHadBye = true;
-                byeCastle = Optional.of(affPool.get(lt));
+                if(!affPool.get(lt).hasHadBye) {
+                    //TODO set bye data from previous commit
+                    affPool.get(lt).hasHadBye = true;
+                    byeCastle = Optional.of(affPool.get(lt));
                     teamPool.remove(byeCastle.get());
                     affPool.remove(byeCastle.get());
+                    break;
+                }
             }
         }
         if (affPool.size() > roomPool.size()) {
@@ -139,11 +144,14 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                //TODO set bye data from previous commit
-                affPool.get(lt).hasHadBye = true;
-                byeCastle = Optional.of(affPool.get(lt));
-                teamPool.remove(byeCastle.get());
-                affPool.remove(byeCastle.get());
+                if(!affPool.get(lt).hasHadBye) {
+                    //TODO set bye data from previous commit
+                    affPool.get(lt).hasHadBye = true;
+                    byeCastle = Optional.of(affPool.get(lt));
+                    teamPool.remove(byeCastle.get());
+                    affPool.remove(byeCastle.get());
+                    break;
+                }
             }
         }
         if (affPool.size() > roomPool.size()) {
@@ -197,11 +205,14 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                //TODO set bye data from previous commit
-                affPool.get(lt).hasHadBye = true;
-                byeCastle = Optional.of(affPool.get(lt));
-                teamPool.remove(byeCastle.get());
-                affPool.remove(byeCastle.get());
+                if(!affPool.get(lt).hasHadBye) {
+                    //TODO set bye data from previous commit
+                    affPool.get(lt).hasHadBye = true;
+                    byeCastle = Optional.of(affPool.get(lt));
+                    teamPool.remove(byeCastle.get());
+                    affPool.remove(byeCastle.get());
+                    break;
+                }
             }
         }
         if (affPool.size() > roomPool.size()) {
@@ -253,11 +264,14 @@ public class Pairer {
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                //TODO set bye data from previous commit
-                affPool.get(lt).hasHadBye = true;
-                byeCastle = Optional.of(affPool.get(lt));
-                teamPool.remove(byeCastle.get());
-                affPool.remove(byeCastle.get());
+                if(!affPool.get(lt).hasHadBye) {
+                    //TODO set bye data from previous commit
+                    affPool.get(lt).hasHadBye = true;
+                    byeCastle = Optional.of(affPool.get(lt));
+                    teamPool.remove(byeCastle.get());
+                    affPool.remove(byeCastle.get());
+                    break;
+                }
             }
         }
         if (affPool.size() > roomPool.size()) {
