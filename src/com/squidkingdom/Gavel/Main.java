@@ -4,7 +4,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.Scanner;
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("")
 
 //TODO? Comment system?
 public class Main {
@@ -39,7 +39,7 @@ public class Main {
                         print("You did not provide the correct amount of arguments.");
                         return;
                     }
-                    selectedResult(Integer.parseInt(arg[1]), Boolean.valueOf(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
+                    selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
                 } else if (anwser.toLowerCase().startsWith("export")) {
 
 
@@ -57,8 +57,8 @@ public class Main {
                     int roomId = Integer.parseInt(anwser.split(" ", 6)[4]);
                     int roundNumber = Integer.parseInt(anwser.split(" ", 6)[5]);
 
-                    Team team1 = manager.getTeamByCode(team1Code);
-                    Team team2 = manager.getTeamByCode(team2Code);
+                    Team team1 = TeamManager.getTeamByCode(team1Code);
+                    Team team2 = TeamManager.getTeamByCode(team2Code);
                     Judge judge = JudgeManager.getJudgeByCode(judgeCode);
                     Room room = RoomManager.getRoomById(roomId);
 
@@ -83,8 +83,8 @@ public class Main {
 
     // addresult 10 true 1 a 1 3 2 4
     public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s) {
-        Team affTeam = manager.getTeamByCode(acode);
-        Team negTeam = manager.getTeamByCode(ncode);
+        Team affTeam = TeamManager.getTeamByCode(acode);
+        Team negTeam = TeamManager.getTeamByCode(ncode);
 
         int round = 1;
         for (int i = 0; i <= 5; i++) {
@@ -131,15 +131,14 @@ public class Main {
         RoomManager.getRoomById(id).data[round] = roundRmObj;
 
         //Testing
-        String bool = " ";
-        bool.valueOf(bool);
-        print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + bool.valueOf(bool));
+        String bool = "";
+        print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + String.valueOf(bool));
     }
 
     public static void selectedNew() {
         print("Enter the code for this new team");
         String code = in.nextLine();
-        if (manager.checkcode(code)) {
+        if (TeamManager.checkcode(code)) {
             print("This code is taken");
             return;
         }
@@ -147,15 +146,15 @@ public class Main {
         String player1 = in.nextLine();
         print("Enter the 2st Speaker's name.");
         String player2 = in.nextLine();
-        manager.newTeam(code, player1, player2);
-        print("Made new team with Code: \"" + manager.getTeamByCode(code).code + "\" and Speakers: " + manager.getTeamByCode(code).person1 + ", " + manager.getTeamByCode(code).person2 + "\n");
+        TeamManager.newTeam(code, player1, player2);
+        print("Made new team with Code: \"" + TeamManager.getTeamByCode(code).code + "\" and Speakers: " + TeamManager.getTeamByCode(code).person1 + ", " + TeamManager.getTeamByCode(code).person2 + "\n");
     }
 
     public static void printInfo(String code) {
-        Team team = manager.getTeamByCode(code);
+        Team team = TeamManager.getTeamByCode(code);
         int lastRound = 0;
         //Make Sure code is valid
-        if (manager.checkcode(code)) {
+        if (TeamManager.checkcode(code)) {
             print("This code is invalid");
             return;
         }
@@ -189,7 +188,6 @@ public class Main {
         team2.judges[event - 1] = judge;
         team2.inProgress[event - 1] = true;
         team2.isAffLead = !team2.isAffLead;
-
         return roundData;
     }
 
