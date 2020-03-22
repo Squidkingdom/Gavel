@@ -20,13 +20,13 @@ public class Pairer {
     public static ArrayList<Team> teamArray = TeamManager.teamArray;
 
     //Round 3
-    public static void pairRound1() throws GavelExeception {
-        Optional<Team> byeCastle;
+    public static ArrayList<RoundData> pairRound1() throws GavelExeception {
+        Optional<Team> byeCastle = Optional.empty();
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
         ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
 
         //Handle Bye
@@ -37,7 +37,7 @@ public class Pairer {
                 byeCastle = Optional.of(affPool.get(lt));
                 teamPool.remove(byeCastle.get());
                 affPool.remove(byeCastle.get());
-
+                break;
             }
         }
         if ((affPool.size()) > roomPool.size()) {
@@ -48,15 +48,18 @@ public class Pairer {
         }
 
 
-        Team team1 = affPool.get(0);
-        Team team2 = negPool.get(0);
-        Judge roundJudge = judgePool.get(0);
+        Team team1;
+        Team team2;
+        Judge roundJudge;
+        ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
 
-
-        while (roomPool.size() != 0) {
-
+        while (affPool.size() > 0) {
             {
+                team1 = affPool.get(0);
+                team2 = negPool.get(0);
+                roundJudge = judgePool.get(0);
                 Room room = roomPool.get(0);
+                pairings.add(Main.pair(team1, team2, roundJudge, room, 1));
                 teamPool.remove(team1);
                 affPool.remove(team1);
                 teamPool.remove(team2);
@@ -66,7 +69,10 @@ public class Pairer {
             }
         }
 
+        if (byeCastle.isPresent())
+            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE")));
 
+        return pairings;
     }
 
 
