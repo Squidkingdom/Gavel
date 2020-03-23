@@ -19,5 +19,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="JDA-4.1.1_101-withDependencies" level="project" />
   </component>
 </module>
