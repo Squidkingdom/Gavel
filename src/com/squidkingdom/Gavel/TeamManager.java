@@ -1,12 +1,16 @@
 package com.squidkingdom.Gavel;
+
 import java.util.ArrayList;
+import java.util.Optional;
+
 public class TeamManager {
     public static final Team dummy = new Team("DUMMY");
     public static ArrayList<Room> roomArray = new ArrayList<Room>(1);
     public static ArrayList<Team> teamArray = new ArrayList<Team>(1);
 
     public static int JIDArrayLength = 0;
-    public TeamManager(){
+
+    public TeamManager() {
     }
 
 
@@ -16,6 +20,7 @@ public class TeamManager {
         JIDArrayLength++;
 
     }
+
     //TODO un comment this for LD
 //    public void newTeam(String code, String person1) {
 //        Team team = new Team(code, person1);
@@ -32,7 +37,7 @@ public class TeamManager {
     }
 
 
-    public static Team getTeamByCode(String code){
+    public static Team getTeamByCode(String code) {
         for (Team team : teamArray) {
             if (team.code.equalsIgnoreCase(code)) {
                 return team;
@@ -41,7 +46,17 @@ public class TeamManager {
         }
         return dummy;
     }
-    public static boolean checkcode(String code){
+
+    public static boolean teamsFinished(int round) {
+        Optional<Team> holder = teamArray.stream().filter(e -> !e.roundComplete[round - 1]).findAny();
+        if (holder.isPresent()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean checkcode(String code) {
         for (Team team : teamArray) {
             if (team.code.equalsIgnoreCase(code)) {
                 return true;
