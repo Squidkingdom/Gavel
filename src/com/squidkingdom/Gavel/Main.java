@@ -150,6 +150,7 @@ public class Main {
         affTeam.totalSpeaks += (a1s + a2s);
         affTeam.roundComplete[round] = true;
         affTeam.totalWins += affWon ? 1 : 0;
+        affTeam.rounds[round].didWin = affWon;
 
         //Set Neg Data
         Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam, affTeam.judges[round]);
@@ -157,6 +158,7 @@ public class Main {
         negTeam.totalSpeaks += (n1s + n2s);
         negTeam.roundComplete[round] = true;
         negTeam.totalWins += !affWon ? 1 : 0;
+        negTeam.rounds[round].didWin = !affWon;
 
         //Set Room Data
         RoundData roundRmObj = new RoundData(affTeam, negTeam, affTeam.rounds[round].judge, (a1s + a2s), (n1s + n2s), affWon, true);
@@ -214,13 +216,12 @@ public class Main {
         team1.opp[event - 1] = team2;
         team1.judges[event - 1] = judge;
         team1.inProgress[event - 1] = true;
-        team1.isAffLead = !team1.isAffLead;
 
         team2.rounds[event - 1] = new Round(false, team1, judge);
         team2.opp[event - 1] = team1;
         team2.judges[event - 1] = judge;
         team2.inProgress[event - 1] = true;
-        team2.isAffLead = !team2.isAffLead;
+
         return roundData;
     }
 

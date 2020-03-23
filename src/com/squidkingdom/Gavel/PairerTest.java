@@ -48,7 +48,6 @@ class PairerTest {
 //        assertTrue(TeamManager.getTeamByCode("t4").inProgress[0]);
 //        assertFalse(TeamManager.getTeamByCode("t5").inProgress[0]);
     }
-}
 
 //    @Test
 //    void roundTwoPairingWorks() {
@@ -136,32 +135,35 @@ class PairerTest {
 //        assertNotEquals(TeamManager.getTeamByCode("t4").judges[0], TeamManager.getTeamByCode("t4").judges[1]);
 //    }
 //
-//    @Test
-//    void betterRoundTwoPairingWorksTest() throws GavelExeception {
-//        Main.manager.newTeam("t1", "s1", "s2");
-//        Main.manager.newTeam("t2", "s1", "s2");
-//        Main.manager.newTeam("t3", "s1", "s2");
-//        Main.manager.newTeam("t4", "s1", "s2");
-//        Main.manager.newTeam("t5", "s1", "s2");
-//        Main.manager.newTeam("t6", "s1", "s2");
-//        Main.manager.newTeam("t7", "s1", "s2");
-//        JudgeManager.newJudge("John Doe", "j1");
-//        JudgeManager.newJudge("Jane Doe", "j2");
-//        JudgeManager.newJudge("James Doe", "j3");
-//        JudgeManager.newJudge("John Doe", "j4");
-//        JudgeManager.newJudge("Jane Doe", "j5");
-//        JudgeManager.newJudge("James Doe", "j6");
-//        RoomManager.newRoom();
-//        RoomManager.newRoom();
-//        RoomManager.newRoom();
-//
-//        ArrayList<RoundData> pairings = Pairer.pairRound1();
-//        pairings.stream().filter(roundData -> roundData.judge != JudgeManager.DUMMY).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
-//
-//        ArrayList<RoundData> pairings2 = Pairer.pairRound2();
-//        int a = 1;
-//
-//    }
+    @Test
+    void betterRoundTwoPairingWorksTest() throws GavelExeception {
+        Main.manager.newTeam("t1", "s1", "s2");
+        Main.manager.newTeam("t2", "s1", "s2");
+        Main.manager.newTeam("t3", "s1", "s2");
+        Main.manager.newTeam("t4", "s1", "s2");
+        Main.manager.newTeam("t5", "s1", "s2");
+        Main.manager.newTeam("t6", "s1", "s2");
+        Main.manager.newTeam("t7", "s1", "s2");
+        JudgeManager.newJudge("John Doe", "j1");
+        JudgeManager.newJudge("Jane Doe", "j2");
+        JudgeManager.newJudge("James Doe", "j3");
+        JudgeManager.newJudge("John Doe", "j4");
+        JudgeManager.newJudge("Jane Doe", "j5");
+        JudgeManager.newJudge("James Doe", "j6");
+        RoomManager.newRoom();
+        RoomManager.newRoom();
+        RoomManager.newRoom();
+
+        ArrayList<RoundData> pairings = Pairer.pairRound1();
+        pairings.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
+
+        ArrayList<RoundData> pairings2 = Pairer.pairRound2();
+        pairings2.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
+
+        int a = 1;
+
+    }
+}
 //
 //    ArrayList<RoundData> safePairing2() {
 //        try {
