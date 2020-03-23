@@ -24,14 +24,15 @@ public class Main {
         RoomManager.newByeRoom();
         while (running) {
             try {                                                                                                                 //Might be redundants if time.
-                print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | Start | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
+                print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
                 String anwser = in.nextLine();
                 if (anwser.toLowerCase().startsWith("new")) {
                     selectedNew();
                 } else if (anwser.toLowerCase().startsWith("print")) {
-                    String code2 = anwser.split(" ", 5)[1];
 
+                    String code2 = anwser.split(" ", 5)[1];
                     printInfo(code2);
+
                 } else if (anwser.toLowerCase().startsWith("addresult")) {
                     String arg[] = anwser.split(" ");
                     if (arg.length != 9) {
@@ -40,9 +41,6 @@ public class Main {
                         selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
                     }
                 } else if (anwser.toLowerCase().startsWith("export")) {
-
-
-                } else if (anwser.toLowerCase().startsWith("start")) {
 
 
                 } else if (anwser.toLowerCase().startsWith("snr")) {
@@ -55,35 +53,36 @@ public class Main {
                             lastRoundStarted++;
                             break;
                         case 2://Round 3
-                            if (TeamManager.teamsFinished(3)){
+                            if (TeamManager.teamsFinished(3)) {
                                 Pairer.pairRound5();
                                 lastRoundStarted++;
-                            }else{
+                            } else {
                                 break;
                             }
                         case 3://Round 4
-                            if (TeamManager.teamsFinished(4)){
+                            if (TeamManager.teamsFinished(4)) {
                                 Pairer.pairRound5();
                                 lastRoundStarted++;
-                            }else{
+                            } else {
 
                             }
                         case 4://Round 5
-                            if (TeamManager.teamsFinished(5)){
+                            if (TeamManager.teamsFinished(5)) {
                                 Pairer.pairRound5();
                                 lastRoundStarted++;
-                            }else{
+                            } else {
 
                             }
-
-
 
                     }
 
                 } else if (anwser.toLowerCase().startsWith("exit")) {
+
                     print("Goodbye...");
                     running = false;
+
                 } else if (anwser.toLowerCase().startsWith("pairmanual")) {
+
                     String team1Code = anwser.split(" ", 6)[1];
                     String team2Code = anwser.split(" ", 6)[2];
                     String judgeCode = anwser.split(" ", 6)[3];
@@ -108,7 +107,7 @@ public class Main {
                     print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
                 }
             } catch (Exception exception) {
-                print("There was an error. Please retry" + exception);
+                print("There was an error. Please retry. Exception:" + exception);
             }
 
         }

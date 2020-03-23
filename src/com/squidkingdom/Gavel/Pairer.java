@@ -58,7 +58,6 @@ public class Pairer {
             byeCastle.get().rounds[0] = new Round(true, ByeTeam, ByeJudge);
             byeCastle.get().totalWins++;
             byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
-            byeCastle.get().judges[0] = ByeJudge;
             byeCastle.get().roundComplete[0] = true;
         }
 
@@ -133,10 +132,8 @@ public class Pairer {
 
         //Pair Judges
         Optional<Judge> roundJudge = judgePool.stream()
-                .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team2.code))
                 .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
@@ -201,10 +198,10 @@ public class Pairer {
 
         //Pair Judges
         Optional<Judge> roundJudge = judgePool.stream()
-                .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team2.code))
+                .filter(e -> e.teams.get(1).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(1).code.equalsIgnoreCase(team2.code))
                 .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
@@ -271,14 +268,12 @@ public class Pairer {
 
         //Pair Judges
         Optional<Judge> roundJudge = judgePool.stream()
-                .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team1.judges[1].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team1.judges[2].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[2].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team1.judges[3].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[3].code.equalsIgnoreCase(e.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team2.code))
+                .filter(e -> e.teams.get(1).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(1).code.equalsIgnoreCase(team2.code))
+                .filter(e -> e.teams.get(2).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(2).code.equalsIgnoreCase(team2.code))
                 .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
@@ -345,16 +340,17 @@ public class Pairer {
 
         //Pair Judges
         Optional<Judge> roundJudge = judgePool.stream()
-                .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team1.judges[1].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[1].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team1.judges[2].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[2].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team1.judges[3].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[3].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team1.judges[4].code.equalsIgnoreCase(e.code))
-                .filter(e -> !team2.judges[4].code.equalsIgnoreCase(e.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(0).code.equalsIgnoreCase(team2.code))
+                .filter(e -> e.teams.get(1).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(1).code.equalsIgnoreCase(team2.code))
+                .filter(e -> e.teams.get(2).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(2).code.equalsIgnoreCase(team2.code))
+                .filter(e -> e.teams.get(3).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(3).code.equalsIgnoreCase(team2.code))
+
+                .filter(e -> e.teams.get(4).code.equalsIgnoreCase(team1.code))
+                .filter(e -> e.teams.get(4).code.equalsIgnoreCase(team2.code))
                 .findAny();
         if (!roundJudge.isPresent())
             throw new GavelExeception("Fuck, No more Judges left.");
