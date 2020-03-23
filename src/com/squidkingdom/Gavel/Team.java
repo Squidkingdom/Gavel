@@ -3,8 +3,7 @@ package com.squidkingdom.Gavel;
 //import org.jetbrains.annotations.NotNull;
 
 // A class 'Team' that implements Comparable
-public class Team implements Comparable<Team>
-{
+public class Team implements Comparable<Team> {
     static boolean affNegFlip = true;
     boolean isAffLead;
     int totalWins = 0;
@@ -33,6 +32,7 @@ public class Team implements Comparable<Team>
     public Team() {
 
     }
+
     @Deprecated
     public Team(String code) {
         this.code = code;
@@ -56,8 +56,13 @@ public class Team implements Comparable<Team>
 
 
     // Getter methods for accessing private data
-    public double getSpeaks() { return totalSpeaks; }
-    public int getTotalWins()  {  return totalWins; }
+    public double getSpeaks() {
+        return totalSpeaks;
+    }
+
+    public int getTotalWins() {
+        return totalWins;
+    }
 }
 
 // Class to compare Teams by ratings

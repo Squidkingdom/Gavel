@@ -24,7 +24,7 @@ public class Main {
         RoomManager.newByeRoom();
         while (running) {
             try {                                                                                                                 //Might be redundants if time.
-                print("Available options are: New | JudgeNew [Name] [Code] | Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
+                print("Available options are: New | judgenew [Name] [Code] | removejudge Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
                 String anwser = in.nextLine();
                 if (anwser.toLowerCase().startsWith("new")) {
                     selectedNew();
@@ -80,6 +80,9 @@ public class Main {
 
                     print("Goodbye...");
                     running = false;
+
+                } else if (anwser.toLowerCase().startsWith("removejudge")) {
+                JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
 
                 } else if (anwser.toLowerCase().startsWith("pairmanual")) {
 

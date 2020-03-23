@@ -149,8 +149,7 @@ public class Pairer {
             Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Optional<Judge> roundJudge = judgePool.stream()
-                    .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
+            Optional<Judge> roundJudge = judgePool.stream() .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
                     .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
                     .findAny();
 
