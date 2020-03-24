@@ -6,24 +6,46 @@ import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.*;
 import net.dv8tion.jda.api.hooks.*;
+import org.omg.PortableInterceptor.ACTIVE;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.security.auth.login.LoginException;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Scanner;
 
 @SuppressWarnings("")
 
 //TODO? Comment system?
-public class Main extends ListenerAdapter {
+public class Main {
     public static TeamManager manager = new TeamManager();
     public static Scanner in = new Scanner(System.in);
     public static final int roomNum = 10;
+    public static File tokenKey = new File("Token.txt");
     public static int lastRoundStarted = 0;
-    public static boolean speaksOrRanks = true;  //This is speaks
-    public static void main(String[] args) throws LoginException {
+    public static final boolean hookBot = true;
+    public static TextChannel boundChannel;
+    public static void main(String[] args) throws LoginException, IOException {
         boolean running = true;
-        JDA Gavel = new JDABuilder(AccountType.BOT).setToken("NDE0NjQ4NTEzMTYzNjg5OTg1.DWqbGg.09aPV3VbDXuwOgYemedeYdstOi4").build();
-        Gavel.addEventListener();
 
+
+        //If this file is missing make it
+       if(tokenKey.createNewFile()){
+           print("File Created");
+           print("PLease put the client secret in the file in the project directory and run this again");
+           System.exit(69);
+       }
+
+        Scanner fileInputStream = new Scanner(tokenKey);
+       String token = fileInputStream.nextLine();
+       print("Token: " + token);
+
+        JDA Gavel = new JDABuilder(AccountType.BOT).setToken(token).build();
+        Gavel.addEventListener(new DiscordHook());
+        Gavel.getPresence().setActivity(Activity.listening("fake news"));
         for (int i = 0; i < roomNum; i++) {
             RoomManager.newRoom();
         }
@@ -121,101 +143,9 @@ public class Main extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onMessageReceived(MessageReceivedEvent event){
-        String anwser = event.getMessage().getContentDisplay();
-        Guild guild = event.getGuild();
-        Member member = event.getMember();
 
-//        try {                                                                                                                 //Might be redundants if time.
-//            print("Available options are: New | judgenew [Name] [Code] | removejudge Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
-//            if (anwser.toLowerCase().startsWith("new")) {
-//                selectedNew();
-//            } else if (anwser.toLowerCase().startsWith("print")) {
-//
-//                String code2 = anwser.split(" ", 5)[1];
-//                printInfo(code2);
-//
-//            } else if (anwser.toLowerCase().startsWith("addresult")) {
-//                String arg[] = anwser.split(" ");
-//                if (arg.length != 9) {
-//                    print("You did not provide the correct amount of arguments.");
-//                } else {
-//                    selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
-//                }
-//            } else if (anwser.toLowerCase().startsWith("export")) {
-//
-//
-//            } else if (anwser.toLowerCase().startsWith("snr")) {
-//                switch (lastRoundStarted) {
-//                    case 0://Round 1&2
-//                        Pairer.pairRound1();
-//                        Pairer.pairRound2();
-//                        lastRoundStarted++;
-//                        lastRoundStarted++;
-//                        break;
-//                    case 2://Round 3
-//                        if (TeamManager.teamsFinished(3)) {
-//                            Pairer.pairRound5();
-//                            lastRoundStarted++;
-//                        } else {
-//                            break;
-//                        }
-//                    case 3://Round 4
-//                        if (TeamManager.teamsFinished(4)) {
-//                            Pairer.pairRound5();
-//                            lastRoundStarted++;
-//                        } else {
-//
-//                        }
-//                    case 4://Round 5
-//                        if (TeamManager.teamsFinished(5)) {
-//                            Pairer.pairRound5();
-//                            lastRoundStarted++;
-//                        } else {
-//
-//                        }
-//
-//                }
-//
-//            } else if (anwser.toLowerCase().startsWith("exit")) {
-//
-//                print("Goodbye...");
-//                running = false;
-//
-//            } else if (anwser.toLowerCase().startsWith("removejudge")) {
-//                JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
-//
-//            } else if (anwser.toLowerCase().startsWith("pairmanual")) {
-//
-//                String team1Code = anwser.split(" ", 6)[1];
-//                String team2Code = anwser.split(" ", 6)[2];
-//                String judgeCode = anwser.split(" ", 6)[3];
-//                int roomId = Integer.parseInt(anwser.split(" ", 6)[4]);
-//                int roundNumber = Integer.parseInt(anwser.split(" ", 6)[5]);
-//
-//                Team team1 = TeamManager.getTeamByCode(team1Code);
-//                Team team2 = TeamManager.getTeamByCode(team2Code);
-//                Judge judge = JudgeManager.getJudgeByCode(judgeCode);
-//                Room room = RoomManager.getRoomById(roomId);
-//
-//                pair(team1, team2, judge, room, roundNumber);
-//                print("Team " + team1Code + " was paired with Team " + team2Code + " with the judge " + judgeCode + " in room " + roomId);
-//
-//            } else if (anwser.toLowerCase().startsWith("judgenew")) {
-//                String judgeName = anwser.split(" ", 5)[1];
-//                String judgeCode = anwser.split(" ", 5)[2];
-//
-//                JudgeManager.newJudge(judgeName, judgeCode);
-//                Judge judge = JudgeManager.getJudgeByCode(judgeCode);
-//
-//                print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
-//            }
-//        } catch (Exception exception) {
-//            print("There was an error. Please retry. Exception:" + exception);
-//        }
 
-    }
+
 
     // addresult 10 true 1 a 1 3 2 4
     public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s) {
