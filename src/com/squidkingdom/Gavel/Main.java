@@ -75,8 +75,10 @@ public class Main {
                     switch (lastRoundStarted) {
                         case 0://Round 1&2
                             Pairer.pairRound1();
-                            Pairer.pairRound2();
                             lastRoundStarted++;
+                            break;
+                        case 1:
+                            Pairer.pairRound2();
                             lastRoundStarted++;
                             break;
                         case 2://Round 3

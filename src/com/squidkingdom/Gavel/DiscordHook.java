@@ -1,5 +1,5 @@
 package com.squidkingdom.Gavel;
-
+//TODO add amount of arguments check to new
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
@@ -48,10 +48,12 @@ public class DiscordHook extends ListenerAdapter {
 
                     } else if (anwser.toLowerCase().startsWith("snr")) {
                         switch (Main.lastRoundStarted) {
-                            case 0://Round 1&2
+                            case 0:
                                 Pairer.pairRound1();
-                                Pairer.pairRound2();
                                 Main.lastRoundStarted++;
+                                break;
+                            case 1:
+                                Pairer.pairRound2();
                                 Main.lastRoundStarted++;
                                 break;
                             case 2://Round 3
