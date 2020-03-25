@@ -38,7 +38,7 @@ class ExporterTest {
         assertFalse(TeamManager.getTeamByCode("t7").inProgress[0]);
 
         ArrayList<RoundData> pairings = Pairer.pairRound1();
-        Exporter.exportSchedule(pairings);
+        Exporter.exportSchedule(pairings, "test_schedule");
     }
 
     @Test
@@ -64,6 +64,6 @@ class ExporterTest {
 
         ArrayList<RoundData> pairings = Pairer.pairRound1();
         pairings.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
-        Exporter.exportRounds();
+        Exporter.exportRounds("test_rounds");
     }
 }

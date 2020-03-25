@@ -40,7 +40,7 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (affPool.size() - byeOffset > roomPool.size()) {
+        if (affPool.size() - byeOffset > (roomPool.size() - 1)) {
             throw new GavelExeception("Error: Not enough rooms");
         }
         if (affPool.size() - byeOffset > judgePool.size()) {
@@ -75,7 +75,7 @@ public class Pairer {
                 team1 = affPool.get(0);
                 team2 = negPool.get(0);
                 roundJudge = judgePool.get(0);
-                Room room = roomPool.get(0);
+                Room room = roomPool.get(1);
                 pairings.add(Main.pair(team1, team2, roundJudge, room, 1));
                 teamPool.remove(team1);
                 affPool.remove(team1);
@@ -115,7 +115,7 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (negPool.size() - byeOffset > roomPool.size()) {
+        if (negPool.size() - byeOffset > (roomPool.size() - 1)) {
             throw new GavelExeception("Error: Not enough rooms");
         }
         if (negPool.size() - byeOffset > judgePool.size()) {
@@ -161,7 +161,7 @@ public class Pairer {
                 throw new GavelExeception("Fuck, No more Judges left.");
 
             {
-                Room room = roomPool.get(0);
+                Room room = roomPool.get(1);
                 pairings.add(Main.pair(team2, team1, roundJudge.get(), room, 2));
                 teamPool.remove(team1);
                 negPool.remove(team1);
@@ -182,13 +182,17 @@ public class Pairer {
     //Round 3
     public static void pairRound3() throws GavelExeception {
         Optional<Team> byeCastle;
+
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
+        WinCompare winCompare = new WinCompare();
+        teamPool.sort(winCompare);
+
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
-        WinCompare winCompare = new WinCompare();
-        teamPool.sort(winCompare);
+
+
 
 
         //Handle Bye

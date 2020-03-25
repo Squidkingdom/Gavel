@@ -2,6 +2,7 @@ package com.squidkingdom.Gavel;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Function;
 
@@ -19,6 +20,7 @@ class PairerTest {
         TeamManager.newTeam("t6", "s1", "s2");
         TeamManager.newTeam("t7", "s1", "s2");
 
+        RoomManager.newByeRoom();
         RoomManager.newRoom();
         RoomManager.newRoom();
         RoomManager.newRoom();
@@ -45,7 +47,7 @@ class PairerTest {
     }
 
     @Test
-    void roundTwoPairingWorks() throws GavelExeception {
+    void roundTwoPairingWorks() throws GavelExeception, IOException {
         Main.manager.newTeam("t1", "s1", "s2");
         Main.manager.newTeam("t2", "s1", "s2");
         Main.manager.newTeam("t3", "s1", "s2");
@@ -53,36 +55,46 @@ class PairerTest {
         Main.manager.newTeam("t5", "s1", "s2");
         Main.manager.newTeam("t6", "s1", "s2");
         Main.manager.newTeam("t7", "s1", "s2");
+        Main.manager.newTeam("t8", "s1", "s2");
+        Main.manager.newTeam("t9", "s1", "s2");
         JudgeManager.newJudge("John Doe", "j1");
         JudgeManager.newJudge("Jane Doe", "j2");
         JudgeManager.newJudge("James Doe", "j3");
         JudgeManager.newJudge("John Doe", "j4");
         JudgeManager.newJudge("Jane Doe", "j5");
         JudgeManager.newJudge("James Doe", "j6");
+        RoomManager.newByeRoom();
+        RoomManager.newRoom();
         RoomManager.newRoom();
         RoomManager.newRoom();
         RoomManager.newRoom();
 
         ArrayList<RoundData> pairings = Pairer.pairRound1();
+        Exporter.exportSchedule(pairings,"schedule1");
         pairings.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
 
         ArrayList<RoundData> pairings2 = Pairer.pairRound2();
+        Exporter.exportSchedule(pairings,"schedule2");
         pairings2.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
 
         for (RoundData round : pairings2) {
-            // TODO: Make sure that byes are accounted for and work here
             assertNotEquals(round.affTeam.opp[0], round.affTeam.opp[1]);
-            assertNotEquals(round.negTeam.opp[0], round.negTeam.opp[1]);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertNotEquals(round.negTeam.opp[0], round.negTeam.opp[1]);
 
             assertNotEquals(round.affTeam.judges[0], round.affTeam.judges[1]);
-            assertNotEquals(round.negTeam.judges[0], round.negTeam.judges[1]);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertNotEquals(round.negTeam.judges[0], round.negTeam.judges[1]);
 
-            assertEquals(1, round.affTeam.totalWins);
-            assertEquals(1, round.negTeam.totalWins);
+            assertTrue(round.affTeam.totalWins == 1 || (round.affTeam.hasHadBye == true && round.affTeam.totalWins >= 1 && round.affTeam.totalWins <= 2));
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertEquals(1, round.negTeam.totalWins);
 
-            assertTrue(round.affTeam.totalSpeaks >= 7);
-            assertTrue(round.negTeam.totalSpeaks >= 7);
+            assertTrue(round.affTeam.totalSpeaks >= 7 && round.affTeam.totalSpeaks <= 10);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertTrue(round.negTeam.totalSpeaks >= 7);
         }
 
+        Exporter.exportRounds("rounds1");
     }
 }

@@ -26,7 +26,7 @@ public class Main {
     public static final int roomNum = 10;
     public static File tokenKey = new File("Token.txt");
     public static int lastRoundStarted = 0;
-    public static final boolean hookBot = false;
+    public static final boolean hookBot = true;
     public static TextChannel boundChannel;
     public static void main(String[] args) throws LoginException, IOException {
         boolean running = true;

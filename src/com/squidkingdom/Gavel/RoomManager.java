@@ -7,11 +7,12 @@ import java.util.Optional;
 public class RoomManager {
     public static final Room DUMMY = new Room();
     public static ArrayList<Room> roomArray = new ArrayList<Room>(1);
+    public static int roomArraySize = 0;
     public RoomManager(){}
 
-
     public static void newRoom() {
-        roomArray.add(new Room(roomArray.size() + 1));
+        roomArraySize++;
+        roomArray.add(new Room(roomArraySize));
     }
 
     public static void newByeRoom() {

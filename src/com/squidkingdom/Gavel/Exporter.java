@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Exporter {
 
-    public static void exportSchedule(ArrayList<RoundData> rounds) throws IOException {
-        FileWriter csvWriter = new FileWriter("tmp/schedule.csv");
+    public static void exportSchedule(ArrayList<RoundData> rounds, String fileName) throws IOException {
+        FileWriter csvWriter = new FileWriter("tmp/" + fileName + ".csv");
         csvWriter.append("Aff Team");
         csvWriter.append(",");
         csvWriter.append("Neg Team");
@@ -26,8 +26,8 @@ public class Exporter {
         csvWriter.close();
     }
 
-    public static void exportRounds() throws IOException {
-        FileWriter csvWriter = new FileWriter("tmp/rounds.csv");
+    public static void exportRounds(String fileName) throws IOException {
+        FileWriter csvWriter = new FileWriter("tmp/" + fileName + ".csv");
         csvWriter.append("Round");
         csvWriter.append(",");
         csvWriter.append("Winner");
