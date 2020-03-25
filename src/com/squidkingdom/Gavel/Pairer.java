@@ -55,11 +55,12 @@ public class Pairer {
             Team ByeTeam = new Team("BYE", "bye", "bye");
             Judge ByeJudge = new Judge("bye", "BYE");
             byeCastle.get().opp[0] = ByeTeam;
-            byeCastle.get().rounds[0] = new Round(true, ByeTeam, ByeJudge, 0);
+            byeCastle.get().rounds[0] = new Round(true, 3, true, 0, 0, ByeTeam, ByeJudge);
             byeCastle.get().totalWins++;
             byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
             byeCastle.get().roundComplete[0] = true;
             byeCastle.get().rounds[0].didWin = true;
+            byeCastle.get().judges[0] = ByeJudge;
             RoomManager.getRoomById(0).data[0] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
@@ -128,12 +129,13 @@ public class Pairer {
             Team ByeTeam = new Team("BYE", "bye", "bye");
             Judge ByeJudge = new Judge("bye", "BYE");
             byeCastle.get().opp[1] = ByeTeam;
-            byeCastle.get().rounds[1] = new Round(false, ByeTeam, ByeJudge, 0);
+            byeCastle.get().rounds[1] = new Round(true, 3, true, 0, 0, ByeTeam, ByeJudge);
             byeCastle.get().totalWins++;
             byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
             byeCastle.get().judges[1] = ByeJudge;
             byeCastle.get().roundComplete[1] = true;
             byeCastle.get().rounds[1].didWin = true;
+            byeCastle.get().judges[1] = ByeJudge;
             RoomManager.getRoomById(0).data[1] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
