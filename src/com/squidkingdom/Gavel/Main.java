@@ -247,15 +247,15 @@ public class Main {
     }
 
     public static RoundData pair(Team team1, Team team2, Judge judge, Room room, int event) {
-        RoundData roundData = new RoundData(team1, team2, judge);
+        RoundData roundData = new RoundData(team1, team2, judge, room.id);
         room.data[event - 1] = roundData;
 
-        team1.rounds[event - 1] = new Round(true, team2, judge);
+        team1.rounds[event - 1] = new Round(true, team2, judge, room.id);
         team1.opp[event - 1] = team2;
         team1.judges[event - 1] = judge;
         team1.inProgress[event - 1] = true;
 
-        team2.rounds[event - 1] = new Round(false, team1, judge);
+        team2.rounds[event - 1] = new Round(false, team1, judge, room.id);
         team2.opp[event - 1] = team1;
         team2.judges[event - 1] = judge;
         team2.inProgress[event - 1] = true;

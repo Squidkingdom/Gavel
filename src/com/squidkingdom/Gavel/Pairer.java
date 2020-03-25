@@ -55,11 +55,12 @@ public class Pairer {
             Team ByeTeam = new Team("BYE", "bye", "bye");
             Judge ByeJudge = new Judge("bye", "BYE");
             byeCastle.get().opp[0] = ByeTeam;
-            byeCastle.get().rounds[0] = new Round(true, ByeTeam, ByeJudge);
+            byeCastle.get().rounds[0] = new Round(true, ByeTeam, ByeJudge, 0);
             byeCastle.get().totalWins++;
             byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
             byeCastle.get().roundComplete[0] = true;
             byeCastle.get().rounds[0].didWin = true;
+            RoomManager.getRoomById(0).data[0] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
 
@@ -85,7 +86,7 @@ public class Pairer {
         }
 
         if (byeCastle.isPresent())
-            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE")));
+            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0));
 
         return pairings;
     }
@@ -127,12 +128,13 @@ public class Pairer {
             Team ByeTeam = new Team("BYE", "bye", "bye");
             Judge ByeJudge = new Judge("bye", "BYE");
             byeCastle.get().opp[1] = ByeTeam;
-            byeCastle.get().rounds[1] = new Round(false, ByeTeam, ByeJudge);
+            byeCastle.get().rounds[1] = new Round(false, ByeTeam, ByeJudge, 0);
             byeCastle.get().totalWins++;
             byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
             byeCastle.get().judges[1] = ByeJudge;
             byeCastle.get().roundComplete[1] = true;
             byeCastle.get().rounds[1].didWin = true;
+            RoomManager.getRoomById(0).data[1] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
         ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
@@ -169,7 +171,7 @@ public class Pairer {
         }
 
         if (byeCastle.isPresent())
-            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE")));
+            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0));
 
         return pairings;
     }

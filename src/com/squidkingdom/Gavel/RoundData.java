@@ -10,12 +10,13 @@ public class RoundData {
     int negSpeaks = 0;
     Judge judge;
 
-    public RoundData(Team affTeam, Team negTeam, Judge judge) {
+    public RoundData(Team affTeam, Team negTeam, Judge judge, int roomId) {
         this.affTeam = affTeam;
         this.negTeam = negTeam;
         this.affSpeaks = affSpeaks;
         this.negSpeaks = negSpeaks;
         this.judge = judge;
+        this.room = roomId;
     }
     public RoundData(Team affTeam, Team negTeam, Judge judge, int affSpeaks, int negSpeaks, boolean affWon, boolean isFinished){
         this.affTeam = affTeam;

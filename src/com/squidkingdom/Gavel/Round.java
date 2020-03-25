@@ -20,10 +20,11 @@ public class Round {
         this.judge = judge;
     }
 
-    Round(boolean side, Team oppTeam, Judge judge) {
+    Round(boolean side, Team oppTeam, Judge judge, int roomId) {
         this.side = side;
         this.oppTeam = oppTeam;
         this.judge = judge;
+        this.roomnum = roomId;
     }
 
     Round() {

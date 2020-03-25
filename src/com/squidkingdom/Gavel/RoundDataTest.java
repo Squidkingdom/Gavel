@@ -8,7 +8,7 @@ class RoundDataTest {
 
     @Test
     void roundDataWorks() {
-        RoundData roundData = new RoundData(new Team("t1", "s1", "s2"), new Team("t2", "ss1", "ss2"), new Judge("John Doe", "j1"));
+        RoundData roundData = new RoundData(new Team("t1", "s1", "s2"), new Team("t2", "ss1", "ss2"), new Judge("John Doe", "j1"), 0);
         assertEquals(false, roundData.isFinished);
 
         roundData.affSpeaks = 5;
