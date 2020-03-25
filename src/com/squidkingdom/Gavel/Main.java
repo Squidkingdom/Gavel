@@ -26,26 +26,28 @@ public class Main {
     public static final int roomNum = 10;
     public static File tokenKey = new File("Token.txt");
     public static int lastRoundStarted = 0;
-    public static final boolean hookBot = true;
+    public static final boolean hookBot = false;
     public static TextChannel boundChannel;
     public static void main(String[] args) throws LoginException, IOException {
         boolean running = true;
 
-
+    if (hookBot) {
         //If this file is missing make it
-       if(tokenKey.createNewFile()){
-           print("File Created");
-           print("PLease put the client secret in the file in the project directory and run this again");
-           System.exit(69);
-       }
-
+        if (tokenKey.createNewFile()) {
+            print("File Created");
+            print("PLease put the client secret in the file in the project directory and run this again");
+            System.exit(69);
+        }
         Scanner fileInputStream = new Scanner(tokenKey);
-       String token = fileInputStream.nextLine();
-       print("Token: " + token);
+        String token = fileInputStream.nextLine();
+        print("Token: " + token);
 
         JDA Gavel = new JDABuilder(AccountType.BOT).setToken(token).build();
         Gavel.addEventListener(new DiscordHook());
         Gavel.getPresence().setActivity(Activity.listening("fake news"));
+
+
+    }
         for (int i = 0; i < roomNum; i++) {
             RoomManager.newRoom();
         }
