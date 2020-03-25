@@ -1,10 +1,8 @@
 package com.squidkingdom.Gavel;
 //TODO add amount of arguments check to new
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.*;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.*;
-import net.dv8tion.jda.api.hooks.*;
 
 
 public class DiscordHook extends ListenerAdapter {
@@ -17,9 +15,9 @@ public class DiscordHook extends ListenerAdapter {
             lastEvent = event;
             String anwser = event.getMessage().getContentDisplay();
             if (event.getAuthor().isBot()) {
-
+                //We said something in chat
+                System.out.println("Self: " + anwser);
             } else {
-
                 if (event.isFromType(ChannelType.TEXT)) {
                     Guild guild = event.getGuild();
                     Member member = event.getMember();
@@ -28,25 +26,25 @@ public class DiscordHook extends ListenerAdapter {
                     //event.getChannel().sendMessage(anwser).queue();
 
                     //Might be redundants if time.print("Available options are: New [Code] [Firstname.lastname](1st speaker) [firstname.lastname](2nd Speaker) | judgenew [Name] [Code] | removejudge Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
-                    if (anwser.toLowerCase().startsWith("new")) {
+                    if (anwser.toLowerCase().startsWith("!new")) {
                         selectedNew(anwser);
-                    } else if (anwser.toLowerCase().startsWith("print")) {
+                    } else if (anwser.toLowerCase().startsWith("!print")) {
 
                         String code2 = anwser.split(" ", 5)[1];
                         printInfo(code2);
 
-                    } else if (anwser.toLowerCase().startsWith("addresult")) {
+                    } else if (anwser.toLowerCase().startsWith("!addresult")) {
                         String arg[] = anwser.split(" ");
                         if (arg.length != 9) {
                             print("You did not provide the correct amount of arguments.");
                         } else {
                             selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
                         }
-                    } else if (anwser.toLowerCase().startsWith("Help")) {
+                    } else if (anwser.toLowerCase().startsWith("!help")) {
                         print("Available options are: New [Code] [Firstname.lastname](1st speaker) [firstname.lastname](2nd Speaker) | judgenew [Name] [Code] | removejudge Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
 
 
-                    } else if (anwser.toLowerCase().startsWith("snr")) {
+                    } else if (anwser.toLowerCase().startsWith("!snr")) {
                         switch (Main.lastRoundStarted) {
                             case 0:
                                 Pairer.pairRound1();
@@ -108,6 +106,9 @@ public class DiscordHook extends ListenerAdapter {
 
                         print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
                     }
+                }else{
+                    //This is run when we get a DM.
+                    System.out.println(event.getMessage().getContentDisplay());
                 }
             }
         }catch(Exception e){
@@ -177,8 +178,8 @@ public class DiscordHook extends ListenerAdapter {
             print("This code is taken");
             return;
         }
-        String player1 = anwser[2];
-        String player2 = anwser[3];
+        String player1 = anwser[2].split(".")[0] + " " + anwser[2].split(".")[1];
+        String player2 = anwser[3].split(".")[0] + " " + anwser[3].split(".")[1];
         TeamManager.newTeam(code, player1, player2);
         print("Made new team with Code: \"" + TeamManager.getTeamByCode(code).code + "\" and Speakers: " + TeamManager.getTeamByCode(code).person1 + ", " + TeamManager.getTeamByCode(code).person2 + "\n");
     }
