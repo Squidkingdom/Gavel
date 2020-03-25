@@ -19,8 +19,8 @@ public class Exporter {
 
         for (RoundData round : rounds) {
             csvWriter.append(String.join(",", round.affTeam.code, round.negTeam.code, round.judge.code, Integer.toString(round.room)));
+            csvWriter.append("\n");
         }
-        csvWriter.append("\n");
 
         csvWriter.flush();
         csvWriter.close();
