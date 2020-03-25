@@ -1,13 +1,17 @@
 package com.squidkingdom.Gavel;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class Exporter {
 
-    public static void exportSchedule(ArrayList<RoundData> rounds, String fileName) throws IOException {
-        FileWriter csvWriter = new FileWriter("tmp/" + fileName + ".csv");
+    public static File exportSchedule(ArrayList<RoundData> rounds) throws IOException {
+        File file = new File("tmp/schedule.csv");
+        FileWriter csvWriter = new FileWriter(file);
+        csvWriter.append("Round " + (Main.lastRoundStarted + 1));
+        csvWriter.append("\n");
         csvWriter.append("Aff Team");
         csvWriter.append(",");
         csvWriter.append("Neg Team");
@@ -24,10 +28,12 @@ public class Exporter {
 
         csvWriter.flush();
         csvWriter.close();
+        return file;
     }
 
-    public static void exportRounds(String fileName) throws IOException {
-        FileWriter csvWriter = new FileWriter("tmp/" + fileName + ".csv");
+    public static File exportRounds() throws IOException {
+        File file = new File("tmp/rounds.csv");
+        FileWriter csvWriter = new FileWriter(file);
         csvWriter.append("Round");
         csvWriter.append(",");
         csvWriter.append("Winner");
@@ -61,5 +67,6 @@ public class Exporter {
 
         csvWriter.flush();
         csvWriter.close();
+        return file;
     }
 }

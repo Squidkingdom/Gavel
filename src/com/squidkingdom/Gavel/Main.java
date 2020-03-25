@@ -73,40 +73,6 @@ public class Main {
                 } else if (anwser.toLowerCase().startsWith("export")) {
 
 
-                } else if (anwser.toLowerCase().startsWith("snr")) {
-                    switch (lastRoundStarted) {
-                        case 0://Round 1&2
-                            Pairer.pairRound1();
-                            lastRoundStarted++;
-                            break;
-                        case 1:
-                            Pairer.pairRound2();
-                            lastRoundStarted++;
-                            break;
-                        case 2://Round 3
-                            if (TeamManager.teamsFinished(3)) {
-                                Pairer.pairRound5();
-                                lastRoundStarted++;
-                            } else {
-                                break;
-                            }
-                        case 3://Round 4
-                            if (TeamManager.teamsFinished(4)) {
-                                Pairer.pairRound5();
-                                lastRoundStarted++;
-                            } else {
-
-                            }
-                        case 4://Round 5
-                            if (TeamManager.teamsFinished(5)) {
-                                Pairer.pairRound5();
-                                lastRoundStarted++;
-                            } else {
-
-                            }
-
-                    }
-
                 } else if (anwser.toLowerCase().startsWith("exit")) {
 
                     print("Goodbye...");
