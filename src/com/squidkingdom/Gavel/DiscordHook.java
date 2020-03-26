@@ -14,130 +14,143 @@ import java.util.concurrent.TimeUnit;
 
 public class DiscordHook extends ListenerAdapter {
     static MessageReceivedEvent lastEvent;
+    static MessageReceivedEvent botLastEvent;
+    static boolean bound = false;
+    static TextChannel binding;
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
-        try {
-            lastEvent = event;
-            String anwser = event.getMessage().getContentDisplay();
-            if (event.getAuthor().isBot()) {
-                //We said something in chat
-                System.out.println("Self: " + anwser);
-            } else {
-                if (event.isFromType(ChannelType.TEXT)) {
-                    Guild guild = event.getGuild();
-                    Member member = event.getMember();
-                    // Uncomment for verbose
-
-                    //event.getChannel().sendMessage(anwser).queue();
-
-                    if (anwser.toLowerCase().startsWith("!new")) {
-                        if (anwser.split(" ").length != 4) {
-                            print("You did not provide the correct amount of arguments.");
-                        } else {
-
-                            selectedNew(anwser);
-                        }
-
-                    } else if (anwser.toLowerCase().startsWith("!print")) {
-
-                        String code2 = anwser.split(" ", 5)[1];
-                        printInfo(code2);
-
-                    } else if (anwser.toLowerCase().startsWith("!addresult")) {
-                        String arg[] = anwser.split(" ");
-                        if (arg.length != 9) {
-                            print("You did not provide the correct amount of arguments.");
-                        } else {
-                            selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
-                        }
-                    } else if (anwser.toLowerCase().startsWith("!help")) {
-                        print("Available options are: New [Code] [Firstname.lastname](1st speaker) [firstname.lastname](2nd Speaker) | judgenew [Code] [Name]| removejudge Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
-
-
-                    } else if (anwser.toLowerCase().startsWith("!snr")) {
-                        switch (Main.lastRoundStarted) {
-                            case 0:
-                                event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound1(), "schedule_round_1")).queue();
-                                Main.lastRoundStarted++;
-                                break;
-                            case 1:
-                                event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound2(), "schedule_round_2")).queue();
-                                Main.lastRoundStarted++;
-                                break;
-                            case 2://Round 3
-                                if (TeamManager.teamsFinished(3)) {
-                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound3(), "schedule_round_3")).queue();
-                                    Main.lastRoundStarted++;
-                                } else {
-                                    print("Cant start round, not all rooms finished.");
-                                    break;
-                                }
-                            case 3://Round 4
-                                if (TeamManager.teamsFinished(4)) {
-                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule_round_4")).queue();
-                                    Main.lastRoundStarted++;
-                                } else {
-                                    print("Cant start round, not all rooms finished.");
-                                    break;
-                                }
-                            case 4://Round 5
-                                if (TeamManager.teamsFinished(5)) {
-                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule_round_5")).queue();
-                                    Main.lastRoundStarted++;
-                                } else {
-                                    print("Cant start round, not all rooms finished.");
-                                    break;
-                                }
-
-                        }
-
-                    } else if (anwser.toLowerCase().startsWith("!removejudge")) {
-                        JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
-                        print("Removed judge from the pool.");
-
-                    } else if (anwser.toLowerCase().startsWith("!bulkjudge")) {
-                        bulkNewJudge(anwser);
-
-                    }else if (anwser.toLowerCase().startsWith("!export")) {
-                        TextChannel text = event.getGuild().getTextChannelsByName("tabschedule", true).get(0);
-                        text.sendMessage("Results").addFile(Exporter.exportRounds("Rounds")).queue();
-
-                    } else if (anwser.toLowerCase().startsWith("pairmanual")) {
-
-                        String team1Code = anwser.split(" ", 6)[1];
-                        String team2Code = anwser.split(" ", 6)[2];
-                        String judgeCode = anwser.split(" ", 6)[3];
-                        int roomId = Integer.parseInt(anwser.split(" ", 6)[4]);
-                        int roundNumber = Integer.parseInt(anwser.split(" ", 6)[5]);
-
-                        Team team1 = TeamManager.getTeamByCode(team1Code);
-                        Team team2 = TeamManager.getTeamByCode(team2Code);
-                        Judge judge = JudgeManager.getJudgeByCode(judgeCode);
-                        Room room = RoomManager.getRoomById(roomId);
-
-                        pair(team1, team2, judge, room, roundNumber);
-                        print("Team " + team1Code + " was paired with Team " + team2Code + " with the judge " + judgeCode + " in room " + roomId);
-
-                    } else if (anwser.toLowerCase().startsWith("!judgenew")) {
-                        String judgeCode = anwser.split(" ", 5)[1];
-                        String judgeName = anwser.split(" ", 5)[2];
-
-                        JudgeManager.newJudge(judgeName, judgeCode);
-                        Judge judge = JudgeManager.getJudgeByCode(judgeCode);
-
-                        print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
-                    }else if (anwser.toLowerCase().startsWith("!bulknew")) {
-                        bulkNew(anwser);
-                    }
+        if (!bound || (event.getTextChannel().equals(binding))) {
+            try {
+                lastEvent = event;
+                String anwser = event.getMessage().getContentDisplay();
+                if (event.getAuthor().isBot()) {
+                    //We said something in chat
+                    botLastEvent = event;
+                    System.out.println("Self: " + anwser);
                 } else {
-                    //This is run when we get a DM.
-                    System.out.println(event.getMessage().getContentDisplay());
+                    if (event.isFromType(ChannelType.TEXT)) {
+                        Guild guild = event.getGuild();
+                        Member member = event.getMember();
+                        // Uncomment for verbose
+
+                        //event.getChannel().sendMessage(anwser).queue();
+
+                        if (anwser.toLowerCase().startsWith("!new")) {
+                            if (anwser.split(" ").length != 4) {
+                                print("You did not provide the correct amount of arguments.");
+                            } else {
+
+                                selectedNew(anwser);
+                            }
+
+                        } else if (anwser.toLowerCase().startsWith("!print")) {
+
+                            String code2 = anwser.split(" ", 5)[1];
+                            printInfo(code2);
+
+                        } else if (anwser.toLowerCase().startsWith("!addresult")) {
+                            String arg[] = anwser.split(" ");
+                            if (arg.length != 9) {
+                                print("You did not provide the correct amount of arguments.");
+                            } else {
+                                selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
+                            }
+                        } else if (anwser.toLowerCase().startsWith("!help")) {
+                            print("Available options are: New [Code] [Firstname.lastname](1st speaker) [firstname.lastname](2nd Speaker) | judgenew [Code] [Name]| removejudge Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
+
+
+                        } else if (anwser.toLowerCase().startsWith("!snr")) {
+                            switch (Main.lastRoundStarted) {
+                                case 0:
+                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound1(), "schedule_round_1")).queue();
+                                    Main.lastRoundStarted++;
+                                    break;
+                                case 1:
+                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound2(), "schedule_round_2")).queue();
+                                    Main.lastRoundStarted++;
+                                    break;
+                                case 2://Round 3
+                                    if (TeamManager.teamsFinished(3)) {
+                                        event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound3(), "schedule_round_3")).queue();
+                                        Main.lastRoundStarted++;
+                                    } else {
+                                        print("Cant start round, not all rooms finished.");
+                                        break;
+                                    }
+                                case 3://Round 4
+                                    if (TeamManager.teamsFinished(4)) {
+                                        event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule_round_4")).queue();
+                                        Main.lastRoundStarted++;
+                                    } else {
+                                        print("Cant start round, not all rooms finished.");
+                                        break;
+                                    }
+                                case 4://Round 5
+                                    if (TeamManager.teamsFinished(5)) {
+                                        event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule_round_5")).queue();
+                                        Main.lastRoundStarted++;
+                                    } else {
+                                        print("Cant start round, not all rooms finished.");
+                                        break;
+                                    }
+
+                            }
+
+                        } else if (anwser.toLowerCase().startsWith("!removejudge")) {
+                            JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
+                            print("Removed judge from the pool.");
+
+                        } else if (anwser.toLowerCase().startsWith("!bulkjudge")) {
+                            bulkNewJudge(anwser);
+
+                        } else if (anwser.toLowerCase().startsWith("!test")) {
+                          print("Boi");
+
+                        } else if (anwser.toLowerCase().startsWith("!bind")) {
+                            binding = event.getTextChannel();
+                            bound = true;
+                            Main.print("Successfully bound to " + binding.getAsMention());
+
+                        } else if (anwser.toLowerCase().startsWith("!export")) {
+                            TextChannel text = event.getGuild().getTextChannelsByName("tabschedule", true).get(0);
+                            text.sendMessage("Results").addFile(Exporter.exportRounds("Rounds")).queue();
+
+                        } else if (anwser.toLowerCase().startsWith("pairmanual")) {
+
+                            String team1Code = anwser.split(" ", 6)[1];
+                            String team2Code = anwser.split(" ", 6)[2];
+                            String judgeCode = anwser.split(" ", 6)[3];
+                            int roomId = Integer.parseInt(anwser.split(" ", 6)[4]);
+                            int roundNumber = Integer.parseInt(anwser.split(" ", 6)[5]);
+
+                            Team team1 = TeamManager.getTeamByCode(team1Code);
+                            Team team2 = TeamManager.getTeamByCode(team2Code);
+                            Judge judge = JudgeManager.getJudgeByCode(judgeCode);
+                            Room room = RoomManager.getRoomById(roomId);
+
+                            pair(team1, team2, judge, room, roundNumber);
+                            print("Team " + team1Code + " was paired with Team " + team2Code + " with the judge " + judgeCode + " in room " + roomId);
+
+                        } else if (anwser.toLowerCase().startsWith("!judgenew")) {
+                            String judgeCode = anwser.split(" ", 5)[1];
+                            String judgeName = anwser.split(" ", 5)[2];
+
+                            JudgeManager.newJudge(judgeName, judgeCode);
+                            Judge judge = JudgeManager.getJudgeByCode(judgeCode);
+
+                            print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
+                        } else if (anwser.toLowerCase().startsWith("!bulknew")) {
+                            bulkNew(anwser);
+                        }
+                    } else {
+                        //This is run when we get a DM.
+                        System.out.println(event.getMessage().getContentDisplay());
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -215,43 +228,49 @@ public class DiscordHook extends ListenerAdapter {
 
     public void bulkNew(String ans) {
         List<String> anwser = new ArrayList<String>();
-        Collections.addAll(anwser,ans.split(" "));
-
+        Collections.addAll(anwser, ans.split(" "));
 
 
         anwser.remove(0);
-        if((anwser.size() % 3) != 0) {
+        if ((anwser.size() % 3) != 0) {
             print("Invalid Arguments");
             return;
         }
-        int teams = (anwser.size()/3);
+
+        String temp = lastEvent.getTextChannel().sendMessage("Processing...").complete().getId();
+        int teams = (anwser.size() / 3);
         for (int i = 0; i < teams; i++) {
-           String code = anwser.get((i*3));
-           String player1 = anwser.get((i*3) + 1);
-           String player2 = anwser.get((i*3) + 2);
+            String code = anwser.get((i * 3));
+            String player1 = anwser.get((i * 3) + 1);
+            String player2 = anwser.get((i * 3) + 2);
             TeamManager.newTeam(code, player1, player2);
-            print("Made new team with Code: \"" + JudgeManager.getJudgeByCode(code).code + "\" and Name: " + JudgeManager.getJudgeByCode(code).name);
 
+            lastEvent.getTextChannel().editMessageFormatById(temp, "Made new Judge with Code: \"" + JudgeManager.getJudgeByCode(code).code + "\" and Name: " + JudgeManager.getJudgeByCode(code).name + "...").queue();
         }
-       }  public void bulkNewJudge(String ans) {
+        lastEvent.getTextChannel().editMessageFormatById(temp, "Finished").queue();
+        Main.print("Self: Finished");
+    }
+
+    public void bulkNewJudge(String ans) throws InterruptedException {
         List<String> anwser = new ArrayList<String>();
-        Collections.addAll(anwser,ans.split(" "));
+        Collections.addAll(anwser, ans.split(" "));
 
-
-
+        String temp = lastEvent.getTextChannel().sendMessage("Processing...").complete().getId();
         anwser.remove(0);
-        if((anwser.size() % 2) != 0) {
+        if ((anwser.size() % 2) != 0) {
             print("Invalid Arguments");
             return;
         }
-        int teams = (anwser.size()/2);
+        int teams = (anwser.size() / 2);
+
         for (int i = 0; i < teams; i++) {
-            String code = anwser.get((i*2));
-            String player1 = anwser.get((i*2) + 1);
+            String code = anwser.get((i * 2));
+            String player1 = anwser.get((i * 2) + 1);
             JudgeManager.newJudge(player1, code);
-            print("Made new team with Code: \"" + TeamManager.getTeamByCode(code).code + "\" and Speakers: " + TeamManager.getTeamByCode(code).person1 + ", " + TeamManager.getTeamByCode(code).person2 + "\n");
+            lastEvent.getTextChannel().editMessageFormatById(temp, "Made new Judge with Code: \"" + JudgeManager.getJudgeByCode(code).code + "\" and Name: " + JudgeManager.getJudgeByCode(code).name + "...").queue();
 
         }
+        lastEvent.getTextChannel().editMessageFormatById(temp, "Finished").queue();
     }
 
 
