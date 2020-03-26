@@ -83,6 +83,42 @@ class PairerTest {
                 assertTrue(round.negTeam.totalSpeaks >= 13);
         }
 
+        ArrayList<RoundData> pairings4 = Pairer.pairRound4();
+        Exporter.exportSchedule(pairings4,"schedule4");
+        pairings4.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
+
+        for (RoundData round : pairings3) {
+            assertNotEquals(round.affTeam.opp[2], round.affTeam.opp[3]);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertNotEquals(round.negTeam.opp[2], round.negTeam.opp[3]);
+
+            assertNotEquals(round.affTeam.judges[2], round.affTeam.judges[3]);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertNotEquals(round.negTeam.judges[2], round.negTeam.judges[3]);
+
+            assertTrue(round.affTeam.totalWins >= 2 && round.affTeam.totalWins <= 3);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertTrue(round.negTeam.totalWins >= 2 && round.negTeam.totalWins <= 3);
+        }
+
+        ArrayList<RoundData> pairings5 = Pairer.pairRound5();
+        Exporter.exportSchedule(pairings5,"schedule5");
+        pairings5.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));
+
+        for (RoundData round : pairings3) {
+            assertNotEquals(round.affTeam.opp[4], round.affTeam.opp[3]);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertNotEquals(round.negTeam.opp[4], round.negTeam.opp[3]);
+
+            assertNotEquals(round.affTeam.judges[4], round.affTeam.judges[3]);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertNotEquals(round.negTeam.judges[4], round.negTeam.judges[3]);
+
+            assertTrue(round.affTeam.totalWins >= 3 && round.affTeam.totalWins <= 4);
+            if (!round.negTeam.code.equalsIgnoreCase("bye"))
+                assertTrue(round.negTeam.totalWins >= 2 && round.negTeam.totalWins <= 3);
+        }
+
         Exporter.exportRounds("rounds1");
     }
 }
