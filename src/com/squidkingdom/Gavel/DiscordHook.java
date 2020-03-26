@@ -1,5 +1,6 @@
 package com.squidkingdom.Gavel;
 //TODO add amount of arguments check to new
+//TODO
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.entities.*;
