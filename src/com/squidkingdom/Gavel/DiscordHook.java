@@ -59,16 +59,16 @@ public class DiscordHook extends ListenerAdapter {
                     } else if (anwser.toLowerCase().startsWith("!snr")) {
                         switch (Main.lastRoundStarted) {
                             case 0:
-                                event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound1(), "schedule1")).queue();
+                                event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound1(), "schedule_round_1")).queue();
                                 Main.lastRoundStarted++;
                                 break;
                             case 1:
-                                event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound2(), "schedule2")).queue();
+                                event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound2(), "schedule_round_2")).queue();
                                 Main.lastRoundStarted++;
                                 break;
                             case 2://Round 3
                                 if (TeamManager.teamsFinished(3)) {
-                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound3(), "schedule3")).queue();
+                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound3(), "schedule_round_3")).queue();
                                     Main.lastRoundStarted++;
                                 } else {
                                     print("Cant start round, not all rooms finished.");
@@ -76,7 +76,7 @@ public class DiscordHook extends ListenerAdapter {
                                 }
                             case 3://Round 4
                                 if (TeamManager.teamsFinished(4)) {
-                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule4")).queue();
+                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule_round_4")).queue();
                                     Main.lastRoundStarted++;
                                 } else {
                                     print("Cant start round, not all rooms finished.");
@@ -84,7 +84,7 @@ public class DiscordHook extends ListenerAdapter {
                                 }
                             case 4://Round 5
                                 if (TeamManager.teamsFinished(5)) {
-                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule5")).queue();
+                                    event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "schedule_round_5")).queue();
                                     Main.lastRoundStarted++;
                                 } else {
                                     print("Cant start round, not all rooms finished.");
