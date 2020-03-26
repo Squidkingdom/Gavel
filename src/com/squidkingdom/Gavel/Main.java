@@ -136,15 +136,6 @@ public class Main {
         affTeam.inProgress[round] = false;
         negTeam.inProgress[round] = false;
 
-        //TODO make speaks double, add check between 25-30
-        //  if (!(a1s + a2s + n1s + n2s == 10)) {
-        //   print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-        //    return;
-        // }
-        //  if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)) {
-        //     print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-        //     return;
-        //  }
 
 
         //Set Aff Data

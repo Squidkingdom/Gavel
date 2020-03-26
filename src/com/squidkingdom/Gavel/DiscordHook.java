@@ -1,12 +1,15 @@
 package com.squidkingdom.Gavel;
-//TODO add amount of arguments check to new
-//TODO
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class DiscordHook extends ListenerAdapter {
@@ -29,8 +32,14 @@ public class DiscordHook extends ListenerAdapter {
 
                     //event.getChannel().sendMessage(anwser).queue();
 
-                     if (anwser.toLowerCase().startsWith("!new")) {
-                        selectedNew(anwser);
+                    if (anwser.toLowerCase().startsWith("!new")) {
+                        if (anwser.split(" ").length != 4) {
+                            print("You did not provide the correct amount of arguments.");
+                        } else {
+
+                            selectedNew(anwser);
+                        }
+
                     } else if (anwser.toLowerCase().startsWith("!print")) {
 
                         String code2 = anwser.split(" ", 5)[1];
@@ -86,12 +95,14 @@ public class DiscordHook extends ListenerAdapter {
 
                     } else if (anwser.toLowerCase().startsWith("!removejudge")) {
                         JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
+                        print("Removed judge from the pool.");
 
-                    } else if (anwser.toLowerCase().startsWith("test")) {
-                        test();
-                        //File file = new File("tmp/MyFirstExcel.xlsx");
-                        //event.getGuild().getTextChannelsByName("results", true).get(0).sendFile(file).queue();
-                        //event.getTextChannel().sendFile(file).queue();
+                    } else if (anwser.toLowerCase().startsWith("!bulkjudge")) {
+                        bulkNewJudge(anwser);
+
+                    }else if (anwser.toLowerCase().startsWith("!export")) {
+                        TextChannel text = event.getGuild().getTextChannelsByName("tabschedule", true).get(0);
+                        text.sendMessage("Results").addFile(Exporter.exportRounds("Rounds")).queue();
 
                     } else if (anwser.toLowerCase().startsWith("pairmanual")) {
 
@@ -117,6 +128,8 @@ public class DiscordHook extends ListenerAdapter {
                         Judge judge = JudgeManager.getJudgeByCode(judgeCode);
 
                         print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
+                    }else if (anwser.toLowerCase().startsWith("!bulknew")) {
+                        bulkNew(anwser);
                     }
                 } else {
                     //This is run when we get a DM.
@@ -146,7 +159,12 @@ public class DiscordHook extends ListenerAdapter {
         affTeam.inProgress[round] = false;
         negTeam.inProgress[round] = false;
 
-        //TODO make speaks double, add check between 25-30
+
+        //TODO test this
+        if ((((a1s > 30) || a2s < 25) || ((a1s < 25) || a2s > 30)) || (((n1s > 30) || n2s < 25) || ((n1s < 25) || n2s > 30))) {
+            print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+            return;
+        }
         //  if (!(a1s + a2s + n1s + n2s == 10)) {
         //   print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
         //    return;
@@ -193,6 +211,47 @@ public class DiscordHook extends ListenerAdapter {
         String player2 = anwser[3];
         TeamManager.newTeam(code, player1, player2);
         print("Made new team with Code: \"" + TeamManager.getTeamByCode(code).code + "\" and Speakers: " + TeamManager.getTeamByCode(code).person1 + ", " + TeamManager.getTeamByCode(code).person2 + "\n");
+    }
+
+    public void bulkNew(String ans) {
+        List<String> anwser = new ArrayList<String>();
+        Collections.addAll(anwser,ans.split(" "));
+
+
+
+        anwser.remove(0);
+        if((anwser.size() % 3) != 0) {
+            print("Invalid Arguments");
+            return;
+        }
+        int teams = (anwser.size()/3);
+        for (int i = 0; i < teams; i++) {
+           String code = anwser.get((i*3));
+           String player1 = anwser.get((i*3) + 1);
+           String player2 = anwser.get((i*3) + 2);
+            TeamManager.newTeam(code, player1, player2);
+            print("Made new team with Code: \"" + JudgeManager.getJudgeByCode(code).code + "\" and Name: " + JudgeManager.getJudgeByCode(code).name);
+
+        }
+       }  public void bulkNewJudge(String ans) {
+        List<String> anwser = new ArrayList<String>();
+        Collections.addAll(anwser,ans.split(" "));
+
+
+
+        anwser.remove(0);
+        if((anwser.size() % 2) != 0) {
+            print("Invalid Arguments");
+            return;
+        }
+        int teams = (anwser.size()/2);
+        for (int i = 0; i < teams; i++) {
+            String code = anwser.get((i*2));
+            String player1 = anwser.get((i*2) + 1);
+            JudgeManager.newJudge(player1, code);
+            print("Made new team with Code: \"" + TeamManager.getTeamByCode(code).code + "\" and Speakers: " + TeamManager.getTeamByCode(code).person1 + ", " + TeamManager.getTeamByCode(code).person2 + "\n");
+
+        }
     }
 
 

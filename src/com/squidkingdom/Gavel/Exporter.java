@@ -68,7 +68,9 @@ public class Exporter {
         int i = 1;
         for (RoundData round : RoomManager.byeRoom.data) {
             if (round.isFinished) {
-                csvWriter.append(String.join(",", "BYE", round.affTeam.code));
+
+                csvWriter.append(String.join(",", Integer.toString(i), "BYE", round.affTeam.code, Integer.toString(round.affSpeaks), "", "", "", ""));
+
                 csvWriter.append("\n");
             }
             i++;

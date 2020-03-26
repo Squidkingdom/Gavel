@@ -1,14 +1,4 @@
 package com.squidkingdom.Gavel;
-/*TODO:
-    Remove TNUM and derrivitave, remove need for localTa after filter.
-     MAKE TEAMS[] BE FIELD OF JUDGES INSTEAD OF JUDGES[] IN TEAMS
-        *(THIS ALLOWS HOT SWAPPING OF JUDGES)
-    More rooms than teams available
-    handle no bye combos
-
-    FIXME:
-        idk what your doing with the returns and pairings, seems half baked, ignoring for now.
- */
 
 import java.util.*;
 import java.util.stream.Collectors;
