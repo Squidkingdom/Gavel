@@ -40,7 +40,7 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (affPool.size() - byeOffset > (roomPool.size() - 1)) {
+        if (affPool.size() - byeOffset > (roomPool.size())) {
             throw new GavelExeception("Error: Not enough rooms");
         }
         if (affPool.size() - byeOffset > judgePool.size()) {
@@ -61,7 +61,7 @@ public class Pairer {
             byeCastle.get().roundComplete[0] = true;
             byeCastle.get().rounds[0].didWin = true;
             byeCastle.get().judges[0] = ByeJudge;
-            RoomManager.getRoomById(0).data[0] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
+            RoomManager.byeRoom.data[0] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
 
@@ -75,7 +75,7 @@ public class Pairer {
                 team1 = affPool.get(0);
                 team2 = negPool.get(0);
                 roundJudge = judgePool.get(0);
-                Room room = roomPool.get(1);
+                Room room = roomPool.get(0);
                 pairings.add(Main.pair(team1, team2, roundJudge, room, 1));
                 teamPool.remove(team1);
                 affPool.remove(team1);
@@ -115,7 +115,7 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (negPool.size() - byeOffset > (roomPool.size() - 1)) {
+        if (negPool.size() - byeOffset > (roomPool.size())) {
             throw new GavelExeception("Error: Not enough rooms");
         }
         if (negPool.size() - byeOffset > judgePool.size()) {
@@ -136,7 +136,7 @@ public class Pairer {
             byeCastle.get().roundComplete[1] = true;
             byeCastle.get().rounds[1].didWin = true;
             byeCastle.get().judges[1] = ByeJudge;
-            RoomManager.getRoomById(0).data[1] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
+            RoomManager.byeRoom.data[1] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
         ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
@@ -162,7 +162,7 @@ public class Pairer {
                 throw new GavelExeception("Fuck, No more Judges left.");
 
             {
-                Room room = roomPool.get(1);
+                Room room = roomPool.get(0);
                 pairings.add(Main.pair(team2, team1, roundJudge.get(), room, 2));
                 teamPool.remove(team1);
                 negPool.remove(team1);
@@ -173,8 +173,7 @@ public class Pairer {
             }
         }
 
-        if (byeCastle.isPresent())
-            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0));
+        byeCastle.ifPresent(team -> pairings.add(new RoundData(team, new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0)));
 
         return pairings;
     }
@@ -183,21 +182,22 @@ public class Pairer {
     //Round 3
     public static ArrayList<RoundData> pairRound3() throws GavelExeception {
         Optional<Team> byeCastle = Optional.empty();
+
         ArrayList<Team> teamPool = (ArrayList<Team>) teamArray.clone();
         WinCompare winCompare = new WinCompare();
         teamPool.sort(winCompare);
 
         ArrayList<Room> roomPool = (ArrayList<Room>) roomArray.clone();
         ArrayList<Judge> judgePool = (ArrayList<Judge>) judgeArray.clone();
-        ArrayList<Team> affPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<Team> negPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> affPool = teamPool.stream().filter(e -> e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Team> negPool = teamPool.stream().filter(e -> !e.isAffLead).collect(Collectors.toCollection(ArrayList::new));
 
         //Handle Bye
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
-                if (!negPool.get(lt).hasHadBye) {
-                    negPool.get(lt).hasHadBye = true;
-                    byeCastle = Optional.of(negPool.get(lt));
+                if (!affPool.get(lt).hasHadBye) {
+                    affPool.get(lt).hasHadBye = true;
+                    byeCastle = Optional.of(affPool.get(lt));
                     break;
                 }
             }
@@ -205,7 +205,7 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (negPool.size() - byeOffset > roomPool.size()) {
+        if (negPool.size() - byeOffset > (roomPool.size())) {
             throw new GavelExeception("Error: Not enough rooms");
         }
         if (negPool.size() - byeOffset > judgePool.size()) {
@@ -214,26 +214,26 @@ public class Pairer {
 
         if (byeCastle.isPresent()) {
             teamPool.remove(byeCastle.get());
-            negPool.remove(byeCastle.get());
+            affPool.remove(byeCastle.get());
 
             Team ByeTeam = new Team("BYE", "bye", "bye");
             Judge ByeJudge = new Judge("bye", "BYE");
-            byeCastle.get().opp[1] = ByeTeam;
-            byeCastle.get().rounds[1] = new Round(true, 3, true, 0, 0, ByeTeam, ByeJudge);
+            byeCastle.get().opp[2] = ByeTeam;
+            byeCastle.get().rounds[2] = new Round(true, 3, true, 0, 0, ByeTeam, ByeJudge);
             byeCastle.get().totalWins++;
             byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
-            byeCastle.get().judges[1] = ByeJudge;
-            byeCastle.get().roundComplete[1] = true;
-            byeCastle.get().rounds[1].didWin = true;
-            byeCastle.get().judges[1] = ByeJudge;
-            RoomManager.getRoomById(0).data[1] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
+            byeCastle.get().judges[2] = ByeJudge;
+            byeCastle.get().roundComplete[2] = true;
+            byeCastle.get().rounds[2].didWin = true;
+            byeCastle.get().judges[2] = ByeJudge;
+            RoomManager.byeRoom.data[2] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
         ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
 
-        while (negPool.size() > 0) {
-            Team team1 = negPool.get(0);
-            Optional<Team> optionalTeam2 = affPool.stream()
+        while (affPool.size() > 0) {
+            Team team1 = affPool.get(0);
+            Optional<Team> optionalTeam2 = negPool.stream()
                     .filter(e -> !e.code.equalsIgnoreCase(team1.code))
                     .filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code))
                     .filter(e -> !e.code.equalsIgnoreCase(team1.opp[1].code))
@@ -256,7 +256,7 @@ public class Pairer {
 
             {
                 Room room = roomPool.get(0);
-                pairings.add(Main.pair(team2, team1, roundJudge.get(), room, 2));
+                pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 3));
                 teamPool.remove(team1);
                 negPool.remove(team1);
                 teamPool.remove(team2);
@@ -270,9 +270,7 @@ public class Pairer {
             pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0));
 
         return pairings;
-
-}
-
+    }
 
     //Round 4
     public static ArrayList<RoundData> pairRound4() throws GavelExeception {

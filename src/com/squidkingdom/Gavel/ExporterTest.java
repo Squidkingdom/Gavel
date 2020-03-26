@@ -22,7 +22,6 @@ class ExporterTest {
         RoomManager.newRoom();
         RoomManager.newRoom();
         RoomManager.newRoom();
-        RoomManager.newByeRoom();
 
         JudgeManager.newJudge("John Doe", "j1");
         JudgeManager.newJudge("Jane Doe", "j2");
@@ -60,7 +59,6 @@ class ExporterTest {
         RoomManager.newRoom();
         RoomManager.newRoom();
         RoomManager.newRoom();
-        RoomManager.newByeRoom();
 
         ArrayList<RoundData> pairings = Pairer.pairRound1();
         pairings.stream().filter(roundData -> !roundData.judge.code.equalsIgnoreCase("bye")).forEach(roundData -> Main.selectedResult(roundData.room, true, roundData.affTeam.code, roundData.negTeam.code, 1, 3, 2, 4));

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 public class RoomManager {
     public static final Room DUMMY = new Room();
+    public static Room byeRoom = new Room(0);
     public static ArrayList<Room> roomArray = new ArrayList<Room>(1);
     public static int roomArraySize = 0;
     public RoomManager(){}
@@ -13,10 +14,6 @@ public class RoomManager {
     public static void newRoom() {
         roomArraySize++;
         roomArray.add(new Room(roomArraySize));
-    }
-
-    public static void newByeRoom() {
-        roomArray.add(new Room(0));
     }
 
     public static Room getRoomById(int id){

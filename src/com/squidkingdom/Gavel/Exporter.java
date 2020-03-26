@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 public class Exporter {
 
-    public static File exportSchedule(ArrayList<RoundData> rounds) throws IOException {
-        File file = new File("tmp/schedule.csv");
+    public static File exportSchedule(ArrayList<RoundData> rounds, String fileName) throws IOException {
+        File file = new File("tmp/" + fileName + ".csv");
         FileWriter csvWriter = new FileWriter(file);
         csvWriter.append("Round " + (Main.lastRoundStarted + 1));
         csvWriter.append("\n");
@@ -31,8 +31,8 @@ public class Exporter {
         return file;
     }
 
-    public static File exportRounds() throws IOException {
-        File file = new File("tmp/rounds.csv");
+    public static File exportRounds(String fileName) throws IOException {
+        File file = new File("tmp/" + fileName + ".csv");
         FileWriter csvWriter = new FileWriter(file);
         csvWriter.append("Round");
         csvWriter.append(",");
@@ -63,6 +63,15 @@ public class Exporter {
                 }
                 i++;
             }
+        }
+
+        int i = 1;
+        for (RoundData round : RoomManager.byeRoom.data) {
+            if (round.isFinished) {
+                csvWriter.append(String.join(",", "BYE", round.affTeam.code));
+                csvWriter.append("\n");
+            }
+            i++;
         }
 
         csvWriter.flush();

@@ -51,7 +51,6 @@ public class Main {
         for (int i = 0; i < roomNum; i++) {
             RoomManager.newRoom();
         }
-        RoomManager.newByeRoom();
         while (running) {
             try {                                                                                                                 //Might be redundants if time.
                 print("Available options are: New | judgenew [Name] [Code] | removejudge Print [Code] | AddResult [Room] [AffWon(true)(false)] [Aff Code] [Neg Code] [1A speaks] [2A speaks] [1N speaks] [2N speaks] | Export | SNR | PairManual [team1 code] [team2 code] [judge code] [room id] [round] | Exit");
