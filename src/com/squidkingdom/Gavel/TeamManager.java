@@ -48,7 +48,7 @@ public class TeamManager {
     }
 
     public static boolean teamsFinished(int round) {
-        Optional<Team> holder = teamArray.stream().filter(e -> !e.roundComplete[round - 1]).findAny();
+        Optional<Team> holder = teamArray.stream().filter(e -> !e.roundComplete[round - 3]).findAny();
         if (holder.isPresent()) {
             return false;
         } else {
