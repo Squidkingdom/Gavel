@@ -257,10 +257,10 @@ public class Pairer {
             {
                 Room room = roomPool.get(0);
                 pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 3));
-                teamPool.remove(team1);
-                negPool.remove(team1);
                 teamPool.remove(team2);
-                affPool.remove(team2);
+                negPool.remove(team2);
+                teamPool.remove(team1);
+                affPool.remove(team1);
                 judgePool.remove(roundJudge.get());
                 roomPool.remove(room);
             }
