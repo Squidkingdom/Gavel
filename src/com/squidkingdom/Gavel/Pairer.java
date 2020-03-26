@@ -315,7 +315,7 @@ public class Pairer {
             byeCastle.get().totalWins++;
             byeCastle.get().totalSpeaks = byeCastle.get().totalSpeaks + 3;
             byeCastle.get().judges[3] = ByeJudge;
-            byeCastle.get().roundComplete[1] = true;
+            byeCastle.get().roundComplete[3] = true;
             byeCastle.get().rounds[3].didWin = true;
             byeCastle.get().judges[3] = ByeJudge;
             RoomManager.byeRoom.data[3] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
