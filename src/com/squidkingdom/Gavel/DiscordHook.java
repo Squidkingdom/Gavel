@@ -98,7 +98,7 @@ public class DiscordHook extends ListenerAdapter {
                             }
 
                         } else if (anwser.toLowerCase().startsWith("!removejudge")) {
-                            JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
+                            JudgeManager.judgeArray.remove(JudgeManager.getJudgeByCode(anwser.split(" ", 5)[1]));
                             print("Removed judge from the pool.");
 
                         } else if (anwser.toLowerCase().startsWith("!bulkjudge")) {
