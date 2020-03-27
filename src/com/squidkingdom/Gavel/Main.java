@@ -23,7 +23,7 @@ import java.util.Scanner;
 public class Main {
     public static TeamManager manager = new TeamManager();
     public static Scanner in = new Scanner(System.in);
-    public static final int roomNum = 10;
+    public static final int roomNum = 30;
     public static File tokenKey = new File("Token.txt");
     public static int lastRoundStarted = 0;
     public static final boolean hookBot = true;

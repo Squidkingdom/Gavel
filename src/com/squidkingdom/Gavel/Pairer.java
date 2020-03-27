@@ -30,14 +30,14 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (affPool.size() - byeOffset > (roomPool.size())) {
-            DiscordHook.print("Error: Not Enough judges");
-            throw new GavelExeception("Error: Not enough rooms");
-        }
-        if (affPool.size() - byeOffset > judgePool.size()) {
-            DiscordHook.print("Error: Not Enough judges");
-            throw new GavelExeception("Error: Not enough judges");
-        }
+//        if (affPool.size() - byeOffset > (roomPool.size())) {
+//            DiscordHook.print("Error: Not Enough judges");
+//            throw new GavelExeception("Error: Not enough rooms");
+//        }
+//        if (affPool.size() - byeOffset > judgePool.size()) {
+//            DiscordHook.print("Error: Not Enough judges");
+//            throw new GavelExeception("Error: Not enough judges");
+//        }
 
         // Update bye data
         if (byeCastle.isPresent()) {
@@ -109,12 +109,12 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (negPool.size() - byeOffset > (roomPool.size())) {
-            throw new GavelExeception("Error: Not enough rooms");
-        }
-        if (negPool.size() - byeOffset > judgePool.size()) {
-            throw new GavelExeception("Error: Not enough judges");
-        }
+//        if (negPool.size() - byeOffset > (roomPool.size())) {
+//            throw new GavelExeception("Error: Not enough rooms");
+//        }
+//        if (negPool.size() - byeOffset > judgePool.size()) {
+//            throw new GavelExeception("Error: Not enough judges");
+//        }
 
         if (byeCastle.isPresent()) {
             teamPool.remove(byeCastle.get());
@@ -200,12 +200,12 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (negPool.size() - byeOffset > (roomPool.size())) {
-            throw new GavelExeception("Error: Not enough rooms");
-        }
-        if (negPool.size() - byeOffset > judgePool.size()) {
-            throw new GavelExeception("Error: Not enough judges");
-        }
+//        if (negPool.size() - byeOffset > (roomPool.size())) {
+//            throw new GavelExeception("Error: Not enough rooms");
+//        }
+//        if (negPool.size() - byeOffset > judgePool.size()) {
+//            throw new GavelExeception("Error: Not enough judges");
+//        }
 
         if (byeCastle.isPresent()) {
             teamPool.remove(byeCastle.get());
@@ -292,12 +292,12 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (negPool.size() - byeOffset > (roomPool.size())) {
-            throw new GavelExeception("Error: Not enough rooms");
-        }
-        if (negPool.size() - byeOffset > judgePool.size()) {
-            throw new GavelExeception("Error: Not enough judges");
-        }
+//        if (negPool.size() - byeOffset > (roomPool.size())) {
+//            throw new GavelExeception("Error: Not enough rooms");
+//        }
+//        if (negPool.size() - byeOffset > judgePool.size()) {
+//            throw new GavelExeception("Error: Not enough judges");
+//        }
 
         if (byeCastle.isPresent()) {
             teamPool.remove(byeCastle.get());
@@ -387,12 +387,12 @@ public class Pairer {
 
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
-        if (negPool.size() - byeOffset > (roomPool.size())) {
-            throw new GavelExeception("Error: Not enough rooms");
-        }
-        if (negPool.size() - byeOffset > judgePool.size()) {
-            throw new GavelExeception("Error: Not enough judges");
-        }
+//        if (negPool.size() - byeOffset > (roomPool.size())) {
+//            throw new GavelExeception("Error: Not enough rooms");
+//        }
+//        if (negPool.size() - byeOffset > judgePool.size()) {
+//            throw new GavelExeception("Error: Not enough judges");
+//        }
 
         if (byeCastle.isPresent()) {
             teamPool.remove(byeCastle.get());
