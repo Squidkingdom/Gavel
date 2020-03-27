@@ -112,7 +112,7 @@ public class DiscordHook extends ListenerAdapter {
                         } else if (anwser.toLowerCase().startsWith("!bind")) {
                             binding = event.getTextChannel();
                             bound = true;
-                            Main.print("Successfully bound to " + binding.getAsMention());
+                            print("Successfully bound to " + binding.getAsMention());
 
                         } else if (anwser.toLowerCase().startsWith("!export")) {
                             TextChannel text = event.getGuild().getTextChannelsByName("tabschedule", true).get(0);
