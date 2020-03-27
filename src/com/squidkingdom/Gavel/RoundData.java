@@ -6,8 +6,8 @@ public class RoundData {
     int room;
     Team affTeam;
     Team negTeam;
-    int affSpeaks = 0;
-    int negSpeaks = 0;
+    double affSpeaks = 0;
+    double negSpeaks = 0;
     Judge judge;
 
     public RoundData(Team affTeam, Team negTeam, Judge judge, int roomId) {
@@ -18,7 +18,7 @@ public class RoundData {
         this.judge = judge;
         this.room = roomId;
     }
-    public RoundData(Team affTeam, Team negTeam, Judge judge, int affSpeaks, int negSpeaks, boolean affWon, boolean isFinished){
+    public RoundData(Team affTeam, Team negTeam, Judge judge, double affSpeaks, double negSpeaks, boolean affWon, boolean isFinished){
         this.affTeam = affTeam;
         this.negTeam = negTeam;
         this.affSpeaks = affSpeaks;

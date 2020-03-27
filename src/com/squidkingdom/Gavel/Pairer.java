@@ -31,9 +31,11 @@ public class Pairer {
         int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
         if (affPool.size() - byeOffset > (roomPool.size())) {
+            DiscordHook.print("Error: Not Enough judges");
             throw new GavelExeception("Error: Not enough rooms");
         }
         if (affPool.size() - byeOffset > judgePool.size()) {
+            DiscordHook.print("Error: Not Enough judges");
             throw new GavelExeception("Error: Not enough judges");
         }
 
@@ -66,6 +68,8 @@ public class Pairer {
                 team2 = negPool.get(0);
                 roundJudge = judgePool.get(0);
                 Room room = roomPool.get(0);
+                team1.inProgress[0] = true;
+                team2.inProgress[0] = true;
                 pairings.add(Main.pair(team1, team2, roundJudge, room, 1));
                 teamPool.remove(team1);
                 affPool.remove(team1);

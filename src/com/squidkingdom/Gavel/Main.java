@@ -28,26 +28,27 @@ public class Main {
     public static int lastRoundStarted = 0;
     public static final boolean hookBot = true;
     public static TextChannel boundChannel;
+
     public static void main(String[] args) throws LoginException, IOException {
         boolean running = true;
 
-    if (hookBot) {
-        //If this file is missing make it
-        if (tokenKey.createNewFile()) {
-            print("File Created");
-            print("PLease put the client secret in the file in the project directory and run this again");
-            System.exit(69);
+        if (hookBot) {
+            //If this file is missing make it
+            if (tokenKey.createNewFile()) {
+                print("File Created");
+                print("PLease put the client secret in the file in the project directory and run this again");
+                System.exit(69);
+            }
+            Scanner fileInputStream = new Scanner(tokenKey);
+            String token = fileInputStream.nextLine();
+            print("Token: " + token);
+
+            JDA Gavel = new JDABuilder(AccountType.BOT).setToken(token).build();
+            Gavel.addEventListener(new DiscordHook());
+            Gavel.getPresence().setActivity(Activity.listening("fake news"));
+
+
         }
-        Scanner fileInputStream = new Scanner(tokenKey);
-        String token = fileInputStream.nextLine();
-        print("Token: " + token);
-
-        JDA Gavel = new JDABuilder(AccountType.BOT).setToken(token).build();
-        Gavel.addEventListener(new DiscordHook());
-        Gavel.getPresence().setActivity(Activity.listening("fake news"));
-
-
-    }
         for (int i = 0; i < roomNum; i++) {
             RoomManager.newRoom();
         }
@@ -78,7 +79,7 @@ public class Main {
                     running = false;
 
                 } else if (anwser.toLowerCase().startsWith("removejudge")) {
-                JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
+                    JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
 
                 } else if (anwser.toLowerCase().startsWith("pairmanual")) {
 
@@ -113,93 +114,102 @@ public class Main {
     }
 
 
-
-
-
     // addresult 10 true 1 a 1 3 2 4
     public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s) {
-        Team affTeam = TeamManager.getTeamByCode(acode);
-        Team negTeam = TeamManager.getTeamByCode(ncode);
+        try {
+            Team affTeam = TeamManager.getTeamByCode(acode);
+            Team negTeam = TeamManager.getTeamByCode(ncode);
 
-        int round = 1;
-        for (int i = 0; i <= 5; i++) {
-            if (!affTeam.roundComplete[i]) {
-                round = i;
-                break;
+            int round = 1;
+            for (int i = 0; i <= 5; i++) {
+                if (!affTeam.roundComplete[i]) {
+                    round = i;
+                    break;
+                }
             }
+
+            if (!affTeam.inProgress[round]) {
+                print("This round is not in progress, you cannot give results for it");
+                return;
+            }
+            affTeam.inProgress[round] = false;
+            negTeam.inProgress[round] = false;
+
+
+            //Set Aff Data
+            Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam, affTeam.judges[round]);
+            affTeam.rounds[round] = roundAffObj;
+            affTeam.totalSpeaks += (a1s + a2s);
+            affTeam.roundComplete[round] = true;
+            affTeam.totalWins += affWon ? 1 : 0;
+            affTeam.rounds[round].didWin = affWon;
+
+            //Set Neg Data
+            Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam, affTeam.judges[round]);
+            negTeam.rounds[round] = roundNegObj;
+            negTeam.totalSpeaks += (n1s + n2s);
+            negTeam.roundComplete[round] = true;
+            negTeam.totalWins += !affWon ? 1 : 0;
+            negTeam.rounds[round].didWin = !affWon;
+
+            //Set Room Data
+            RoundData roundRmObj = new RoundData(affTeam, negTeam, affTeam.rounds[round].judge, (a1s + a2s), (n1s + n2s), affWon, true);
+            RoomManager.getRoomById(id).data[round] = roundRmObj;
+
+            //Testing
+            String bool = "";
+            print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + String.valueOf(bool));
+        } catch (GavelExeception e) {
+            print("Team Code not found");
+            System.out.println(e);
         }
-
-        if (!affTeam.inProgress[round]) {
-            print("This round is not in progress, you cannot give results for it");
-            return;
-        }
-        affTeam.inProgress[round] = false;
-        negTeam.inProgress[round] = false;
-
-
-
-        //Set Aff Data
-        Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam, affTeam.judges[round]);
-        affTeam.rounds[round] = roundAffObj;
-        affTeam.totalSpeaks += (a1s + a2s);
-        affTeam.roundComplete[round] = true;
-        affTeam.totalWins += affWon ? 1 : 0;
-        affTeam.rounds[round].didWin = affWon;
-
-        //Set Neg Data
-        Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam, affTeam.judges[round]);
-        negTeam.rounds[round] = roundNegObj;
-        negTeam.totalSpeaks += (n1s + n2s);
-        negTeam.roundComplete[round] = true;
-        negTeam.totalWins += !affWon ? 1 : 0;
-        negTeam.rounds[round].didWin = !affWon;
-
-        //Set Room Data
-        RoundData roundRmObj = new RoundData(affTeam, negTeam, affTeam.rounds[round].judge, (a1s + a2s), (n1s + n2s), affWon, true);
-        RoomManager.getRoomById(id).data[round] = roundRmObj;
-
-        //Testing
-        String bool = "";
-        print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + String.valueOf(bool));
     }
 
     public static void selectedNew() {
-        print("Enter the code for this new team");
-        String code = in.nextLine();
-        if (TeamManager.checkcode(code)) {
-            print("This code is taken");
-            return;
+        try {
+            print("Enter the code for this new team");
+            String code = in.nextLine();
+            if (TeamManager.checkcode(code)) {
+                print("This code is taken");
+                return;
+            }
+            print("Enter the 1st Speaker's name.");
+            String player1 = in.nextLine();
+            print("Enter the 2st Speaker's name.");
+            String player2 = in.nextLine();
+            TeamManager.newTeam(code, player1, player2);
+            print("Made new team with Code: \"" + TeamManager.getTeamByCode(code).code + "\" and Speakers: " + TeamManager.getTeamByCode(code).person1 + ", " + TeamManager.getTeamByCode(code).person2 + "\n");
+        } catch (GavelExeception e) {
+            print("Something has gone wrong...");
+            System.out.println(e);
         }
-        print("Enter the 1st Speaker's name.");
-        String player1 = in.nextLine();
-        print("Enter the 2st Speaker's name.");
-        String player2 = in.nextLine();
-        TeamManager.newTeam(code, player1, player2);
-        print("Made new team with Code: \"" + TeamManager.getTeamByCode(code).code + "\" and Speakers: " + TeamManager.getTeamByCode(code).person1 + ", " + TeamManager.getTeamByCode(code).person2 + "\n");
     }
 
     public static void printInfo(String code) {
-
-        int lastRound = 0;
-        //Make Sure code is valid
-        if (!TeamManager.checkcode(code)) {
-            print("This code is invalid");
-            return;
-        }
-        Team team = TeamManager.getTeamByCode(code);
-        print("Code: \"" + team.code + "\" and Speakers: " + team.person1 + ", " + team.person2 + "\n");
-
-        for (int i = 0; i < 5; i++) {
-            if (team.roundComplete[i]) {
-                Round round = team.rounds[i];
-                String didWin = round.didWin ? "Won on a " : "Lost on a ";
-                String side = round.side ? "Aff" : "Neg";
-                int speaks = round.side ? round.affSpeaks : round.negSpeaks;
-                print("Round " + (i + 1) + ": Side: \"" + side + "\" Outcome: \"" + didWin + speaks + "\" Opp Code: \"" + round.oppTeam.code + "\" Judge: \"" + round.judge.name + "\" Room: \"" + round.roomnum + "\"");
+        try {
+            int lastRound = 0;
+            //Make Sure code is valid
+            if (!TeamManager.checkcode(code)) {
+                print("This code is invalid");
+                return;
             }
+            Team team = TeamManager.getTeamByCode(code);
+            print("Code: \"" + team.code + "\" and Speakers: " + team.person1 + ", " + team.person2 + "\n");
+
+            for (int i = 0; i < 5; i++) {
+                if (team.roundComplete[i]) {
+                    Round round = team.rounds[i];
+                    String didWin = round.didWin ? "Won on a " : "Lost on a ";
+                    String side = round.side ? "Aff" : "Neg";
+                    double speaks = round.side ? round.affSpeaks : round.negSpeaks;
+                    print("Round " + (i + 1) + ": Side: \"" + side + "\" Outcome: \"" + didWin + speaks + "\" Opp Code: \"" + round.oppTeam.code + "\" Judge: \"" + round.judge.name + "\" Room: \"" + round.roomnum + "\"");
+                }
+            }
+
+        } catch (GavelExeception e) {
+            print("Team Code not found");
+            System.out.println(e);
         }
-
-
     }
 
     public static RoundData pair(Team team1, Team team2, Judge judge, Room room, int event) {

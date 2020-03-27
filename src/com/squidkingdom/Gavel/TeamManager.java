@@ -37,14 +37,14 @@ public class TeamManager {
     }
 
 
-    public static Team getTeamByCode(String code) {
+    public static Team getTeamByCode(String code) throws GavelExeception {
         for (Team team : teamArray) {
             if (team.code.equalsIgnoreCase(code)) {
                 return team;
             }
 
         }
-        return dummy;
+        throw new GavelExeception("Team Code not found");
     }
 
     public static boolean teamsFinished(int round) {

@@ -58,7 +58,7 @@ public class Exporter {
                 if (round.isFinished) {
                     String winner = round.affWon ? "Aff" : "Neg";
 
-                    csvWriter.append(String.join(",", Integer.toString(i), winner, round.affTeam.code, Integer.toString(round.affSpeaks), round.negTeam.code, Integer.toString(round.negSpeaks), round.judge.code, Integer.toString(room.id)));
+                    csvWriter.append(String.join(",", Integer.toString(i), winner, round.affTeam.code, Double.toString(round.affSpeaks), round.negTeam.code, Double.toString(round.negSpeaks), round.judge.code, Integer.toString(room.id)));
                     csvWriter.append("\n");
                 }
                 i++;
@@ -69,7 +69,7 @@ public class Exporter {
         for (RoundData round : RoomManager.byeRoom.data) {
             if (round.isFinished) {
 
-                csvWriter.append(String.join(",", Integer.toString(i), "BYE", round.affTeam.code, Integer.toString(round.affSpeaks), "", "", "", ""));
+                csvWriter.append(String.join(",", Integer.toString(i), "BYE", round.affTeam.code, Double.toString(round.affSpeaks), "", "", "", ""));
 
                 csvWriter.append("\n");
             }

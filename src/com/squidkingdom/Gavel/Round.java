@@ -6,11 +6,11 @@ public class Round {
     boolean side;
     int roomnum;
     Team oppTeam;
-    int affSpeaks = 0;
-    int negSpeaks = 0;
+    double affSpeaks = 0;
+    double negSpeaks = 0;
     Judge judge = new Judge();
 
-    Round(boolean side, int affS, boolean won, int roomid, int negSpeaks, Team oppTeam, Judge judge) {
+    Round(boolean side, double affS, boolean won, int roomid, double negSpeaks, Team oppTeam, Judge judge) {
         this.affSpeaks = affS;
         this.didWin = won;
         this.roomnum = roomid;

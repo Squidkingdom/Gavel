@@ -22,14 +22,18 @@ class TeamManagerTest {
 
     @Test
     void getTeamByCode() {
-        TeamManager manager = new TeamManager();
-        manager.newTeam("t1", "s1", "s2");
-        manager.newTeam("t2", "s3", "s4");
+        try {
+            TeamManager manager = new TeamManager();
+            manager.newTeam("t1", "s1", "s2");
+            manager.newTeam("t2", "s3", "s4");
 
 
-        assertEquals("t1", manager.getTeamByCode("t1").code);
-        assertEquals("s3", manager.getTeamByCode("t2").person1);
-        assertEquals(TeamManager.dummy, manager.getTeamByCode("non_existent_team"));
+            assertEquals("t1", manager.getTeamByCode("t1").code);
+            assertEquals("s3", manager.getTeamByCode("t2").person1);
+            assertEquals(TeamManager.dummy, manager.getTeamByCode("non_existent_team"));
+        }catch (GavelExeception e){
+            System.out.println(e);
+        }
     }
 
     @Test
