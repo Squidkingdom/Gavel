@@ -79,7 +79,7 @@ public class Main {
                     running = false;
 
                 } else if (anwser.toLowerCase().startsWith("removejudge")) {
-                    JudgeManager.judgeArray.remove(TeamManager.getTeamByCode(anwser.split(" ", 5)[1]));
+                    JudgeManager.judgeArray.remove(JudgeManager.getJudgeByCode(anwser.split(" ", 5)[1]));
 
                 } else if (anwser.toLowerCase().startsWith("pairmanual")) {
 
