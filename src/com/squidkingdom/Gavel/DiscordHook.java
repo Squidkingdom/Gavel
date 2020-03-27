@@ -303,7 +303,7 @@ public class DiscordHook extends ListenerAdapter {
                                             "> !exit                                  :: Use this command to stop the bot.\n" +
                                             "> !setschedule (textchannel)             :: Sets the schedule output channel.\n" +
                                             "> !setresult (textchannel)               :: Sets the result output channel.\n" +
-                                            "> !setspeaks [code] [Total Speaks]       :: Use this command to overide speaker points." +
+                                            "> !setspeaks [code] [Total Speaks]       :: Use this command to overide speaker points.\n" +
                                             "```" +
                                             "\u200B\n"
                             );
