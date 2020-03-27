@@ -30,7 +30,11 @@ public class DiscordHook extends ListenerAdapter {
                 if (event.getAuthor().isBot()) {
                     //We said something in chat
                     botLastEvent = event;
-                    System.out.println("Self: " + anwser);
+                        if (!botLastEvent.getMessage().getAttachments().isEmpty()){
+                            System.out.println("Self: *sent a file* " + botLastEvent.getMessage().getAttachments().get(0).getFileName());
+                        }else{
+                            System.out.println("Self: " + anwser);
+                        }
                 } else {
                     if (event.isFromType(ChannelType.TEXT)) {
                         Guild guild = event.getGuild();
@@ -47,12 +51,14 @@ public class DiscordHook extends ListenerAdapter {
                                 selectedNew(anwser);
                             }
 
-                        } else if (anwser.toLowerCase().startsWith("!print")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!print")) {
 
                             String code2 = anwser.split(" ", 5)[1];
                             printInfo(code2);
 
-                        } else if (anwser.toLowerCase().startsWith("!addresult")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!addresult")) {
                             String arg[] = anwser.split(" ");
                             if (arg.length != 9) {
                                 print("You did not provide the correct amount of arguments.");
@@ -122,40 +128,48 @@ public class DiscordHook extends ListenerAdapter {
 
                             }
 
-                        } else if (anwser.toLowerCase().startsWith("!removejudge")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!removejudge")) {
                             JudgeManager.judgeArray.remove(JudgeManager.getJudgeByCode(anwser.split(" ", 5)[1]));
                             print("Removed judge from the pool.");
 
-                        } else if (anwser.toLowerCase().startsWith("!bulkjudge")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!bulkjudge")) {
                             bulkNewJudge(anwser);
 
-                        } else if (anwser.toLowerCase().startsWith("!bound")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!bound")) {
                             if (bound) {
                                 print("Bound to " + binding.getAsMention());
                             }
 
-                        } else if (anwser.toLowerCase().startsWith("!setspeaks")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!setspeaks")) {
                             if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
                                 TeamManager.getTeamByCode(anwser.split(" ")[1]).totalSpeaks = Double.parseDouble(anwser.split(" ")[2]);
                             } else {
                                 print("You dont have permission.");
                             }
-                        } else if (anwser.toLowerCase().startsWith("!removeteam")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!removeteam")) {
                             removeTeam(anwser.split(" ")[1]);
                             print("Removed team with code: " + anwser.split(" ")[1]);
-                        } else if (anwser.toLowerCase().startsWith("!bind")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!bind")) {
                             binding = event.getTextChannel();
                             bound = true;
                             print("Successfully bound to " + binding.getAsMention());
 
-                        } else if (anwser.toLowerCase().startsWith("!export")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!export")) {
                             if (results != null) {
                                 results.sendMessage("Results").addFile(Exporter.exportRounds("Rounds")).queue();
                             } else {
                                 event.getTextChannel().sendMessage("Results").addFile(Exporter.exportRounds("Rounds")).queue();
                             }
 
-                        } else if (anwser.toLowerCase().startsWith("!pairmanual")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!pairmanual")) {
                             if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
 
                                 String team1Code = anwser.split(" ", 6)[1];
@@ -174,7 +188,8 @@ public class DiscordHook extends ListenerAdapter {
                             } else {
                                 print("You dont have permissions");
                             }
-                        } else if (anwser.toLowerCase().startsWith("!addjudge")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!addjudge")) {
                             String[] temp = anwser.split(" ");
                             if (temp.length != 3) {
                                 print("Invalid Arguments");
@@ -187,9 +202,11 @@ public class DiscordHook extends ListenerAdapter {
                             Judge judge = JudgeManager.getJudgeByCode(judgeCode);
 
                             print("Created judge with the name of " + judgeName + " and the code " + judgeCode);
-                        } else if (anwser.toLowerCase().startsWith("!bulknew")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!bulknew")) {
                             bulkNew(anwser);
-                        } else if (anwser.toLowerCase().startsWith("!exit")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!exit")) {
                             if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
                                 print("Shutting Down.");
                                 Main.Gavel.removeEventListener(Main.dch);
@@ -232,7 +249,8 @@ public class DiscordHook extends ListenerAdapter {
                                     print("Invalid Arguments");
                                 }
                             }
-                        } else if (anwser.toLowerCase().startsWith("!setresults")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!setresults")) {
                             List<String> ans = new ArrayList<String>();
                             Collections.addAll(ans, anwser.split(" "));
                             if (ans.size() == 1) {
@@ -249,34 +267,38 @@ public class DiscordHook extends ListenerAdapter {
                             } else {
                                 print("Invalid Arguments");
                             }
-                        } else if (anwser.toLowerCase().startsWith("!help")) {
+                        }
+                        else if (anwser.toLowerCase().startsWith("!help")) {
                             print(
                                     "> ```asciidoc\n" +
-                                            "> = Gavel Info =\n" +
+                                            "> == Gavel Info ==\n" +
                                             "> !help                                  :: Display help for a command.\n" +
                                             "> !bound                                 :: Displays binding status.\n" +
                                             "> \n" +
 
-                                            "> = Data Commands =\n" +
+                                            "> == Data Commands ==\n" +
                                             "> !new [Code] [Name1] [Name2]            :: Adds a new team to pool.\n" +
                                             "> !removeteam [Code]                     :: Removes a team from pool.\n" +
                                             "> !newjudge [Code] [Name]                :: Adds a new judge to pool.\n" +
                                             "> !removejudge [Code]                    :: Removes a judge from the pool.\n" +
                                             "> !print [Code]                          :: Prints result data for a code.\n" +
+                                            "> \n"+
+                                            ">!addresult [room] [affwon(true/false] [affcode] [negcode] [1A speaks] [1N Speaks] (2A Speaks) ::\n" +
+                                            ">    - Enters results/outcome of a given room and teams\n"+
 
                                             "> \n" +
-                                            "> = Bulk Commands =\n" +
+                                            "> == Bulk Commands ==\n" +
                                             "> !bulkjudge ([Code] [Name])x ∞          :: Adds multiple judges in one go.\n" +
                                             "> !bulknew ([Code] [Name1] [Name2])x ∞   :: Adds multiple teams in one go.\n" +
                                             "> \n" +
 
-                                            "> = Bot Commands =\n" +
+                                            "> == Bot Commands ==\n" +
                                             "> !bind                                  :: Binds the bot to the channel.\n" +
                                             "> !snr                                   :: Starts Next Round\n" +
                                             "> !export                                :: Exports current entered results.\n" +
                                             "> \n" +
 
-                                            "> = Admin Commands =\n" +
+                                            "> == Admin Commands ==\n" +
                                             "> !pairmanual                            :: Manually Overrides Parings.\n" +
                                             "> !exit                                  :: Use this command to stop the bot.\n" +
                                             "> !setschedule (textchannel)             :: Sets the schedule output channel.\n" +
@@ -480,7 +502,7 @@ public class DiscordHook extends ListenerAdapter {
                 }
             }
 
-        } catch (GavelExeception e) {
+        }catch(GavelExeception e){
             print("Team Code not found");
             System.out.println(e);
         }

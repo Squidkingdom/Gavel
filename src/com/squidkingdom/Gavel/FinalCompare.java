@@ -1,7 +1,7 @@
 package com.squidkingdom.Gavel;
 
 import java.util.Comparator;
-class FinalsCompare implements Comparator<Team>{
+class FinalCompare implements Comparator<Team>{
     public int compare(Team m1, Team m2)
     {
         if (m1.getTotalWins() < m2.getTotalWins()) return -1;
