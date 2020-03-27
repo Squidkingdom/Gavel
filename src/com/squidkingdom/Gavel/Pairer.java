@@ -156,6 +156,7 @@ public class Pairer {
                 throw new GavelExeception("Fuck, No more Judges left.");
 
             {
+
                 Room room = roomPool.get(0);
                 pairings.add(Main.pair(team2, team1, roundJudge.get(), room, 2));
                 teamPool.remove(team1);

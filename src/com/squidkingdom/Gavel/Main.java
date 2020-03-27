@@ -28,6 +28,9 @@ public class Main {
     public static int lastRoundStarted = 0;
     public static final boolean hookBot = true;
     public static TextChannel boundChannel;
+    public static JDA Gavel;
+
+    public static DiscordHook dch = new DiscordHook();
 
     public static void main(String[] args) throws LoginException, IOException {
         boolean running = true;
@@ -43,8 +46,9 @@ public class Main {
             String token = fileInputStream.nextLine();
             print("Token: " + token);
 
-            JDA Gavel = new JDABuilder(AccountType.BOT).setToken(token).build();
-            Gavel.addEventListener(new DiscordHook());
+            Gavel = new JDABuilder(AccountType.BOT).setToken(token).build();
+            DiscordHook dch = new DiscordHook();
+            Gavel.addEventListener(dch);
             Gavel.getPresence().setActivity(Activity.listening("fake news"));
 
 
@@ -68,7 +72,7 @@ public class Main {
                     if (arg.length != 9) {
                         print("You did not provide the correct amount of arguments.");
                     } else {
-                        selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
+                        //selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Integer.parseInt(arg[5]), Integer.parseInt(arg[6]), Integer.parseInt(arg[7]), Integer.parseInt(arg[8]));
                     }
                 } else if (anwser.toLowerCase().startsWith("export")) {
 
@@ -115,55 +119,55 @@ public class Main {
 
 
     // addresult 10 true 1 a 1 3 2 4
-    public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s) {
-        try {
-            Team affTeam = TeamManager.getTeamByCode(acode);
-            Team negTeam = TeamManager.getTeamByCode(ncode);
-
-            int round = 1;
-            for (int i = 0; i <= 5; i++) {
-                if (!affTeam.roundComplete[i]) {
-                    round = i;
-                    break;
-                }
-            }
-
-            if (!affTeam.inProgress[round]) {
-                print("This round is not in progress, you cannot give results for it");
-                return;
-            }
-            affTeam.inProgress[round] = false;
-            negTeam.inProgress[round] = false;
-
-
-            //Set Aff Data
-            Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam, affTeam.judges[round]);
-            affTeam.rounds[round] = roundAffObj;
-            affTeam.totalSpeaks += (a1s + a2s);
-            affTeam.roundComplete[round] = true;
-            affTeam.totalWins += affWon ? 1 : 0;
-            affTeam.rounds[round].didWin = affWon;
-
-            //Set Neg Data
-            Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam, affTeam.judges[round]);
-            negTeam.rounds[round] = roundNegObj;
-            negTeam.totalSpeaks += (n1s + n2s);
-            negTeam.roundComplete[round] = true;
-            negTeam.totalWins += !affWon ? 1 : 0;
-            negTeam.rounds[round].didWin = !affWon;
-
-            //Set Room Data
-            RoundData roundRmObj = new RoundData(affTeam, negTeam, affTeam.rounds[round].judge, (a1s + a2s), (n1s + n2s), affWon, true);
-            RoomManager.getRoomById(id).data[round] = roundRmObj;
-
-            //Testing
-            String bool = "";
-            print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + String.valueOf(bool));
-        } catch (GavelExeception e) {
-            print("Team Code not found");
-            System.out.println(e);
-        }
-    }
+//    public static void selectedResult(int id, boolean affWon, String acode, String ncode, int a1s, int a2s, int n1s, int n2s) {
+//        try {
+//            Team affTeam = TeamManager.getTeamByCode(acode);
+//            Team negTeam = TeamManager.getTeamByCode(ncode);
+//
+//            int round = 1;
+//            for (int i = 0; i <= 5; i++) {
+//                if (!affTeam.roundComplete[i]) {
+//                    round = i;
+//                    break;
+//                }
+//            }
+//
+//            if (!affTeam.inProgress[round]) {
+//                print("This round is not in progress, you cannot give results for it");
+//                return;
+//            }
+//            affTeam.inProgress[round] = false;
+//            negTeam.inProgress[round] = false;
+//
+//
+//            //Set Aff Data
+//            Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam, affTeam.judges[round]);
+//            affTeam.rounds[round] = roundAffObj;
+//            affTeam.totalSpeaks += (a1s + a2s);
+//            affTeam.roundComplete[round] = true;
+//            affTeam.totalWins += affWon ? 1 : 0;
+//            affTeam.rounds[round].didWin = affWon;
+//
+//            //Set Neg Data
+//            Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam, affTeam.judges[round]);
+//            negTeam.rounds[round] = roundNegObj;
+//            negTeam.totalSpeaks += (n1s + n2s);
+//            negTeam.roundComplete[round] = true;
+//            negTeam.totalWins += !affWon ? 1 : 0;
+//            negTeam.rounds[round].didWin = !affWon;
+//
+//            //Set Room Data
+//            RoundData roundRmObj = new RoundData(affTeam, negTeam, affTeam.rounds[round].judge, (a1s + a2s), (n1s + n2s), affWon, true);
+//            RoomManager.getRoomById(id).data[round] = roundRmObj;
+//
+//            //Testing
+//            String bool = "";
+//            print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + String.valueOf(bool));
+//        } catch (GavelExeception e) {
+//            print("Team Code not found");
+//            System.out.println(e);
+//        }
+//    }
 
     public static void selectedNew() {
         try {
