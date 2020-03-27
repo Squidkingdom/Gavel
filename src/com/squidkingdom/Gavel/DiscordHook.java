@@ -104,6 +104,8 @@ public class DiscordHook extends ListenerAdapter {
                         } else if (anwser.toLowerCase().startsWith("!bulkjudge")) {
                             bulkNewJudge(anwser);
 
+                        } else if (anwser.toLowerCase().startsWith("!removeteam")) {
+                            removeTeam(anwser.split(" ")[1]);
                         } else if (anwser.toLowerCase().startsWith("!test")) {
                             print("Boi");
 
@@ -116,7 +118,7 @@ public class DiscordHook extends ListenerAdapter {
                             TextChannel text = event.getGuild().getTextChannelsByName("tabschedule", true).get(0);
                             text.sendMessage("Results").addFile(Exporter.exportRounds("Rounds")).queue();
 
-                        } else if (anwser.toLowerCase().startsWith("pairmanual")) {
+                        } else if (anwser.toLowerCase().startsWith("!pairmanual")) {
 
                             String team1Code = anwser.split(" ", 6)[1];
                             String team2Code = anwser.split(" ", 6)[2];
@@ -286,7 +288,9 @@ public class DiscordHook extends ListenerAdapter {
         }
         lastEvent.getTextChannel().editMessageFormatById(temp, "Finished").queue();
     }
-
+    public static void removeTeam(String code) throws GavelExeception {
+        TeamManager.teamArray.remove(TeamManager.getTeamByCode(code));
+    }
 
     public static void printInfo(String code) {
         try{
