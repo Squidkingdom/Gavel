@@ -1,4 +1,4 @@
-//package com.squidkingdom.Gavel;
+package com.squidkingdom.Gavel.Tests;
 //
 //import org.junit.jupiter.api.Test;
 //

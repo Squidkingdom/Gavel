@@ -1,5 +1,7 @@
-package com.squidkingdom.Gavel;
+package com.squidkingdom.Gavel.Tests;
 
+import com.squidkingdom.Gavel.Judge;
+import com.squidkingdom.Gavel.JudgeManager;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

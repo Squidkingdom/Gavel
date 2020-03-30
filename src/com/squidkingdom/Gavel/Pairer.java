@@ -70,7 +70,7 @@ public class Pairer {
                 Room room = roomPool.get(0);
                 team1.inProgress[0] = true;
                 team2.inProgress[0] = true;
-                pairings.add(Main.pair(team1, team2, roundJudge, room, 1));
+                pairings.add(pair(team1, team2, roundJudge, room, 1));
                 teamPool.remove(team1);
                 affPool.remove(team1);
                 teamPool.remove(team2);
@@ -158,7 +158,7 @@ public class Pairer {
             {
 
                 Room room = roomPool.get(0);
-                pairings.add(Main.pair(team2, team1, roundJudge.get(), room, 2));
+                pairings.add(pair(team2, team1, roundJudge.get(), room, 2));
                 teamPool.remove(team1);
                 negPool.remove(team1);
                 teamPool.remove(team2);
@@ -251,7 +251,7 @@ public class Pairer {
 
             {
                 Room room = roomPool.get(0);
-                pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 3));
+                pairings.add(pair(team1, team2, roundJudge.get(), room, 3));
                 teamPool.remove(team2);
                 negPool.remove(team2);
                 teamPool.remove(team1);
@@ -346,7 +346,7 @@ public class Pairer {
 
             {
                 Room room = roomPool.get(0);
-                pairings.add(Main.pair(team2, team1, roundJudge.get(), room, 4));
+                pairings.add(pair(team2, team1, roundJudge.get(), room, 4));
                 teamPool.remove(team1);
                 negPool.remove(team1);
                 teamPool.remove(team2);
@@ -444,7 +444,7 @@ public class Pairer {
 
             {
                 Room room = roomPool.get(0);
-                pairings.add(Main.pair(team1, team2, roundJudge.get(), room, 5));
+                pairings.add(pair(team1, team2, roundJudge.get(), room, 5));
                 teamPool.remove(team2);
                 negPool.remove(team2);
                 teamPool.remove(team1);
@@ -458,6 +458,28 @@ public class Pairer {
             pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0));
 
         return pairings;
+    }
+
+
+
+
+
+
+    public static RoundData pair (Team team1, Team team2, Judge judge, Room room,int event){
+        RoundData roundData = new RoundData(team1, team2, judge, room.id);
+        room.data[event - 1] = roundData;
+
+        team1.rounds[event - 1] = new Round(true, team2, judge, room.id);
+        team1.opp[event - 1] = team2;
+        team1.judges[event - 1] = judge;
+        team1.inProgress[event - 1] = true;
+
+        team2.rounds[event - 1] = new Round(false, team1, judge, room.id);
+        team2.opp[event - 1] = team1;
+        team2.judges[event - 1] = judge;
+        team2.inProgress[event - 1] = true;
+
+        return roundData;
     }
 
 

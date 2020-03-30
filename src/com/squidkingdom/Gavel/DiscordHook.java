@@ -310,10 +310,10 @@ public class DiscordHook extends ListenerAdapter {
                 }
             }
 
-            if (!affTeam.inProgress[round]) {
-                print("This round is not in progress, you cannot give results for it");
-                return;
-            }
+//            if (!affTeam.inProgress[round]) {
+//                print("This round is not in progress, you cannot give results for it");
+//                return;
+//            }
             affTeam.inProgress[round] = false;
             negTeam.inProgress[round] = false;
 
