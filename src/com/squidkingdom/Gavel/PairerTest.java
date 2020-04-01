@@ -12,15 +12,15 @@ class PairerTest {
 
     @Test
     void pairingWorks() throws GavelExeception, IOException {
-        Main.manager.newTeam("t1", "s1", "s2");
-        Main.manager.newTeam("t2", "s1", "s2");
-        Main.manager.newTeam("t3", "s1", "s2");
-        Main.manager.newTeam("t4", "s1", "s2");
-        Main.manager.newTeam("t5", "s1", "s2");
-        Main.manager.newTeam("t6", "s1", "s2");
-        Main.manager.newTeam("t7", "s1", "s2");
-        Main.manager.newTeam("t8", "s1", "s2");
-        Main.manager.newTeam("t9", "s1", "s2");
+        TeamManager.newTeam("t1", "s1", "s2");
+        TeamManager.newTeam("t2", "s1", "s2");
+        TeamManager.newTeam("t3", "s1", "s2");
+        TeamManager.newTeam("t4", "s1", "s2");
+        TeamManager.newTeam("t5", "s1", "s2");
+        TeamManager.newTeam("t6", "s1", "s2");
+        TeamManager.newTeam("t7", "s1", "s2");
+        TeamManager.newTeam("t8", "s1", "s2");
+        TeamManager.newTeam("t9", "s1", "s2");
         JudgeManager.newJudge("John Doe", "j1");
         JudgeManager.newJudge("Jane Doe", "j2");
         JudgeManager.newJudge("James Doe", "j3");

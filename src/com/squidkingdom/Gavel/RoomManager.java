@@ -21,4 +21,16 @@ public class RoomManager {
         return optionalRoom.orElse(DUMMY);
     }
 
+
+
+    public static void refreshRoomNum(int size ){
+        roomArray.clear();
+        roomArraySize = 0;
+        for (int i= 0; i < size; i++) {
+            newRoom();
+        }
+
+
+    }
+
 }
