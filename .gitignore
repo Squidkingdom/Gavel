@@ -110,3 +110,5 @@ Token.txt
 classes/
 
 config.properties
+
+*.iml
