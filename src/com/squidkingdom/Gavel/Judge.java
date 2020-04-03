@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class Judge implements Comparable<Judge>{
-    String name = "Judge";
-    String code = "";
-    ArrayList<Team> teams = new ArrayList<>();
-    boolean hasBeenFlighted = false;
+public class Judge implements Comparable<Judge> {
+    public String name = "Judge";
+    public String code = "";
+    public ArrayList<Team> teams = new ArrayList<>();
+    public boolean hasBeenFlighted = false;
 
     public Judge() {
     }

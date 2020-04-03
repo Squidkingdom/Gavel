@@ -47,14 +47,7 @@ public class TeamManager {
         throw new GavelExeception("Team Code not found");
     }
 
-    public static boolean teamsFinished(int round) {
-        Optional<Team> holder = teamArray.stream().filter(e -> !e.roundComplete[round - 3]).findAny();
-        if (holder.isPresent()) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+
 
     public static boolean checkcode(String code) {
         for (Team team : teamArray) {

@@ -2,9 +2,12 @@ package com.squidkingdom.Gavel;
 
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.*;
 
 import javax.xml.soap.Text;
 import java.io.File;
@@ -59,11 +62,11 @@ public class DiscordHook extends ListenerAdapter {
 
                         }
                         else if (anwser.toLowerCase().startsWith("!addresult")) {
-                            String arg[] = anwser.split(" ");
-                            if (arg.length != 9) {
+                            String[] arg = anwser.split(" ");
+                            if (arg.length != 8) {
                                 print("You did not provide the correct amount of arguments.");
                             } else {
-                                selectedResult(Integer.parseInt(arg[1]), Boolean.parseBoolean(arg[2]), arg[3], arg[4], Double.parseDouble(arg[5]), Double.parseDouble(arg[6]), Double.parseDouble(arg[7]), Double.parseDouble(arg[8]));
+                                selectedResult(Integer.parseInt(arg[1]), Integer.parseInt(arg[2]), arg[3], Double.parseDouble(arg[4]), Double.parseDouble(arg[5]), Double.parseDouble(arg[6]), Double.parseDouble(arg[7]));
                             }
                         }
 //                        else if (anwser.toLowerCase().startsWith("")) {
@@ -90,7 +93,7 @@ public class DiscordHook extends ListenerAdapter {
                                     Main.lastRoundStarted++;
                                     break;
                                 case 2://Round 3
-                                    if (TeamManager.teamsFinished(3)) {
+                                    if (RoomManager.allRoomsFinished(1)) {
                                         if (schedule != null) {
                                             schedule.sendFile(Exporter.exportSchedule(Pairer.pairRound3(), "Schedule_Round_3")).queue();
                                         } else {
@@ -102,7 +105,7 @@ public class DiscordHook extends ListenerAdapter {
                                         break;
                                     }
                                 case 3://Round 4
-                                    if (TeamManager.teamsFinished(4)) {
+                                    if (RoomManager.allRoomsFinished(2)) {
                                         if (schedule != null) {
                                             schedule.sendFile(Exporter.exportSchedule(Pairer.pairRound4(), "Schedule_round_4")).queue();
                                         } else {
@@ -114,7 +117,7 @@ public class DiscordHook extends ListenerAdapter {
                                         break;
                                     }
                                 case 4://Round 5
-                                    if (TeamManager.teamsFinished(5)) {
+                                    if (RoomManager.allRoomsFinished(3)) {
                                         if (schedule != null) {
                                             schedule.sendFile(Exporter.exportSchedule(Pairer.pairRound5(), "Schedule_Round_5")).queue();
                                         } else {
@@ -159,6 +162,9 @@ public class DiscordHook extends ListenerAdapter {
                             binding = event.getTextChannel();
                             bound = true;
                             print("Successfully bound to " + binding.getAsMention());
+
+                        }else if (anwser.toLowerCase().startsWith("!validate")) {
+
 
                         }
                         else if (anwser.toLowerCase().startsWith("!export")) {
@@ -205,6 +211,14 @@ public class DiscordHook extends ListenerAdapter {
                         }
                         else if (anwser.toLowerCase().startsWith("!bulknew")) {
                             bulkNew(anwser);
+                        }else if (anwser.toLowerCase().startsWith("!quickset")) {
+                            selectedNew("!new YeetBB Jackie Raymond");
+                            selectedNew("!new Coppell Kaveen Alexis");
+                            JudgeManager.newJudge("a","J1");
+                            print("Created judge with the name of " + "a" + " and the code " + "J1");
+                            JudgeManager.newJudge("a","J2");
+                            print("Created judge with the name of " + "a" + " and the code " + "J2");
+
                         }
                         else if (anwser.toLowerCase().startsWith("!exit")) {
                             if (event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
@@ -320,91 +334,93 @@ public class DiscordHook extends ListenerAdapter {
         }
     }
 
-    public static void selectedResult(int id, boolean affWon, String acode, String ncode, double a1s, double a2s, double n1s, double n2s) {
-        try {
-            Team affTeam = TeamManager.getTeamByCode(acode);
-            Team negTeam = TeamManager.getTeamByCode(ncode);
-            int round = 1;
-            for (int i = 0; i <= 5; i++) {
-                if (!affTeam.roundComplete[i]) {
-                    round = i;
-                    break;
-                }
-            }
+    public static void selectedResult(int roomID, int roundNum, String affWon, double a1s, double a2s, double n1s, double n2s) {
+        Team affTeam = RoomManager.getRoomById(roomID).data[roundNum -1].affTeam;
+        Team negTeam = RoomManager.getRoomById(roomID).data[roundNum -1].negTeam;
+        if (affTeam == null){
+            print("This round has not started... Prolly");
+            return;
+        }
+        int round = roundNum - 1;
 
-            if (!affTeam.inProgress[round]) {
-                print("This round is not in progress, you cannot give results for it");
-                return;
-            }
-            affTeam.inProgress[round] = false;
-            negTeam.inProgress[round] = false;
+//            if (!affTeam.inProgress[round]) {
+//                print("This round is not in progress, you cannot give results for it");
+//                return;
+//            }
+
+        //TODO test this
+        if ((((a1s > 30) || a2s < 25) || ((a1s < 25) || a2s > 30)) || (((n1s > 30) || n2s < 25) || ((n1s < 25) || n2s > 30))) {
+            print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+            return;
+        }
+        if(!affWon.equalsIgnoreCase("aff")){
+           if(!affWon.equalsIgnoreCase("neg")){
+               print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+               return;
+           }
+        }
 
 
-            //Bye Speaks
-            if (affTeam.hasHadBye && (round == 1)) {
+        affTeam.inProgress[round] = false;
+        negTeam.inProgress[round] = false;
+
+
+        //Bye Speaks
+        if (affTeam.hasHadBye && (round == 1)) {
+            affTeam.totalSpeaks += (a1s + a2s);
+            affTeam.byeComp = true;
+        }
+        if (negTeam.hasHadBye && (round == 1)) {
+            negTeam.totalSpeaks += (n1s + n2s);
+            negTeam.byeComp = true;
+        }
+        if (affTeam.hasHadBye && (round == 2)) {
+            if (!affTeam.byeComp) {
                 affTeam.totalSpeaks += (a1s + a2s);
                 affTeam.byeComp = true;
             }
-            if (negTeam.hasHadBye && (round == 1)) {
+        }
+        if (negTeam.hasHadBye && (round == 2)) {
+            if (!negTeam.byeComp) {
                 negTeam.totalSpeaks += (n1s + n2s);
                 negTeam.byeComp = true;
             }
-            if (affTeam.hasHadBye && (round == 2)) {
-                if (!affTeam.byeComp) {
-                    affTeam.totalSpeaks += (a1s + a2s);
-                    affTeam.byeComp = true;
-                }
-            }
-            if (negTeam.hasHadBye && (round == 2)) {
-                if (!negTeam.byeComp) {
-                    negTeam.totalSpeaks += (n1s + n2s);
-                    negTeam.byeComp = true;
-                }
-            }
-
-
-            //TODO test this
-            if ((((a1s > 30) || a2s < 25) || ((a1s < 25) || a2s > 30)) || (((n1s > 30) || n2s < 25) || ((n1s < 25) || n2s > 30))) {
-                print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-                return;
-            }
-            //  if (!(a1s + a2s + n1s + n2s == 10)) {
-            //   print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-            //    return;
-            // }
-            //  if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)) {
-            //     print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
-            //     return;
-            //  }
-
-
-            //Set Aff Data
-            Round roundAffObj = new Round(true, (a1s + a2s), affWon, id, (n2s + n1s), negTeam, affTeam.judges[round]);
-            affTeam.rounds[round] = roundAffObj;
-            affTeam.totalSpeaks += (a1s + a2s);
-            affTeam.roundComplete[round] = true;
-            affTeam.totalWins += affWon ? 1 : 0;
-            affTeam.rounds[round].didWin = affWon;
-
-            //Set Neg Data
-            Round roundNegObj = new Round(false, (a1s + a2s), !affWon, id, (n2s + n1s), affTeam, affTeam.judges[round]);
-            negTeam.rounds[round] = roundNegObj;
-            negTeam.totalSpeaks += (n1s + n2s);
-            negTeam.roundComplete[round] = true;
-            negTeam.totalWins += !affWon ? 1 : 0;
-            negTeam.rounds[round].didWin = !affWon;
-
-            //Set Room Data
-            RoundData roundRmObj = new RoundData(affTeam, negTeam, affTeam.rounds[round].judge, (a1s + a2s), (n1s + n2s), affWon, true);
-            RoomManager.getRoomById(id).data[round] = roundRmObj;
-
-            //Testing
-            String bool = "";
-            print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + String.valueOf(bool));
-        } catch (GavelExeception e) {
-            print("Team Code not found");
-            System.out.println(e);
         }
+
+
+        //  if (!(a1s + a2s + n1s + n2s == 10)) {
+        //   print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+        //    return;
+        // }
+        //  if ((a1s + a2s > 5 && affWon) || (n2s + n1s < 5 && affWon)) {
+        //     print("This is not a valid speaker combo, please contact " + affTeam.rounds[round].judge.name);
+        //     return;
+        //  }
+
+
+        //Set Aff Data
+        Round roundAffObj = new Round(true, (a1s + a2s), affWon.equalsIgnoreCase("aff"), roomID, (n2s + n1s), negTeam, affTeam.judges[round]);
+        affTeam.rounds[round] = roundAffObj;
+        affTeam.totalSpeaks += (a1s + a2s);
+        affTeam.roundComplete[round] = true;
+        affTeam.totalWins += affWon.toLowerCase().equals("aff") ? 1 : 0;
+        affTeam.rounds[round].didWin = affWon.toLowerCase().equals("aff");
+
+        //Set Neg Data
+        Round roundNegObj = new Round(false, (a1s + a2s), affWon.equalsIgnoreCase("neg"), roomID, (n2s + n1s), affTeam, affTeam.judges[round]);
+        negTeam.rounds[round] = roundNegObj;
+        negTeam.totalSpeaks += (n1s + n2s);
+        negTeam.roundComplete[round] = true;
+        negTeam.totalWins += affWon.equalsIgnoreCase("neg") ? 1 : 0;
+        negTeam.rounds[round].didWin = affWon.equalsIgnoreCase("neg");
+
+        //Set Room Data
+        RoundData roundRmObj = new RoundData(affTeam, negTeam, affTeam.rounds[round].judge, (a1s + a2s), (n1s + n2s), affWon.equalsIgnoreCase("aff"), true);
+        RoomManager.getRoomById(roomID).data[round] = roundRmObj;
+
+        //Testing
+        String bool = "";
+        print("Spot Check: " + roundRmObj.negSpeaks + " " + roundRmObj.affSpeaks + "" + String.valueOf(bool));
     }
 
     public static void selectedNew(String ans) {

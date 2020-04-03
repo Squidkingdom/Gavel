@@ -106,3 +106,7 @@ lib/poi-ooxml-schemas-4.1.2.jar
 Token.txt
 
 *.csv
+
+classes/
+
+config.properties

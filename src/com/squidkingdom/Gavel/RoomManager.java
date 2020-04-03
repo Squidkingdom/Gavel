@@ -21,4 +21,26 @@ public class RoomManager {
         return optionalRoom.orElse(DUMMY);
     }
 
+    public static boolean allRoomsFinished(int id){
+        for (Room room : RoomManager.roomArray) {
+           RoundData round = room.data[id];
+                if (!round.isFinished) {
+                    return false;
+                }
+
+        }
+        return true;
+    }
+
+
+    public static void refreshRoomNum(int size ){
+        roomArray.clear();
+        roomArraySize = 0;
+        for (int i= 0; i < size; i++) {
+            newRoom();
+        }
+
+
+    }
+
 }
