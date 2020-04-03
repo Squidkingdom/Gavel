@@ -1,6 +1,7 @@
 package com.squidkingdom.Gavel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"unchecked", "UnusedReturnValue"})
@@ -20,6 +21,7 @@ public class Pairer {
 
 
         //Handle Bye
+        //FIXME uhh does this actually handle byes, check the warnings
         if (((affPool.size() + negPool.size()) % 2) > 0) {
             for (int lt = (affPool.size() - 1); lt > 0; lt--) {
                 affPool.get(lt).hasHadBye = true;
@@ -27,8 +29,6 @@ public class Pairer {
                 break;
             }
         }
-
-        int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
 //        if (affPool.size() - byeOffset > (roomPool.size())) {
 //            DiscordHook.print("Error: Not Enough judges");
@@ -65,26 +65,14 @@ public class Pairer {
         while (affPool.size() > 0) {
             {
 
-                Collections.sort(judgePool, new Comparator<Judge>() {
-                    @Override
-                    public int compare(Judge o1, Judge o2) {
-                        int b1 = o1.hasBeenFlighted ? 0 : 1;
-                        int b2 = o2.hasBeenFlighted ? 0 : 1;
-                        return b2 - b1;
-                    }
-                });
                 try {
                     roundJudge = judgePool.get(0);
-                }catch(IndexOutOfBoundsException e){
+                } catch (IndexOutOfBoundsException e) {
                     DiscordHook.print("OOB Excep, Ran out of judges");
                     throw new GavelExeception("");
                 }
-                if (roundJudge.hasBeenFlighted){
-                    roundJudge.hasBeenFlighted = false;
-                    judgePool.remove(roundJudge);
-                }else{
-                    roundJudge.hasBeenFlighted = true;
-                }
+                judgePool.remove(roundJudge);
+
 
                 team1 = affPool.get(0);
                 team2 = negPool.get(0);
@@ -128,7 +116,6 @@ public class Pairer {
             }
         }
 
-        int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
 //        if (negPool.size() - byeOffset > (roomPool.size())) {
 //            throw new GavelExeception("Error: Not enough rooms");
@@ -150,7 +137,6 @@ public class Pairer {
             byeCastle.get().judges[1] = ByeJudge;
             byeCastle.get().roundComplete[1] = true;
             byeCastle.get().rounds[1].didWin = true;
-            byeCastle.get().judges[1] = ByeJudge;
             RoomManager.byeRoom.data[1] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
@@ -163,19 +149,15 @@ public class Pairer {
                     .filter(e -> !e.code.equalsIgnoreCase(team1.opp[0].code))
                     .findFirst();
 
-            if (!optionalTeam2.isPresent())
+            if (!optionalTeam2.isPresent()) {
+                //TODO add override here
+                DiscordHook.print("Ran Out of teams..");
                 throw new GavelExeception("Fuck, No more teams left.");
+            }
             Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Collections.sort(judgePool, new Comparator<Judge>() {
-                @Override
-                public int compare(Judge o1, Judge o2) {
-                    int b1 = o1.hasBeenFlighted ? 0 : 1;
-                    int b2 = o2.hasBeenFlighted ? 0 : 1;
-                    return b2 - b1;
-                }
-            });
+
             Optional<Judge> roundJudge = judgePool.stream()
                     .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
                     .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
@@ -191,12 +173,8 @@ public class Pairer {
                 negPool.remove(team1);
                 teamPool.remove(team2);
                 affPool.remove(team2);
-                if(roundJudge.get().hasBeenFlighted){
-                    roundJudge.get().hasBeenFlighted = false;
-                    judgePool.remove(roundJudge.get());
-                }else{
-                    roundJudge.get().hasBeenFlighted = true;
-                }
+                judgePool.remove(roundJudge.get());
+
                 roomPool.remove(room);
             }
         }
@@ -253,11 +231,10 @@ public class Pairer {
             byeCastle.get().judges[2] = ByeJudge;
             byeCastle.get().roundComplete[2] = true;
             byeCastle.get().rounds[2].didWin = true;
-            byeCastle.get().judges[2] = ByeJudge;
             RoomManager.byeRoom.data[2] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
-        ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
+        ArrayList<RoundData> pairings = new ArrayList<>(1);
 
         while (affPool.size() > 0) {
             Team team1 = affPool.get(0);
@@ -272,14 +249,6 @@ public class Pairer {
             Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Collections.sort(judgePool, new Comparator<Judge>() {
-                @Override
-                public int compare(Judge o1, Judge o2) {
-                    int b1 = o1.hasBeenFlighted ? 0 : 1;
-                    int b2 = o2.hasBeenFlighted ? 0 : 1;
-                    return b2 - b1;
-                }
-            });
             Optional<Judge> roundJudge = judgePool.stream()
                     .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
                     .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
@@ -297,18 +266,12 @@ public class Pairer {
                 negPool.remove(team2);
                 teamPool.remove(team1);
                 affPool.remove(team1);
-                if(roundJudge.get().hasBeenFlighted){
-                roundJudge.get().hasBeenFlighted = false;
                 judgePool.remove(roundJudge.get());
-            }else{
-                roundJudge.get().hasBeenFlighted = true;
-            }
                 roomPool.remove(room);
             }
         }
 
-        if (byeCastle.isPresent())
-            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0));
+        byeCastle.ifPresent(team -> pairings.add(new RoundData(team, new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0)));
 
         return pairings;
     }
@@ -358,11 +321,10 @@ public class Pairer {
             byeCastle.get().judges[3] = ByeJudge;
             byeCastle.get().roundComplete[3] = true;
             byeCastle.get().rounds[3].didWin = true;
-            byeCastle.get().judges[3] = ByeJudge;
             RoomManager.byeRoom.data[3] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
-        ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
+        ArrayList<RoundData> pairings = new ArrayList<>(1);
 
         while (negPool.size() > 0) {
             Team team1 = negPool.get(0);
@@ -378,14 +340,8 @@ public class Pairer {
             Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Collections.sort(judgePool, new Comparator<Judge>() {
-                @Override
-                public int compare(Judge o1, Judge o2) {
-                    int b1 = o1.hasBeenFlighted ? 0 : 1;
-                    int b2 = o2.hasBeenFlighted ? 0 : 1;
-                    return b2 - b1;
-                }
-            });
+
+
             Optional<Judge> roundJudge = judgePool.stream()
                     .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
                     .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
@@ -405,12 +361,7 @@ public class Pairer {
                 negPool.remove(team1);
                 teamPool.remove(team2);
                 affPool.remove(team2);
-                if(roundJudge.get().hasBeenFlighted){
-                    roundJudge.get().hasBeenFlighted = false;
-                    judgePool.remove(roundJudge.get());
-                }else{
-                    roundJudge.get().hasBeenFlighted = true;
-                }
+                judgePool.remove(roundJudge.get());
                 roomPool.remove(room);
             }
         }
@@ -444,7 +395,6 @@ public class Pairer {
             }
         }
 
-        int byeOffset = byeCastle.isPresent() ? 1 : 0;
 
 //        if (negPool.size() - byeOffset > (roomPool.size())) {
 //            throw new GavelExeception("Error: Not enough rooms");
@@ -466,11 +416,10 @@ public class Pairer {
             byeCastle.get().judges[4] = ByeJudge;
             byeCastle.get().roundComplete[4] = true;
             byeCastle.get().rounds[4].didWin = true;
-            byeCastle.get().judges[4] = ByeJudge;
             RoomManager.byeRoom.data[4] = new RoundData(byeCastle.get(), ByeTeam, ByeJudge, 3, 0, true, true);
         }
 
-        ArrayList<RoundData> pairings = new ArrayList<RoundData>(1);
+        ArrayList<RoundData> pairings = new ArrayList<>(1);
 
         while (affPool.size() > 0) {
             Team team1 = affPool.get(0);
@@ -487,14 +436,7 @@ public class Pairer {
             Team team2 = optionalTeam2.get();
 
             //Pair Judges
-            Collections.sort(judgePool, new Comparator<Judge>() {
-                @Override
-                public int compare(Judge o1, Judge o2) {
-                    int b1 = o1.hasBeenFlighted ? 0 : 1;
-                    int b2 = o2.hasBeenFlighted ? 0 : 1;
-                    return b2 - b1;
-                }
-            });
+
             Optional<Judge> roundJudge = judgePool.stream()
                     .filter(e -> !team1.judges[0].code.equalsIgnoreCase(e.code))
                     .filter(e -> !team2.judges[0].code.equalsIgnoreCase(e.code))
@@ -516,28 +458,19 @@ public class Pairer {
                 negPool.remove(team2);
                 teamPool.remove(team1);
                 affPool.remove(team1);
-                if(roundJudge.get().hasBeenFlighted){
-                    roundJudge.get().hasBeenFlighted = false;
-                    judgePool.remove(roundJudge.get());
-                }else{
-                    roundJudge.get().hasBeenFlighted = true;
-                }
+                judgePool.remove(roundJudge.get());
+
                 roomPool.remove(room);
             }
         }
 
-        if (byeCastle.isPresent())
-            pairings.add(new RoundData(byeCastle.get(), new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0));
+        byeCastle.ifPresent(team -> pairings.add(new RoundData(team, new Team("BYE", "bye", "bye"), new Judge("bye", "BYE"), 0)));
 
         return pairings;
     }
 
 
-
-
-
-
-    public static RoundData pair (Team team1, Team team2, Judge judge, Room room,int event){
+    public static RoundData pair(Team team1, Team team2, Judge judge, Room room, int event) {
         RoundData roundData = new RoundData(team1, team2, judge, room.id);
         room.data[event - 1] = roundData;
 
