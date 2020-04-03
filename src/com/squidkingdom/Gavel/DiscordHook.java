@@ -521,7 +521,6 @@ public class DiscordHook extends ListenerAdapter {
         team2.opp[event - 1] = team1;
         team2.judges[event - 1] = judge;
         team2.inProgress[event - 1] = true;
-
         return roundData;
     }
 
