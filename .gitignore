@@ -108,3 +108,5 @@ Token.txt
 *.csv
 
 classes/
+
+config.properties
