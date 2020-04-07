@@ -1,5 +1,6 @@
 package com.squidkingdom.Gavel
 
+import org.jetbrains.exposed.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -7,6 +8,7 @@ import java.sql.Connection
 import java.util.*
 
 val Boolean.int get() = if (this) 1 else 0
+val Int.boolean get() = if (this == 1) true else false
 
 sealed class DbMutationResult {
     data class Success(val ret: Any) : DbMutationResult()
@@ -21,6 +23,8 @@ object Teams : Table() {
     val totalSpeaks = float("total_speaks")
     val isAffLead = integer("is_aff_lead") // This is a boolean, 0 is false and 1 is true
 }
+
+fun ResultRow.toTeam() = Team(this[Teams.code], this[Teams.speaker1], this[Teams.speaker2], this[Teams.totalWins], this[Teams.totalSpeaks], this[Teams.isAffLead].boolean)
 
 object DataAccess {
     var db: Optional<Database> = Optional.empty()
@@ -54,14 +58,13 @@ object DataAccess {
     }
 
     fun getTeam(teamCode: String): DbMutationResult = if (!db.isPresent) DbMutationResult.Failed(GavelExeception("DBNotPresent")) else {
-        val teamQuery = transaction(db.get()) {
-            Teams.select { Teams.code eq teamCode }.toList()
-        }
+        transaction(db.get()) {
+            val teamQuery = Teams.select { Teams.code eq teamCode }.map { it.toTeam() }.toList()
 
-        if (teamQuery.count() != 1) DbMutationResult.Failed(GavelExeception("NoTeamWithThatCode")) else {
-            val team = teamQuery.elementAt(1)
-            team.code
-            DbMutationResult.Success(true)
+            if (teamQuery.count() != 1) DbMutationResult.Failed(GavelExeception("NoTeamWithThatCode")) else {
+                val team = teamQuery.elementAt(1)
+                DbMutationResult.Success(team)
+            }
         }
     }
 }

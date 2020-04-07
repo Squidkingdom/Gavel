@@ -55,6 +55,16 @@ public class Team implements Comparable<Team> {
         affNegFlip = !affNegFlip;
     }
 
+    public Team(String code, String person1, String person2, int totalWins, float totalSpeaks, boolean isAffLead) {
+        this.code = code;
+        this.person1 = person1;
+        this.person2 = person2;
+        this.isAffLead = affNegFlip;
+        this.totalWins = totalWins;
+        this.totalSpeaks = totalSpeaks;
+        this.isAffLead = isAffLead;
+    }
+
 
     // Getter methods for accessing private data
     public double getSpeaks() {
